@@ -3,10 +3,19 @@
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+html {
+	height: 100%;
+}
 body {
+	min-height: 100%;
+	height: 100%;
 	font-size: 14px;
 	font-family: @sansFonts;
 	color: @darkGrey;
+}
+div[ng-view] {
+	width: 100%;
+	height: 100%;
 }
 h1 {
 	font-size: 2.5em;
@@ -53,9 +62,12 @@ textarea {
 button {
 	background: none;
 	border: none;
+
+	display: inline-block;
 	background-color: @betaLightGreen;
 	border-radius: 5px;
 	padding: 6px 10px 5px;
+	margin: 0 10px;
 	text-align: center;
 	color: @offWhite;
 	font-weight: 700;
@@ -65,5 +77,42 @@ button {
 	&:hover {
 		color: @white;
 		background-color: @betaGreen;
+	}
+}
+nav.menuBar {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	padding: 0 20px;
+	text-align: left;
+	box-shadow: 0 0 15px -2px @grey;
+	background-color: @betaDarkBlue;
+	color: @white;
+
+	.leftList,
+	.rightList {
+		display: inline-block;
+
+		a {
+			display: inline-block;
+			padding: 10px 15px 8px;
+			text-align: center;
+
+			.transition();
+
+			&:hover {
+				background-color: @betaBlue;
+			}
+			&.green {
+				background-color: @betaLightGreen;
+
+				&:hover {
+					background-color: @betaGreen;
+				}
+			}
+		}
+	}
+	.rightList {
+		float: right;
 	}
 }

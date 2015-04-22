@@ -1,0 +1,38 @@
+.results {
+	width: 100%;
+	height: 100%;
+
+	jd-google-map {
+		float: left;
+		display: inline-block;
+		height: 100%;
+		width: 80%;
+	}
+	.menuBar {
+		position: relative;
+		z-index: 3;
+		box-shadow: 0 0 20px @grey;
+
+		.currentLocation {
+			display: inline-block;
+		}
+	}
+	.filterBar {
+		position: relative;
+		z-index: 2;
+		float: left;
+		display: inline-block;
+		height: 100%;
+		width: 20%;
+		padding: 20px 40px;
+		background-color: @lighterGrey;
+		box-shadow: 0 0 20px @grey;
+
+
+		&:after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+	}
+}

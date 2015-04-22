@@ -1,5 +1,4 @@
-var app = angular
-	.module('spotBeta', [
+var app = angular.module('spotBeta', [
 		'ngAnimate',
 		// 'ngCookies',
 		'ngResource',
@@ -15,7 +14,7 @@ var app = angular
 				templateUrl: 'home.html',
 				controller: 'mainController'
 			})
-			.when('/searchResult', {
+			.when('/app', {
 				templateUrl: 'app.html',
 				controller: 'appController'
 			})
@@ -28,7 +27,7 @@ var app = angular
 				controller: 'appController'
 			})
 			.otherwise({
-				redirectTo: '/home'
+				redirectTo: '/'
 			});
 
 		$locationProvider.html5Mode(true);
@@ -99,30 +98,23 @@ app.factory('Profile', ["$window", "FIREBASE_URL", "$firebase", function($window
 app.controller('mainController', ['$scope', '$location', 'Auth', function($scope, $location, Auth){
 
 	// USER AUTHENTICATION
-	//TODO: change the paths here from '/' to the dashboard template
 
 	$scope.signedIn = Auth.signedIn;
 	$scope.logout = Auth.logout;
 	$scope.user = Auth.user;
 	$scope.oldUser = {};
 
-	if (Auth.signedIn) {
-		$location.path('/');
-	}
+	// if (Auth.signedIn) {
+	// 	$location.path('/');
+	// }
 
 	$scope.login = function() {
 		Auth.login($scope.oldUser).then(function(userData){
 			console.log('User Logged In:');
 			console.log(userData);
 
-			$location.path('/');
+			$location.path('/app');
 			$scope.hideAuth();
-			// $scope.signedIn = Auth.signedIn;
-
-			console.log('User:');
-			console.log(Auth.user);
-			console.log('$scope.user:');
-			console.log($scope.user);
 
 		}, function(error) {
 			$scope.error = error.toString();
@@ -135,7 +127,7 @@ app.controller('mainController', ['$scope', '$location', 'Auth', function($scope
 			console.log(userData);
 
 			return Auth.login($scope.user).then(function(){
-				$location.path('/');
+				$location.path('/app');
 			});
 		}, function(error) {
 			$scope.error = error.toString();
@@ -163,6 +155,75 @@ app.controller('mainController', ['$scope', '$location', 'Auth', function($scope
 
 }]);
 
-app.controller('appController', ['$scope', function($scope){
+
+app.controller('appController', ['$scope', 'Auth', function($scope, Auth){
+	$scope.signedIn = Auth.signedIn;
+	$scope.logout = Auth.logout;
+	$scope.user = Auth.user;
+	$scope.oldUser = {};
+
+	$scope.login = function() {
+		Auth.login($scope.oldUser).then(function(userData){
+			console.log('User Logged In:');
+			console.log(userData);
+
+			$location.path('/app');
+			$scope.hideAuth();
+
+		}, function(error) {
+			$scope.error = error.toString();
+		});
+	}
+
+	$scope.register = function() {
+		Auth.register($scope.user).then(function(userData){
+			console.log('User Created:');
+			console.log(userData);
+
+			return Auth.login($scope.user).then(function(){
+				$location.path('/app');
+			});
+		}, function(error) {
+			$scope.error = error.toString();
+		});
+	}
+
+
+	// Show/Hide Login and Signup forms in menu bar
+	$scope.signupShowing = false;
+	$scope.loginShowing = false;
+
+	$scope.showLogin = function() {
+		$scope.signupShowing = false;
+		$scope.loginShowing = !$scope.loginShowing;
+	}
+	$scope.showSignup = function() {
+		$scope.signupShowing = !$scope.signupShowing;
+		$scope.loginShowing = false;
+	}
+	$scope.hideAuth = function() {
+		$scope.signupShowing = false;
+		$scope.loginShowing = false;
+	}
 
 }]);
+
+app.directive('jdGoogleMap', function(){
+	return {
+		restrict: 'E',
+		template: "<div class='googleMap'></div>",
+		link: function(scope, element, attributes) {
+
+			var berkeleyLat = 37.8717;
+			var berkeleyLong = -122.2728;
+
+			var mapElement = element[0];
+
+			var mapOptions = {
+				center: new google.maps.LatLng(berkeleyLat, berkeleyLong),
+				zoom: 10
+			};
+			var map = new google.maps.Map(mapElement, mapOptions);
+		}
+	}
+});
