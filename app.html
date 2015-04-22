@@ -1,0 +1,71 @@
+<nav class="menuBar">
+	<div class="leftList">
+		<div class="currentLocation">
+			You are at <span class="locName">(location)</span>			
+		</div>
+		<button type="button">Search again</button>
+	</div>
+	<div class="rightList">
+		<a ng-href="#authSection" ng-hide="signedIn()" ng-click="showSignup()">Sign-up</a>
+		<a ng-href="#authSection" ng-hide="signedIn()" ng-click="showLogin()">Login</a>
+
+		<a ng-href="#" ng-show="signedIn()">Profile</a>
+		<a ng-href="#" ng-show="signedIn()">Lists</a>
+		<a ng-href="#" ng-show="signedIn()" ng-click="logout()">Logout</a>
+	</div>
+
+	<form id="headerSearchForm" ng-submit="" ng-show="showSearch">
+		<div class="errorMsg" ng-show="error">{{error}}</div>
+		<input type="text" ng-model="climbSpot" placeholder="Find another spot...">
+		<button type="submit">Search</button>
+	</form>
+
+	<form id="signupForm" ng-submit="register()" ng-show="signupShowing">
+		<div class="errorMsg" ng-show="error">{{error}}</div>
+		<input type="email" ng-model="user.email" placeholder="Email">
+		<input type="password" ng-model="user.password" placeholder="Password">
+		<button type="submit">Register</button>
+	</form>
+
+	<form id="loginForm" ng-submit="login()" ng-show="loginShowing">
+		<div class="errorMsg" ng-show="error">{{error}}</div>
+		<input type="email" ng-model="oldUser.email" placeholder="Email">
+		<input type="password" ng-model="oldUser.password" placeholder="Password">
+		<button type="submit">Log in</button>
+	</form>
+</nav>
+
+<main class="mapView">
+	Map
+</main>
+
+<article class="filterBar">
+	<h2>Filter Routes and Problems</h2>
+	<div class="filterSection">
+		<div class="filterHeader">
+			Climb type
+		</div>
+		<label>
+			<input type="checkbox">
+			Roped
+		</label>
+		<div class="ropeSubTypes">			
+			<label>
+				<input type="checkbox">
+				Sport
+			</label>
+			<label>
+				<input type="checkbox">
+				Trad
+			</label>
+			<label>
+				<input type="checkbox">
+				Top-rope
+			</label>
+		</div>
+		<label>
+			<input type="checkbox">
+			Boulders
+		</label>
+	</div>
+</article>

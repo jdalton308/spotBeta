@@ -1,0 +1,79 @@
+
+<section class="titleSection">
+	<div class="logoHolder">
+		<img class="logoImg" src="#">
+		<h1>SpotBeta</h1>
+	</div>
+	<div class="searchForm">
+		<form id="homeSearch">
+			<h3>find rocks...</h3>
+			<input type="text" name="location">
+			<button type="submit" class="submitBtn">GO</button>
+		</form>
+	</div>
+</section>
+
+
+<nav class="menuBar">
+	<div class="leftList">
+		<a href="#about">about</a>
+		<a href="#" class="toTop">top</a>
+	</div>
+	<div class="rightList">
+		<!-- signed-out links -->
+		<a ng-hide="signedIn()" ng-click="showSignup()">Sign-up</a>
+		<a ng-hide="signedIn()" ng-click="showLogin()">Login</a>
+
+		<!-- signed-in links -->
+		<a ng-href="/profile" ng-show="signedIn()">Profile</a>
+		<a ng-href="/lists" ng-show="signedIn()">Lists</a>
+		<a ng-show="signedIn()" ng-click="logout()">Logout</a>
+	</div>
+
+	<form id="signupForm" ng-submit="register()" ng-show="signupShowing">
+		<div class="errorMsg" ng-show="error">{{error}}</div>
+		<input type="email" ng-model="user.email" placeholder="Email">
+		<input type="password" ng-model="user.password" placeholder="Password">
+		<button type="submit">Register</button>
+	</form>
+
+	<form id="loginForm" ng-submit="login()" ng-show="loginShowing">
+		<div class="errorMsg" ng-show="error">{{error}}</div>
+		<input type="email" ng-model="oldUser.email" placeholder="Email">
+		<input type="password" ng-model="oldUser.password" placeholder="Password">
+		<button type="submit">Log in</button>
+	</form>
+</nav>
+
+<main id="about">
+	<div class="row">
+		<div class="shortHalf">
+			<img src="#">
+		</div>
+		<div class="longHalf">
+			<h2>Search for Routes</h2>
+			<p>Twee Pinterest brunch artisan 8-bit flannel, synth banjo forage single-origin coffee.</p>
+			<p>Chambray YOLO heirloom, taxidermy freegan Godard wolf Pinterest pork belly vegan. Gluten-free butcher hashtag trust fund</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="longHalf">
+			<h2>Save Lists</h2>
+			<p>Twee Pinterest brunch artisan 8-bit flannel, synth banjo forage single-origin coffee.</p>
+			<p>Chambray YOLO heirloom, taxidermy freegan Godard wolf Pinterest pork belly vegan. Gluten-free butcher hashtag trust fund</p>
+		</div>
+		<div class="shortHalf">
+			<img src="#">
+		</div>
+	</div>
+	<div class="row">
+		<div class="shortHalf">
+			<img src="#">
+		</div>
+		<div class="longHalf">
+			<h2>Add Your Project</h2>
+			<p>Twee Pinterest brunch artisan 8-bit flannel, synth banjo forage single-origin coffee.</p>
+			<p>Chambray YOLO heirloom, taxidermy freegan Godard wolf Pinterest pork belly vegan. Gluten-free butcher hashtag trust fund</p>
+		</div>
+	</div>
+</main>

@@ -9,15 +9,29 @@ var app = angular
 		'firebase'
 	])
 	.constant('FIREBASE_URL', 'https://intense-inferno-4354.firebaseio.com' )
-	.config(function($routeProvider) {
+	.config(function($routeProvider, $locationProvider) {
 		$routeProvider
 			.when('/', {
-				templateUrl: 'index.html',
+				templateUrl: 'home.html',
 				controller: 'mainController'
 			})
+			.when('/searchResult', {
+				templateUrl: 'app.html',
+				controller: 'appController'
+			})
+			.when('/profile', {
+				templateUrl: 'app.html',
+				controller: 'appController'
+			})
+			.when('/lists', {
+				templateUrl: 'app.html',
+				controller: 'appController'
+			})
 			.otherwise({
-				redirectTo: '/'
+				redirectTo: '/home'
 			});
+
+		$locationProvider.html5Mode(true);
 	});
 
 
@@ -33,7 +47,7 @@ app.factory('Auth', ["$firebaseAuth", "FIREBASE_URL", "$rootScope", function($fi
 
 	var Auth = {
 		register: function(user) {
-			return auth.$createUser({email: user.email, password: user.password});
+			return auth.$createUser(user);
 		},
 		login: function(user) {
 			return auth.$authWithPassword(user);
@@ -64,18 +78,6 @@ app.factory('Auth', ["$firebaseAuth", "FIREBASE_URL", "$rootScope", function($fi
 			angular.copy({}, Auth.user);
 		}
 	});
-
-	// $rootScope.$on('auth.$onAuth', function(e, user) {
-	// 	console.log('logged in');
-	// 	angular.copy(user, Auth.user);
-
-	// 	console.log('User:');
-	// 	console.log(Auth.user);
-	// });
-	// $rootScope.$on('$firebaseAuth:logout', function(){
-	// 	console.log('logged out');
-	// 	angular.copy({}, Auth.user);
-	// });
 
 	return Auth;
 }]);
@@ -158,5 +160,9 @@ app.controller('mainController', ['$scope', '$location', 'Auth', function($scope
 		$scope.loginShowing = false;
 	}
 
+
+}]);
+
+app.controller('appController', ['$scope', function($scope){
 
 }]);
