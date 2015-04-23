@@ -206,6 +206,14 @@ app.controller('appController', ['$scope', 'Auth', function($scope, Auth){
 		$scope.loginShowing = false;
 	}
 
+
+	// Location data
+	$scope.searchResult = {
+		name: 'Berkeley',
+		lat: 37.8717,
+		lng: -122.2728
+	}
+
 }]);
 
 app.directive('jdGoogleMap', function(){
@@ -217,13 +225,82 @@ app.directive('jdGoogleMap', function(){
 			var berkeleyLat = 37.8717;
 			var berkeleyLong = -122.2728;
 
-			var mapElement = element[0];
+			var mapElement = element[0]; // Not sure why have to do this
 
 			var mapOptions = {
 				center: new google.maps.LatLng(berkeleyLat, berkeleyLong),
-				zoom: 10
+				zoom: 12,
+				mapTypeId: google.maps.MapTypeId.TERRAIN
 			};
 			var map = new google.maps.Map(mapElement, mapOptions);
+
+			// Markers
+			var marker = new google.maps.Marker({
+				title: 'Indian Rock',
+				position: new google.maps.LatLng(37.8918233,-122.2723689),
+				map: map
+			});
+
+			var marker2 = new google.maps.Marker({
+				title: 'Grizzly Peak',
+				position: new google.maps.LatLng(37.8838356,-122.2406285),
+				map: map
+			});
+
+			// Info Windows
+//TODO: create single template, then set scope to be whatever marker was clicked
+			var boxContent = 
+				'<div class="mapInfoBox">' +
+					'<h2>Routes</h2>' +
+					'<div class="boxRoute">' +
+						'<a href="#">Indian Traverse</a>' +
+						'<span class="boxRating">V5</span>' +
+					'</div>' +
+					'<div class="boxRoute">' +
+						'<a href="#">Waterfall</a>' +
+						'<span class="boxRating">V1</span>' +
+					'</div>' +
+				'</div>';
+
+			var infoBox = new google.maps.InfoWindow({
+				content: boxContent
+			});
+
+
+			var boxContent2 = 
+				'<div class="mapInfoBox">' +
+					'<h2>Routes</h2>' +
+					'<div class="boxRoute">' +
+						'<a href="#">Face</a>' +
+						'<span class="boxRating">V5</span>' +
+					'</div>' +
+					'<div class="boxRoute">' +
+						'<a href="#">Traverse</a>' +
+						'<span class="boxRating">V0</span>' +
+					'</div>' +
+				'</div>';
+
+			var infoBox2 = new google.maps.InfoWindow({
+				content: boxContent2
+			});
+
+
+			// Marker click event
+			google.maps.event.addListener(marker, 'click', function(){
+				infoBox.open(map, marker);
+				map.setCenter(marker.getPosition());
+			});
+
+			google.maps.event.addListener(marker2, 'click', function(){
+				infoBox2.open(map, marker2);
+				map.setCenter(marker2.getPosition());				
+			});
+
+			// Close info boxes on map click
+			google.maps.event.addListener(map, 'click', function(){
+				infoBox.close();
+				infoBox2.close();
+			});
 		}
 	}
 });
