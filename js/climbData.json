@@ -1,0 +1,143 @@
+{
+    "data" : [
+    {
+        "name": "Indian Rock",
+        "climbs" : [
+            {
+                "name": "Indian Traverse",
+                "description" : "Start is down the path, way down by a tree that is growing on the rock. Finish up on the slab near the stairs",
+                "grade" : 5,
+                "height" : 4,
+                "rating" : 4,
+                "type" : "boulder"
+            },
+            {
+                "name": "The Slab",
+                "description" : "The face that is along the path directly under the stairs. Could be used for beginner top rope",
+                "grade" : 0,
+                "height" : 20,
+                "rating" : 2,
+                "type" : "boulder"
+            },
+            {
+                "name": "Center Overhang",
+                "description" : "Stand start on left side of the pit area. Go up the center to a highball finish over the lip.",
+                "grade" : 3,
+                "height" : 14,
+                "rating" : 3,
+                "type" : "boulder"
+            },
+            {
+                "name": "Watercouse",
+                "description" : "In the corner of the 'pit', just right of the gap. Go up the corner into the huge jug, then finish the easy but high top out",
+                "grade" : 1,
+                "height" : 25,
+                "rating" : 3,
+                "type" : "boulder"
+            }
+        ],
+        "location" : {
+            "lat" : 37.8924,
+            "long" : -122.272867
+        }
+    },
+    {
+        "name": "Grizzly Peak",
+        "climbs" : [
+            {
+                "name": "Scary Arete",
+                "description" : "On the upper boulder, on the face toward the road. Left side, stand start with left hand in gaston pocket, then up to good pockets. At the first lip go left to the arete.",
+                "grade" : 3,
+                "height" : 15,
+                "rating" : 3,
+                "type" : "boulder"
+            },
+            {
+                "name": "Scary Overhang",
+                "description" : "Same start as Scary Arete (in high left hand gaston pocket, up the pockets), but at the first lip, continue straight up",
+                "grade" : 5,
+                "height" : 17,
+                "rating" : 4,
+                "type" : "boulder"
+            },
+            {
+                "name": "Warm-up Slab",
+                "description" : "On back side of upper boulder, do any of the routes or traverse using any of the indents or pockets.",
+                "grade" : 0,
+                "height" : 12,
+                "rating" : 2,
+                "type" : "boulder"
+            },
+            {
+                "name": "Scott's Arete",
+                "description" : "On the upper boulder, on the road-side, in the center. Start with high antenae-shaped hold, and the arete, then use side-pull to the left and go up.",
+                "grade" : 5,
+                "height" : 17,
+                "rating" : 4,
+                "type" : "boulder"
+            }
+        ],
+        "location" : {
+            "lat" : 37.8755,
+            "long" : -122.24155
+        }
+    },
+    {
+        "name": "Turtle Rock",
+        "climbs" : [
+            {
+                "name": "Turtle Traverse",
+                "description" : "Start on the far right (north) side, near the down-climb, then move left all the way around to the south side while staying below the lip.",
+                "grade" : 5,
+                "height" : 4,
+                "rating" : 4,
+                "type" : "boulder"
+            },
+            {
+                "name": "The Lieback",
+                "description" : "In the middle of the rock, stand start on the protruding arete and go up",
+                "grade" : 0,
+                "height" : 12,
+                "rating" : 2,
+                "type" : "boulder"
+            },
+            {
+                "name": "South Solo",
+                "description" : "On the south side of the rock (city-side), go up the highball, full-featured face.",
+                "grade" : 0,
+                "height" : 20,
+                "rating" : 3,
+                "type" : "boulder"
+            }
+        ],
+        "location" : {
+            "lat" : 37.911183,
+            "long" : -122.491433
+        }
+    },
+    {
+        "name": "Stinson Beach",
+        "climbs" : [
+            {
+                "name": "The Old Man",
+                "description" : "On the big boulder, on middle of the ocean side, go up to highball finish, or down-climb",
+                "grade" : 1,
+                "height" : 20,
+                "rating" : 3,
+                "type" : "boulder"
+            },
+            {
+                "name": "Old Woman Arete",
+                "description" : "On the boulder just north of the big boulder, go up the sharp arete that starts between the two.",
+                "grade" : 0,
+                "height" : 14,
+                "rating" : 3,
+                "type" : "boulder"
+            }
+        ],
+        "location" : {
+            "lat" : 37.89166,
+            "long" : -122.6352421
+        }
+    }]
+}

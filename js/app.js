@@ -82,20 +82,26 @@ app.factory('Auth', ["$firebaseAuth", "FIREBASE_URL", "$rootScope", function($fi
 }]);
 
 
-app.factory('Profile', ["$window", "FIREBASE_URL", "$firebase", function($window, FIREBASE_URL, $firebase){
-	var ref = new $window.Firebase(FIREBASE_URL);
+app.factory('ClimbData', ["FIREBASE_URL", "$firebaseObject", 
+	function(FIREBASE_URL, $firebaseObject){
 
-	var profile = {
-		get: function(userId) {
-			return $firebase(ref.child('profile').child(userId)).$asObject();
-		}
-	}
+	// Get data
+	var ref = new Firebase(FIREBASE_URL);
+	var data = $firebaseObject(ref);
 
-	return profile;
+	// var climbData = {
+	// 	loaded: function() {
+	// 		// Returns promise for when data is loaded. Use with a .then().catch();
+	// 		return data.$loaded();
+	// 	}
+	// }
+
+	return data;
 }]);
 
 
-app.controller('mainController', ['$scope', '$location', 'Auth', function($scope, $location, Auth){
+app.controller('mainController', ['$scope', '$location', 'Auth', 
+	function($scope, $location, Auth){
 
 	// USER AUTHENTICATION
 
@@ -156,7 +162,9 @@ app.controller('mainController', ['$scope', '$location', 'Auth', function($scope
 }]);
 
 
-app.controller('appController', ['$scope', 'Auth', function($scope, Auth){
+app.controller('appController', ['$scope', "FIREBASE_URL", 'Auth', 'ClimbData', 
+	function($scope, FIREBASE_URL, Auth, ClimbData){
+
 	$scope.signedIn = Auth.signedIn;
 	$scope.logout = Auth.logout;
 	$scope.user = Auth.user;
@@ -216,91 +224,109 @@ app.controller('appController', ['$scope', 'Auth', function($scope, Auth){
 
 }]);
 
-app.directive('jdGoogleMap', function(){
+
+app.directive('jdGoogleMap', ['ClimbData', function(ClimbData){
 	return {
 		restrict: 'E',
 		template: "<div class='googleMap'></div>",
 		link: function(scope, element, attributes) {
 
-			var berkeleyLat = 37.8717;
-			var berkeleyLong = -122.2728;
+			// Render data after loaded
+			ClimbData.$loaded()
+				.then(function(data){
+					console.log('Data in directive');
+					console.log(data);
 
-			var mapElement = element[0]; // Not sure why have to do this
+					drawMarkers(data.data);
+				})
+				.catch(function(err){
+					console.error(err);	
+				});
+
+			// var currentData = angular.copy(ClimbData.data);
+			// console.log('Current Map Data:');
+			// console.log(currentData);
+
+			// Draw map
+			var currentLat = 37.8717;
+			var currentLong = -122.2728;
+
+			var mapElement = element[0]; // Not sure why this is needed
 
 			var mapOptions = {
-				center: new google.maps.LatLng(berkeleyLat, berkeleyLong),
+				center: new google.maps.LatLng(currentLat, currentLong),
 				zoom: 12,
 				mapTypeId: google.maps.MapTypeId.TERRAIN
 			};
 			var map = new google.maps.Map(mapElement, mapOptions);
 
-			// Markers
-			var marker = new google.maps.Marker({
-				title: 'Indian Rock',
-				position: new google.maps.LatLng(37.8918233,-122.2723689),
-				map: map
-			});
 
-			var marker2 = new google.maps.Marker({
-				title: 'Grizzly Peak',
-				position: new google.maps.LatLng(37.8838356,-122.2406285),
-				map: map
-			});
+			// Markers
+			var drawMarkers = function(data) {
+				console.log('drawMarkers called for: ');
+				console.log(data);
+
+				angular.forEach( data, function(val, key){
+
+					var thisTitle = val.name;
+					var thisLong = val.location.long;
+					var thisLat = val.location.lat;
+				
+
+					// Create new marker for each location
+					scope['marker' + key] = new google.maps.Marker({
+					// var marker = new google.maps.Marker({
+						title: thisTitle,
+						position: new google.maps.LatLng(thisLat, thisLong),
+						map: map
+					});
+
+
+					// Create info box for each marker
+
+
+
+					// Marker click event
+					// google.maps.event.addListener(marker, 'click', function(){
+					// 	infoBox.open(map, marker);
+					// 	map.setCenter(marker.getPosition());
+					// });
+				});
+			};
+
 
 			// Info Windows
 //TODO: create single template, then set scope to be whatever marker was clicked
-			var boxContent = 
-				'<div class="mapInfoBox">' +
-					'<h2>Routes</h2>' +
-					'<div class="boxRoute">' +
-						'<a href="#">Indian Traverse</a>' +
-						'<span class="boxRating">V5</span>' +
-					'</div>' +
-					'<div class="boxRoute">' +
-						'<a href="#">Waterfall</a>' +
-						'<span class="boxRating">V1</span>' +
-					'</div>' +
-				'</div>';
+			// var boxContent = 
+			// 	'<div class="mapInfoBox">' +
+			// 		'<h2>Routes</h2>' +
+			// 		'<div class="boxRoute">' +
+			// 			'<a href="#">Indian Traverse</a>' +
+			// 			'<span class="boxRating">V5</span>' +
+			// 		'</div>' +
+			// 		'<div class="boxRoute">' +
+			// 			'<a href="#">Waterfall</a>' +
+			// 			'<span class="boxRating">V1</span>' +
+			// 		'</div>' +
+			// 	'</div>';
 
-			var infoBox = new google.maps.InfoWindow({
-				content: boxContent
-			});
-
-
-			var boxContent2 = 
-				'<div class="mapInfoBox">' +
-					'<h2>Routes</h2>' +
-					'<div class="boxRoute">' +
-						'<a href="#">Face</a>' +
-						'<span class="boxRating">V5</span>' +
-					'</div>' +
-					'<div class="boxRoute">' +
-						'<a href="#">Traverse</a>' +
-						'<span class="boxRating">V0</span>' +
-					'</div>' +
-				'</div>';
-
-			var infoBox2 = new google.maps.InfoWindow({
-				content: boxContent2
-			});
+			// var infoBox = new google.maps.InfoWindow({
+			// 	content: boxContent
+			// });
 
 
-			// Marker click event
-			google.maps.event.addListener(marker, 'click', function(){
-				infoBox.open(map, marker);
-				map.setCenter(marker.getPosition());
-			});
+			// // Marker click event
+			// google.maps.event.addListener(marker, 'click', function(){
+			// 	infoBox.open(map, marker);
+			// 	map.setCenter(marker.getPosition());
+			// });
 
-			google.maps.event.addListener(marker2, 'click', function(){
-				infoBox2.open(map, marker2);
-				map.setCenter(marker2.getPosition());				
-			});
 
-			// Close info boxes on map click
-			google.maps.event.addListener(map, 'click', function(){
-				infoBox.close();
-				infoBox2.close();
-			});
+			// // Close info boxes on map click
+			// google.maps.event.addListener(map, 'click', function(){
+			// 	infoBox.close();
+			// 	infoBox2.close();
+			// });
 		}
 	}
-});
+}]);
