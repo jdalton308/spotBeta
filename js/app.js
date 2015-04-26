@@ -263,12 +263,10 @@ app.directive('jdGoogleMap', ['ClimbData', function(ClimbData){
 
 			// Markers
 			var drawMarkers = function(data) {
-				console.log('drawMarkers called for: ');
-				console.log(data);
 
 				angular.forEach( data, function(val, key){
 
-					var thisTitle = val.name;
+					var spotTitle = val.name;
 					var thisLong = val.location.long;
 					var thisLat = val.location.lat;
 				
@@ -276,21 +274,52 @@ app.directive('jdGoogleMap', ['ClimbData', function(ClimbData){
 					// Create new marker for each location
 					scope['marker' + key] = new google.maps.Marker({
 					// var marker = new google.maps.Marker({
-						title: thisTitle,
+						title: spotTitle,
 						position: new google.maps.LatLng(thisLat, thisLong),
 						map: map
 					});
 
 
 					// Create info box for each marker
+					var boxContent =
+						'<div class="mapInfoBox">' +
+								'<h2>Routes</h2>';
 
+					// for each route, construct the HTML
+					for (var i = 0; i < val.climbs.length; i++) {
+						var thisRoute = val.climbs[i];
+
+						var routeTitle = thisRoute.name;
+						var grade;
+
+						if (thisRoute.type = 'boulder') {
+							grade = "V" + thisRoute.rating;
+						} else {
+							grade = "5." + thisRoute.rating;
+						}
+
+						var routeElement = 
+							'<div class="boxRoute">' +
+								'<a href="#">' + routeTitle + '</a>' +
+								'<span class="boxRating">' + grade + '</span>' +
+							'</div>';
+
+						boxContent += routeElement;
+					}
+
+					boxContent += '</div>';
+
+					scope['infoBox' + key] = new google.maps.InfoWindow({
+						content: boxContent
+					});
 
 
 					// Marker click event
-					// google.maps.event.addListener(marker, 'click', function(){
-					// 	infoBox.open(map, marker);
-					// 	map.setCenter(marker.getPosition());
-					// });
+					google.maps.event.addListener(scope['marker' + key], 'click', function(){
+						scope['infoBox' + key] .open(map, scope['marker' + key] );
+						map.panTo( scope['marker' + key].getPosition() );
+					});
+
 				});
 			};
 
