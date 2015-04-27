@@ -225,17 +225,17 @@ app.controller('appController', ['$scope', "FIREBASE_URL", 'Auth', 'ClimbData',
 }]);
 
 
-app.directive('jdGoogleMap', ['ClimbData', function(ClimbData){
+app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 	return {
 		restrict: 'E',
-		template: "<div class='googleMap'></div>",
+		templateUrl: "directives/mapFilter.html",
 		link: function(scope, element, attributes) {
 
 			// Render data after loaded
 			ClimbData.$loaded()
 				.then(function(data){
-					console.log('Data in directive');
-					console.log(data);
+					// console.log('Data in directive');
+					// console.log(data);
 
 					drawMarkers(data.data);
 				})
@@ -243,21 +243,19 @@ app.directive('jdGoogleMap', ['ClimbData', function(ClimbData){
 					console.error(err);	
 				});
 
-			// var currentData = angular.copy(ClimbData.data);
-			// console.log('Current Map Data:');
-			// console.log(currentData);
 
 			// Draw map
 			var currentLat = 37.8717;
 			var currentLong = -122.2728;
 
-			var mapElement = element[0]; // Not sure why this is needed
+			var mapElement = document.getElementById("googleMap");
 
 			var mapOptions = {
 				center: new google.maps.LatLng(currentLat, currentLong),
 				zoom: 12,
 				mapTypeId: google.maps.MapTypeId.TERRAIN
 			};
+
 			var map = new google.maps.Map(mapElement, mapOptions);
 
 
@@ -283,7 +281,7 @@ app.directive('jdGoogleMap', ['ClimbData', function(ClimbData){
 					// Create info box for each marker
 					var boxContent =
 						'<div class="mapInfoBox">' +
-								'<h2>Routes</h2>';
+								'<h2>' + spotTitle + '</h2>';
 
 					// for each route, construct the HTML
 					for (var i = 0; i < val.climbs.length; i++) {
@@ -300,8 +298,8 @@ app.directive('jdGoogleMap', ['ClimbData', function(ClimbData){
 
 						var routeElement = 
 							'<div class="boxRoute">' +
-								'<a href="#">' + routeTitle + '</a>' +
 								'<span class="boxRating">' + grade + '</span>' +
+								'<a href="#">' + routeTitle + '</a>' +
 							'</div>';
 
 						boxContent += routeElement;
