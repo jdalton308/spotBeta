@@ -7,25 +7,25 @@
 			Climb type
 		</div>
 		<label>
-			<input type="checkbox">
+			<input type="checkbox" checked="checked" ng-model="filter.roped" ng-change="filterType('roped')">
 			Roped
 		</label>
 		<div class="ropeSubTypes">			
 			<label>
-				<input type="checkbox">
+				<input type="checkbox" checked="checked" ng-model="filter.sport" ng-change="filterType('sport')">
 				Sport
 			</label>
 			<label>
-				<input type="checkbox">
+				<input type="checkbox" checked="checked" ng-model="filter.trad" ng-change="filterType('trad')">
 				Trad
 			</label>
 			<label>
-				<input type="checkbox">
+				<input type="checkbox" checked="checked" ng-model="filter.topRope" ng-change="filterType('topRope')">
 				Top-rope
 			</label>
 		</div>
 		<label>
-			<input type="checkbox">
+			<input type="checkbox" checked="checked" ng-model="filter.boulder" ng-change="filterType('boulder')">
 			Boulders
 		</label>
 	</div>

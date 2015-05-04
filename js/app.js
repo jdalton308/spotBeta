@@ -12,7 +12,7 @@ var app = angular.module('spotBeta', [
 		$routeProvider
 			.when('/', {
 				templateUrl: 'home.html',
-				controller: 'mainController'
+				controller: 'homeController'
 			})
 			.when('/app', {
 				templateUrl: 'app.html',
@@ -89,18 +89,11 @@ app.factory('ClimbData', ["FIREBASE_URL", "$firebaseObject",
 	var ref = new Firebase(FIREBASE_URL);
 	var data = $firebaseObject(ref);
 
-	// var climbData = {
-	// 	loaded: function() {
-	// 		// Returns promise for when data is loaded. Use with a .then().catch();
-	// 		return data.$loaded();
-	// 	}
-	// }
-
 	return data;
 }]);
 
 
-app.controller('mainController', ['$scope', '$location', 'Auth', 
+app.controller('homeController', ['$scope', '$location', 'Auth', 
 	function($scope, $location, Auth){
 
 	// USER AUTHENTICATION
@@ -231,129 +224,188 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 		templateUrl: "directives/mapFilter.html",
 		link: function(scope, element, attributes) {
 
-			// Render data after loaded
-			ClimbData.$loaded()
-				.then(function(data){
-					// console.log('Data in directive');
-					// console.log(data);
-
-					drawMarkers(data.data);
-				})
-				.catch(function(err){
-					console.error(err);	
-				});
-
+			// RENDERING
+			//====================
 
 			// Draw map
 			var currentLat = 37.8717;
 			var currentLong = -122.2728;
 
 			var mapElement = document.getElementById("googleMap");
-
 			var mapOptions = {
 				center: new google.maps.LatLng(currentLat, currentLong),
 				zoom: 12,
 				mapTypeId: google.maps.MapTypeId.TERRAIN
 			};
 
-			var map = new google.maps.Map(mapElement, mapOptions);
+			scope.map = new google.maps.Map(mapElement, mapOptions);
+
+			if (scope.markers === undefined) {
+				scope.markers = {};
+			}
+
+			var infoWindow = new google.maps.InfoWindow();
 
 
-			// Markers
+			// Markers/Marker click events function
 			var drawMarkers = function(data) {
 
 				angular.forEach( data, function(val, key){
+					// Loop through each climb spot
 
 					var spotTitle = val.name;
 					var thisLong = val.location.long;
 					var thisLat = val.location.lat;
-				
 
-					// Create new marker for each location
-					scope['marker' + key] = new google.maps.Marker({
-					// var marker = new google.maps.Marker({
-						title: spotTitle,
-						position: new google.maps.LatLng(thisLat, thisLong),
-						map: map
-					});
 
+					// Hide each marker by default, then show if route included
+					val.included = false;
 
 					// Create info box for each marker
 					var boxContent =
 						'<div class="mapInfoBox">' +
 								'<h2>' + spotTitle + '</h2>';
 
-					// for each route, construct the HTML
-					for (var i = 0; i < val.climbs.length; i++) {
-						var thisRoute = val.climbs[i];
+					// for each route, construct the HTML within infobox
+					angular.forEach( val.climbs, function(climb, key){
 
-						var routeTitle = thisRoute.name;
-						var grade;
-
-						if (thisRoute.type = 'boulder') {
-							grade = "V" + thisRoute.rating;
-						} else {
-							grade = "5." + thisRoute.rating;
+						// Initial rendering creates the included var for filtering
+						if (climb.included === undefined) {
+							climb.included = true;
 						}
 
-						var routeElement = 
-							'<div class="boxRoute">' +
-								'<span class="boxRating">' + grade + '</span>' +
-								'<a href="#">' + routeTitle + '</a>' +
-							'</div>';
+						// Test if climb should be included
+						if (climb.included) {
 
-						boxContent += routeElement;
-					}
+							// show spot's marker, since at least one climb is shown
+							val.included = true;
+
+							var routeTitle = climb.name;
+							var grade;
+
+							if (climb.type = 'boulder') {
+								grade = "V" + climb.rating;
+							} else {
+								grade = "5." + climb.rating;
+							}
+
+							var routeElement = 
+								'<div class="boxRoute">' +
+									'<span class="boxRating">' + grade + '</span>' +
+									'<a href="#">' + routeTitle + '</a>' +
+								'</div>';
+
+							boxContent += routeElement;
+						}
+					});
 
 					boxContent += '</div>';
+				
 
-					scope['infoBox' + key] = new google.maps.InfoWindow({
-						content: boxContent
-					});
+					// If included routes, create new marker for each location
+					if (val.included) {
+						console.log('Spot included');
+
+						if (scope.markers[key]) {
+							console.log('Marker exists');
+							// marker exists, so just update info box
+							scope.markers[key].boxContent = boxContent;
+
+						} else {
+							console.log('Creating new marker');
+							// create a new marker
+							
+							// scope['marker' + key] = new google.maps.Marker({
+							var marker = new google.maps.Marker({
+								title: spotTitle,
+								position: new google.maps.LatLng(thisLat, thisLong),
+								map: scope.map
+							});
+
+							// Marker click event
+							google.maps.event.addListener(marker, 'click', function(){
+								// scope['infoBox' + key].open(map, scope['marker' + key] );
+					            infoWindow.setContent(marker.boxContent);
+					            infoWindow.open(scope.map, marker);
+								scope.map.panTo( marker.getPosition() );
+							});
+
+							scope.markers[key] = marker;
+						}
+
+					} else {
+						// Destroy the marker, infobox, and click-event listner
+						console.log('Deleting...')
+						console.log(scope.markers[key]);
+
+						scope.markers[key].setMap(null);
+						// scope['marker' + key].setVisible(null);
+						// setTimeout(function(){
+						// 	scope['marker' + key] = null;
+						// }, 1);
+						//google.maps.event.clearListeners(scope['marker' + key], 'click');
+
+						scope.markers[key] = null;
+						// delete scope['marker' + key];
+						// console.log('Spot removed');
+						// console.log('Scope:');
+						// console.log(scope);
+
+					}
+
+				}); // end forEach()
+			}; // end drawMarkers()
 
 
-					// Marker click event
-					google.maps.event.addListener(scope['marker' + key], 'click', function(){
-						scope['infoBox' + key] .open(map, scope['marker' + key] );
-						map.panTo( scope['marker' + key].getPosition() );
-					});
+			// Render markers after data loaded
+			var originalData;
+			var filteredData;
 
+			ClimbData.$loaded()
+				.then(function(data){
+					console.log('Data in directive');
+					console.log(data);
+
+					originalData = angular.copy(data.data);
+					filteredData = angular.copy(data.data);
+
+					drawMarkers(filteredData);
+				})
+				.catch(function(err){
+					console.error(err);	
 				});
-			};
 
 
-			// Info Windows
-//TODO: create single template, then set scope to be whatever marker was clicked
-			// var boxContent = 
-			// 	'<div class="mapInfoBox">' +
-			// 		'<h2>Routes</h2>' +
-			// 		'<div class="boxRoute">' +
-			// 			'<a href="#">Indian Traverse</a>' +
-			// 			'<span class="boxRating">V5</span>' +
-			// 		'</div>' +
-			// 		'<div class="boxRoute">' +
-			// 			'<a href="#">Waterfall</a>' +
-			// 			'<span class="boxRating">V1</span>' +
-			// 		'</div>' +
-			// 	'</div>';
 
-			// var infoBox = new google.maps.InfoWindow({
-			// 	content: boxContent
-			// });
+			// FILTERING
+			//==================
 
+			// Filter the markers on clicks
+			scope.filter;
 
-			// // Marker click event
-			// google.maps.event.addListener(marker, 'click', function(){
-			// 	infoBox.open(map, marker);
-			// 	map.setCenter(marker.getPosition());
-			// });
+			scope.filterType = function(type) {
 
+				console.log(scope.filter);
 
-			// // Close info boxes on map click
-			// google.maps.event.addListener(map, 'click', function(){
-			// 	infoBox.close();
-			// 	infoBox2.close();
-			// });
+				angular.forEach(filteredData, function(value, key){
+					// loop through each climbing spot 
+					var spotClimbs = value.climbs;
+
+					angular.forEach(spotClimbs, function(climb, key){
+						// loop through each climb
+
+						if (climb.type == type) {
+							// identify the climbs that will be filtered, then set to bool, kept track in checkbox
+							climb.included = scope.filter[type];
+						}
+					});
+				});
+
+				drawMarkers(filteredData);
+				console.log(filteredData);
+				console.log(scope);
+			}
+
 		}
 	}
 }]);
