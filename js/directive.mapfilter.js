@@ -179,52 +179,56 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 				},
 				grade: {
 					boulder: {
-						0: true,
-						1: true, 
-						2: true,
-						3: true,
-						4: true,
-						5: true,
-						6: true,
-						7: true,
-						8: true,
-						9: true,
-						10: true,
-						11: true,
-						12: true,
-						13: true,
-						14: true,
-						15: true,
-						16: true
+						small: {
+							0: true,
+							1: true, 
+							2: true,
+							3: true,
+							4: true,
+							5: true,
+							6: true,
+							7: true,
+							8: true,
+							9: true
+						},
+						large: {
+							10: true,
+							11: true,
+							12: true,
+							13: true,
+							14: true,
+							15: true,
+							16: true
+						}
 					},
 					roped: {
 						6: true,
 						7: true,
 						8: true,
 						9: true,
-						10a: true,
-						10b: true,
-						10c: true,
-						10d: true,
-						11a: true,
-						11b: true,
-						11c: true,
-						11d: true,
-						12a: true,
-						12b: true,
-						12c: true,
-						12d: true,
-						13a: true,
-						13b: true,
-						13c: true,
-						13d: true,
-						14a: true,
-						14b: true,
-						14c: true,
-						14d: true,
-						15a: true,
-						15b: true,
-						15c: true,
+						'10a': true,
+						'10b': true,
+						'10c': true,
+						'10d': true,
+						'11a': true,
+						'11b': true,
+						'11c': true,
+						'11d': true,
+						'12a': true,
+						'12b': true,
+						'12c': true,
+						'12d': true,
+						'13a': true,
+						'13b': true,
+						'13c': true,
+						'13d': true,
+						'14a': true,
+						'14b': true,
+						'14c': true,
+						'14d': true,
+						'15a': true,
+						'15b': true,
+						'15c': true,
 					}
 				}
 			}
@@ -262,9 +266,12 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 						// loop through each climb
 
 						if (climb.grade == grade) {
-							// identify the climbs that will be filtered, then set to bool, kept track in checkbox
-							climb.included = scope.filter.grade.boulder[grade];
+						// identify the climbs that will be filtered, then set to bool, kept track in checkbox
+							climb.included = (grade > 9) ?
+								scope.filter.grade.boulder.large[grade] :
+								scope.filter.grade.boulder.small[grade];
 						}
+						
 					});
 				});
 

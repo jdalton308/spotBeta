@@ -32,3 +32,4 @@ var app = angular.module('spotBeta', [
 
 		$locationProvider.html5Mode(true);
 	});
+
