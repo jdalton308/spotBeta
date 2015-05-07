@@ -7,26 +7,83 @@
 			Climb type
 		</div>
 		<label>
-			<input type="checkbox" checked="checked" ng-model="filter.roped" ng-change="filterType('roped')">
+			<input type="checkbox" checked="checked" ng-model="filter.type.roped" ng-change="filterType('roped')">
 			Roped
 		</label>
 		<div class="ropeSubTypes">			
 			<label>
-				<input type="checkbox" checked="checked" ng-model="filter.sport" ng-change="filterType('sport')">
+				<input type="checkbox" checked="checked" ng-model="filter.type.sport" ng-change="filterType('sport')">
 				Sport
 			</label>
 			<label>
-				<input type="checkbox" checked="checked" ng-model="filter.trad" ng-change="filterType('trad')">
+				<input type="checkbox" checked="checked" ng-model="filter.type.trad" ng-change="filterType('trad')">
 				Trad
 			</label>
 			<label>
-				<input type="checkbox" checked="checked" ng-model="filter.topRope" ng-change="filterType('topRope')">
+				<input type="checkbox" checked="checked" ng-model="filter.type.topRope" ng-change="filterType('topRope')">
 				Top-rope
 			</label>
 		</div>
 		<label>
-			<input type="checkbox" checked="checked" ng-model="filter.boulder" ng-change="filterType('boulder')">
+			<input type="checkbox" checked="checked" ng-model="filter.type.boulder" ng-change="filterType('boulder')">
 			Boulders
 		</label>
+	</div>
+	<div class="filterSection">
+		<div class="filterHeader">
+			Grade
+		</div>
+		<div class="boulderGrades">
+
+			<label ng-repeat="(grade, val)  in filter.grade.boulder">
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder[grade]" ng-change="filterBoulderGrade(grade)">
+				V{{grade}}
+			</label>
+
+			<!-- <label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['0']" ng-change="filterBoulderGrade(0)">
+				V0
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['1']" ng-change="filterBoulderGrade(1)">
+				V1
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['2']" ng-change="filterBoulderGrade(2)">
+				V2
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['3']" ng-change="filterBoulderGrade(3)">
+				V3
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['4']" ng-change="filterBoulderGrade(4)">
+				V4
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['5']" ng-change="filterBoulderGrade(5)">
+				V5
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['6']" ng-change="filterBoulderGrade(6)">
+				V6
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['7']" ng-change="filterBoulderGrade(7)">
+				V7
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['8']" ng-change="filterBoulderGrade(8)">
+				V8
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['9']" ng-change="filterBoulderGrade(9)">
+				V9
+			</label>
+			<label>
+				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder['10']" ng-change="filterBoulderGrade(10)">
+				V10+
+			</label> -->
+		</div>
 	</div>
 </article>
