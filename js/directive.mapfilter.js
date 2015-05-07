@@ -27,6 +27,10 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 
 			var infoWindow = new google.maps.InfoWindow();
 
+			google.maps.event.addListener(infoWindow, 'closeclick', function(){
+				infoWindow.isOpen = false;
+			});
+
 
 			// Markers/Marker click events function
 			var drawMarkers = function(data) {
@@ -92,14 +96,25 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 						// console.log('Spot included');
 
 						if (scope.markers[key]) {
-							// Close infobox, if open
-							infoWindow.close();
-							// TODO: Test if current infoWindow.content = last boxContent. If so, update the infowindow content, then reshow the infowindow on the marker
-
 							// console.log('Marker exists');
+
 							// marker exists, so just update info box
 							scope.markers[key].boxContent = boxContent;
 
+							// If infowindow is open, update the content w/o closing it
+							if (infoWindow.isOpen) {
+								// console.log('Infowindow open');
+
+								var infoPos = infoWindow.getPosition();
+								var markerPos = scope.markers[key].getPosition();
+
+								if (infoPos == markerPos) {
+									// console.log('Infowindow found');
+									infoWindow.close();
+									new google.maps.event.trigger( scope.markers[key], 'click' );
+								}
+
+							}
 
 						} else {
 							// console.log('Creating new marker');
@@ -119,8 +134,8 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 					            infoWindow.open(scope.map, marker);
 								scope.map.panTo( marker.getPosition() );
 
-								console.log('Marker:');
-								console.log(marker);
+								//for tracking open/closed status
+								infoWindow.isOpen = true;
 							});
 
 							scope.markers[key] = marker;
@@ -128,18 +143,29 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 
 					} else {
 						// Destroy the marker, infobox, and click-event listner
-						// console.log('Deleting...')
-						// console.log(scope.markers[key]);
+						if (scope.markers[key]) {
 
-						scope.markers[key].setMap(null);
-						scope.markers[key] = null;
+							var infoPos = infoWindow.getPosition();
+							var markerPos = scope.markers[key].getPosition();
+
+							if (infoPos == markerPos) {
+								// Marker is being deleted, but the infowindow is open in that spot
+								infoWindow.isOpen = false;
+							}
+
+							scope.markers[key].setMap(null);
+							scope.markers[key] = null;
+
+						}
 					}
 
 				}); // end forEach()
 			}; // end drawMarkers()
 
 
-			// Render markers after data loaded
+			// INITIALIZE
+			//=====================
+
 			var originalData;
 			var filteredData;
 
@@ -158,17 +184,7 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 				});
 
 
-
-			// FILTERING
-			//==================
-
-			// scope.boulderGrades = [
-			// 	0, 1, 2, 3, 4, 5, 6, 7, 8 ,9, 10, 11, 12, 13, 14, 15, 16
-			// ];
-
-			// Filter the markers on clicks
-
-			// initialize the 
+			// initialize the filter
 			scope.filter = {
 				type: {
 					roped: true,
@@ -231,7 +247,13 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 						'15c': true,
 					}
 				}
-			}
+			};
+
+
+			// FILTERING
+			//==================
+
+			// Filter the markers on clicks
 
 			scope.filterType = function(type) {
 
@@ -252,7 +274,7 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 				});
 
 				drawMarkers(filteredData);
-			}
+			};
 
 			scope.filterBoulderGrade = function(grade) {
 
@@ -276,7 +298,7 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 				});
 
 				drawMarkers(filteredData);
-			}
+			};
 
 		}
 	}
