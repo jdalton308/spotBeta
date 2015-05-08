@@ -35,9 +35,8 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 			// Markers/Marker click events function
 			var drawMarkers = function(data) {
 
-				// Close infobox, if open
-				// infoWindow.close();
-
+				// Determine what is included and create infobox
+				//---------------------------
 				angular.forEach( data, function(val, key){
 					// Loop through each climb spot
 
@@ -91,6 +90,8 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 					boxContent += '</div>';
 				
 
+				// Create the marker and add infobox
+				//---------------------------
 					// If included routes, create new marker for each location
 					if (val.included) {
 						// console.log('Spot included');
@@ -163,11 +164,55 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 			}; // end drawMarkers()
 
 
+			var buildFilterList = function(data) {
+
+				angular.forEach( data, function(spot, key) {
+					// Loop through each climb spot
+
+					var thisSpot = {};
+
+					if (spot.included) {
+						thisSpot.name = spot.name;
+						thisSpot.location = spot.location;
+						thisSpot.climbs = [];
+
+						angular.forEach( spot.climbs, function(climb, key){
+							if (climb.included) {
+								thisSpot.climbs.push(angular.copy(climb));
+							}
+						});
+
+						// Turn the ratings into strings
+						angular.forEach( thisSpot.climbs, function(climb, key){
+
+							if (angular.isNumber(climb.grade)) {
+								var newGrade = (climb.type == 'boulder') ?
+									'V' + climb.grade.toString() :
+									'5.' + climb.grade.toString();
+
+								climb.grade = newGrade;
+							}
+						});
+
+						scope.filteredList[thisSpot.name] = thisSpot;
+
+					} else {
+						delete scope.filteredList[spot.name];
+					}
+
+				}); // end forEach
+
+				console.log('Filtered List:');
+				console.log(scope.filteredList);
+			}
+
+
 			// INITIALIZE
 			//=====================
 
 			var originalData;
-			var filteredData;
+			scope.filteredData;
+			scope.filteredList = {};
 
 			ClimbData.$loaded()
 				.then(function(data){
@@ -175,9 +220,10 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 					console.log(data);
 
 					originalData = angular.copy(data.data);
-					filteredData = angular.copy(data.data);
+					scope.filteredData = angular.copy(data.data);
 
-					drawMarkers(filteredData);
+					drawMarkers(scope.filteredData);
+					buildFilterList(scope.filteredData);
 				})
 				.catch(function(err){
 					console.error(err);	
@@ -257,9 +303,9 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 
 			scope.filterType = function(type) {
 
-				console.log(scope.filter);
+				// console.log(scope.filter);
 
-				angular.forEach(filteredData, function(value, key){
+				angular.forEach(scope.filteredData, function(value, key){
 					// loop through each climbing spot 
 					var spotClimbs = value.climbs;
 
@@ -273,14 +319,15 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 					});
 				});
 
-				drawMarkers(filteredData);
+				drawMarkers(scope.filteredData);
+				buildFilterList(scope.filteredData);
 			};
 
 			scope.filterBoulderGrade = function(grade) {
 
-				console.log(scope.filter);
+				// console.log(scope.filter);
 
-				angular.forEach(filteredData, function(value, key){
+				angular.forEach(scope.filteredData, function(value, key){
 					// loop through each climbing spot 
 					var spotClimbs = value.climbs;
 
@@ -297,7 +344,8 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 					});
 				});
 
-				drawMarkers(filteredData);
+				drawMarkers(scope.filteredData);
+				buildFilterList(scope.filteredData);
 			};
 
 		}

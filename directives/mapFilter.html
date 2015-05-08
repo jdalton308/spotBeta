@@ -1,16 +1,36 @@
 <div id='googleMap'></div>
 
+<div class="resultList">
+	<h2>Included Climbs</h2>
+
+	<div class="resultSpot" ng-repeat="(key, spot) in filteredList">
+		<div class="spotDetails">
+			<h3>{{spot.name}}</h3>
+			<ul class="spotClimbs">
+
+				<li ng-repeat="climb in spot.climbs">
+					<div class="climbResult">
+						<div class="climbRating">{{climb.grade}}</div>
+						<a href="#">{{climb.name}}</a>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+
+</div>
+
 <article class="filterBar">
 	<h2>Filter Routes and Problems</h2>
+
 	<div class="filterSection">
-		<div class="filterHeader">
-			Climb type
-		</div>
+		<h3>Climb type</h3>
 		<label>
 			<input type="checkbox" checked="checked" ng-model="filter.type.roped" ng-change="filterType('roped')">
 			Roped
 		</label>
-		<div class="ropeSubTypes">			
+		<div class="ropeSubTypes" ng-show="filter.type.roped">			
 			<label>
 				<input type="checkbox" checked="checked" ng-model="filter.type.sport" ng-change="filterType('sport')">
 				Sport
@@ -29,10 +49,9 @@
 			Boulders
 		</label>
 	</div>
+
 	<div class="filterSection">
-		<div class="filterHeader">
-			Grade
-		</div>
+		<h3>Grade</h3>
 		<div class="boulderGrades">
 
 			<!-- Split in two to keep order -->
