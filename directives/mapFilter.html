@@ -1,17 +1,17 @@
-<div id='googleMap'></div>
+<div id='googleMap' ng-class="{open: showResultList}"></div>
 
-<div class="resultList">
+<div class="resultList" ng-class="{open: showResultList}">
 	<h2>Included Climbs</h2>
 
 	<div class="resultSpot" ng-repeat="(key, spot) in filteredList">
 		<div class="spotDetails">
-			<h3>{{spot.name}}</h3>
+			<h3 class="clickable" ng-click="showMarker(spot.key)">{{spot.name}}</h3>
 			<ul class="spotClimbs">
 
 				<li ng-repeat="climb in spot.climbs">
 					<div class="climbResult">
 						<div class="climbRating">{{climb.grade}}</div>
-						<a href="#">{{climb.name}}</a>
+						<a href="#" ng-click="">{{climb.name}}</a>
 					</div>
 				</li>
 
@@ -22,49 +22,61 @@
 </div>
 
 <article class="filterBar">
+
+	<button class="showListBtn" ng-click="toggleList()" ng-class="{active: showResultList}">
+		<span ng-if="!showResultList">Show list</span>
+		<span ng-if="showResultList">Hide list</span>
+	</button>
+
 	<h2>Filter Routes and Problems</h2>
 
 	<div class="filterSection">
-		<h3>Climb type</h3>
-		<label>
-			<input type="checkbox" checked="checked" ng-model="filter.type.roped" ng-change="filterType('roped')">
-			Roped
-		</label>
-		<div class="ropeSubTypes" ng-show="filter.type.roped">			
+		<h3 class="clickable" ng-click="toggleFilter('type')">Climb type</h3>
+
+		<div class="filters" ng-show="filter.type.showing">
 			<label>
-				<input type="checkbox" checked="checked" ng-model="filter.type.sport" ng-change="filterType('sport')">
-				Sport
+				<input type="checkbox" checked="checked" ng-model="filter.type.roped" ng-change="filterType('roped')">
+				Roped
 			</label>
+			<div class="ropeSubTypes" ng-show="filter.type.roped">			
+				<label>
+					<input type="checkbox" checked="checked" ng-model="filter.type.sport" ng-change="filterType('sport')">
+					Sport
+				</label>
+				<label>
+					<input type="checkbox" checked="checked" ng-model="filter.type.trad" ng-change="filterType('trad')">
+					Trad
+				</label>
+				<label>
+					<input type="checkbox" checked="checked" ng-model="filter.type.topRope" ng-change="filterType('topRope')">
+					Top-rope
+				</label>
+			</div>
 			<label>
-				<input type="checkbox" checked="checked" ng-model="filter.type.trad" ng-change="filterType('trad')">
-				Trad
-			</label>
-			<label>
-				<input type="checkbox" checked="checked" ng-model="filter.type.topRope" ng-change="filterType('topRope')">
-				Top-rope
+				<input type="checkbox" checked="checked" ng-model="filter.type.boulder" ng-change="filterType('boulder')">
+				Boulders
 			</label>
 		</div>
-		<label>
-			<input type="checkbox" checked="checked" ng-model="filter.type.boulder" ng-change="filterType('boulder')">
-			Boulders
-		</label>
 	</div>
 
 	<div class="filterSection">
-		<h3>Grade</h3>
-		<div class="boulderGrades">
+		<h3 class="clickable" ng-click="toggleFilter('grade')">Grade</h3>
 
-			<!-- Split in two to keep order -->
-			<label ng-repeat="(grade, val)  in filter.grade.boulder.small">
-				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder.small[grade]" ng-change="filterBoulderGrade(grade)">
-				V{{grade}}
-			</label>
+		<div class="filters" ng-show="filter.grade.showing">
+			<div class="boulderGrades" ng-show="filter.type.boulder">
 
-			<label ng-repeat="(grade, val)  in filter.grade.boulder.large">
-				<input type="checkbox" checked="checked" ng-model="filter.grade.boulder.large[grade]" ng-change="filterBoulderGrade(grade)">
-				V{{grade}}
-			</label>
+				<!-- Split in two to keep order -->
+				<label ng-repeat="(grade, val)  in filter.grade.boulder.small">
+					<input type="checkbox" checked="checked" ng-model="filter.grade.boulder.small[grade]" ng-change="filterBoulderGrade(grade)">
+					V{{grade}}
+				</label>
 
+				<label ng-repeat="(grade, val)  in filter.grade.boulder.large">
+					<input type="checkbox" checked="checked" ng-model="filter.grade.boulder.large[grade]" ng-change="filterBoulderGrade(grade)">
+					V{{grade}}
+				</label>
+
+			</div>
 		</div>
 	</div>
 </article>

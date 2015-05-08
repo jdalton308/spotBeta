@@ -31,6 +31,15 @@ h3 {
 	font-size: 1.5em;
 	margin: 0 0 10px;
 	color: @grey;
+
+	&.clickable {
+		cursor: pointer;
+		.transition();
+		
+		&:hover {
+			color: @betaOrange;
+		}
+	}
 }
 ul {
 	list-style: none;
@@ -68,7 +77,6 @@ button {
 
 	display: inline-block;
 	background-color: @betaLightGreen;
-	border-radius: 5px;
 	padding: 6px 10px 5px;
 	margin: 0 10px;
 	text-align: center;

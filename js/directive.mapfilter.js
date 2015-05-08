@@ -175,6 +175,7 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 						thisSpot.name = spot.name;
 						thisSpot.location = spot.location;
 						thisSpot.climbs = [];
+						thisSpot.key = key;
 
 						angular.forEach( spot.climbs, function(climb, key){
 							if (climb.included) {
@@ -194,10 +195,10 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 							}
 						});
 
-						scope.filteredList[thisSpot.name] = thisSpot;
+						scope.filteredList[thisSpot.key] = thisSpot;
 
 					} else {
-						delete scope.filteredList[spot.name];
+						delete scope.filteredList[key];
 					}
 
 				}); // end forEach
@@ -233,6 +234,7 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 			// initialize the filter
 			scope.filter = {
 				type: {
+					showing: true,
 					roped: true,
 					sport: true,
 					trad: true,
@@ -240,7 +242,9 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 					boulder: true
 				},
 				grade: {
+					showing: true,
 					boulder: {
+						showing: true,
 						small: {
 							0: true,
 							1: true, 
@@ -264,6 +268,7 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 						}
 					},
 					roped: {
+						showing: true,
 						6: true,
 						7: true,
 						8: true,
@@ -347,6 +352,25 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 				drawMarkers(scope.filteredData);
 				buildFilterList(scope.filteredData);
 			};
+
+
+			// SHOW?HIDE CONTROLS
+			//=========================
+			scope.showResultList = false;
+
+			scope.toggleList = function() {
+				scope.showResultList = !scope.showResultList;
+			};
+
+			scope.showMarker = function(key) {
+				new google.maps.event.trigger( scope.markers[key], 'click' );
+			};
+
+			scope.toggleFilter = function(cat) {
+				console.log('Cat: '+ cat);
+				console.log(scope.filter);
+				scope.filter[cat].showing = !scope.filter[cat].showing;
+			}
 
 		}
 	}
