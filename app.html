@@ -13,7 +13,7 @@
 			<a ng-href="#authSection" ng-hide="signedIn()" ng-click="showSignup()">Sign-up</a>
 			<a ng-href="#authSection" ng-hide="signedIn()" ng-click="showLogin()">Login</a>
 
-			<a ng-href="/profile" ng-show="signedIn()">Profile</a>
+			<a ng-href="" ng-show="signedIn()" ng-click="toggleProfile()">Profile</a>
 			<a ng-href="/lists" ng-show="signedIn()">Lists</a>
 			<a ng-show="signedIn()" ng-click="logout()">Logout</a>
 		</div>
@@ -40,5 +40,7 @@
 	</nav>
 
 	<jd-map-filter></jd-map-filter>
+
+	<jd-profile-view ng-show="showProfile"></jd-profile-view>
 
 </div>

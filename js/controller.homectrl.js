@@ -1,61 +1,64 @@
 
-app.controller('homeController', ['$scope', '$location', 'Auth', 
-	function($scope, $location, Auth){
+// USING APPCONTROLLER INSTEAD
 
-	// USER AUTHENTICATION
+// app.controller('homeController', ['$scope', '$location', 'Auth', 'User', 
+// 	function($scope, $location, Auth, User){
 
-	$scope.signedIn = Auth.signedIn;
-	$scope.logout = Auth.logout;
-	$scope.user = Auth.user;
-	$scope.oldUser = {};
+// 	// USER AUTHENTICATION
 
-	// if (Auth.signedIn) {
-	// 	$location.path('/');
-	// }
+// 	$scope.signedIn = Auth.signedIn;
+// 	$scope.logout = Auth.logout;
+// 	$scope.user = Auth.user;
+// 	$scope.oldUser = {};
 
-	$scope.login = function() {
-		Auth.login($scope.oldUser).then(function(userData){
-			console.log('User Logged In:');
-			console.log(userData);
+// 	// if (Auth.signedIn) {
+// 	// 	$location.path('/');
+// 	// }
 
-			$location.path('/app');
-			$scope.hideAuth();
+// 	$scope.login = function() {
+// 		Auth.login($scope.oldUser).then(function(profileData){
+// 			console.log('User Logged In:');
+// 			console.log(profileData);
 
-		}, function(error) {
-			$scope.error = error.toString();
-		});
-	}
+// 			$location.path('/app');
+// 			$scope.hideAuth();
 
-	$scope.register = function() {
-		Auth.register($scope.user).then(function(userData){
-			console.log('User Created:');
-			console.log(userData);
+// 		}, function(error) {
+// 			$scope.error = error.toString();
+// 		});
+// 	}
 
-			return Auth.login($scope.user).then(function(){
-				$location.path('/app');
-			});
-		}, function(error) {
-			$scope.error = error.toString();
-		});
-	}
+// 	$scope.register = function() {
+// 		Auth.register($scope.user).then(function(userData){
+// 			console.log('User Created:');
+// 			console.log(userData);
 
-
-	// Show/Hide Login and Signup forms in menu bar
-	$scope.signupShowing = false;
-	$scope.loginShowing = false;
-
-	$scope.showLogin = function() {
-		$scope.signupShowing = false;
-		$scope.loginShowing = !$scope.loginShowing;
-	}
-	$scope.showSignup = function() {
-		$scope.signupShowing = !$scope.signupShowing;
-		$scope.loginShowing = false;
-	}
-	$scope.hideAuth = function() {
-		$scope.signupShowing = false;
-		$scope.loginShowing = false;
-	}
+// 			Auth.login($scope.user).then(function(){
+// 				$location.path('/app');
+// 			});
+			
+// 		}, function(error) {
+// 			$scope.error = error.toString();
+// 		});
+// 	}
 
 
-}]);
+// 	// Show/Hide Login and Signup forms in menu bar
+// 	$scope.signupShowing = false;
+// 	$scope.loginShowing = false;
+
+// 	$scope.showLogin = function() {
+// 		$scope.signupShowing = false;
+// 		$scope.loginShowing = !$scope.loginShowing;
+// 	}
+// 	$scope.showSignup = function() {
+// 		$scope.signupShowing = !$scope.signupShowing;
+// 		$scope.loginShowing = false;
+// 	}
+// 	$scope.hideAuth = function() {
+// 		$scope.signupShowing = false;
+// 		$scope.loginShowing = false;
+// 	}
+
+
+// }]);

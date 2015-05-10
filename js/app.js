@@ -12,7 +12,7 @@ var app = angular.module('spotBeta', [
 		$routeProvider
 			.when('/', {
 				templateUrl: 'home.html',
-				controller: 'homeController'
+				controller: 'appController'
 			})
 			.when('/app', {
 				templateUrl: 'app.html',

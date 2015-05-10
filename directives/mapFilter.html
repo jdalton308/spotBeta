@@ -10,6 +10,9 @@
 
 				<li ng-repeat="climb in spot.climbs">
 					<div class="climbResult">
+						<div class="addToList" ng-click="addToList(climb)">
+							<i class="fa fa-plus-circle"></i>
+						</div>
 						<div class="climbRating">{{climb.grade}}</div>
 						<a href="#" ng-click="">{{climb.name}}</a>
 					</div>

@@ -203,8 +203,8 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 
 				}); // end forEach
 
-				console.log('Filtered List:');
-				console.log(scope.filteredList);
+				// console.log('Filtered List:');
+				// console.log(scope.filteredList);
 			}
 
 
@@ -217,11 +217,11 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 
 			ClimbData.$loaded()
 				.then(function(data){
-					console.log('Data in directive');
-					console.log(data);
+					// console.log('Data in directive');
+					// console.log(data);
 
-					originalData = angular.copy(data.data);
-					scope.filteredData = angular.copy(data.data);
+					originalData = angular.copy(data);
+					scope.filteredData = angular.copy(data);
 
 					drawMarkers(scope.filteredData);
 					buildFilterList(scope.filteredData);
@@ -354,7 +354,7 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 			};
 
 
-			// SHOW?HIDE CONTROLS
+			// SHOW/HIDE CONTROLS
 			//=========================
 			scope.showResultList = false;
 
@@ -367,11 +367,15 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 			};
 
 			scope.toggleFilter = function(cat) {
-				console.log('Cat: '+ cat);
-				console.log(scope.filter);
 				scope.filter[cat].showing = !scope.filter[cat].showing;
 			}
 
+
+			// CREATE LISTS
+			//=======================
+			scope.addToList = function(climb){
+
+			}
 		}
 	}
 }]);

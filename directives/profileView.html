@@ -1,0 +1,89 @@
+<div class="profileView">
+
+	<div class="wrapper">
+		<h2>Profile</h2>
+		<form name="updateProfile">
+			<div class="formGroup">
+				<label>First</label>
+				<input ng-model="userProfile.info.firstname" type="text">
+			</div>
+
+			<div class="formGroup">
+				<label>Last</label>
+				<input ng-model="userProfile.info.lastname" type="text">
+			</div>
+			<div class="formGroup">
+				<label>Location</label>
+				<input ng-model="userProfile.info.location" type="text">
+			</div>
+
+			<button type="submit" ng-click="saveProfile()">Save</button>
+		</form>
+
+		<h2>Account</h2>
+		<div class="accountWrapper">
+			<h3 ng-click="showUpdatePass()" class="clickable">Update Password</h3>
+			<h3 ng-click="showUpdateEmail()" class="clickable">Update Email</h3>			
+			<h3 ng-click="showDeleteUser()" class="clickable">Delete Profile</h3>			
+
+			<form name="updatePass" ng-show="updatePassForm">
+				<div class="formGroup">
+					<label>Email</label>
+					<input ng-model="tempPassUpdate.email" type="email">
+				</div>
+
+				<div class="formGroup">
+					<label>Old Password</label>
+					<input ng-model="tempPassUpdate.oldPass" type="password">
+				</div>
+
+				<div class="formGroup">
+					<label>New Password</label>
+					<input ng-model="tempPassUpdate.newPass" type="password">
+				</div>
+
+				<button type="submit" ng-click="updatePassword()">Update Password</button>
+			</form>
+
+
+			<form name="updateEmail" ng-show="updateEmailForm">
+
+				<div class="formGroup">
+					<label>New Email</label>
+					<input ng-model="tempEmailUpdate.newEmail" type="text">
+				</div>
+
+				<div class="formGroup">
+					<label>Old Email</label>
+					<input ng-model="tempEmailUpdate.oldEmail" type="email">
+				</div>
+
+				<div class="formGroup">
+					<label>Password</label>
+					<input ng-model="tempEmailUpdate.pass" type="password">
+				</div>
+
+				<button type="submit" ng-click="updateEmail()">Update Email</button>
+			</form>
+
+
+			<form name="deleteAccount" ng-show="deleteUserForm">
+
+				<div class="formGroup">
+					<label>Email</label>
+					<input ng-model="deleteUserObj.email" type="email">
+				</div>
+
+				<div class="formGroup">
+					<label>Password</label>
+					<input ng-model="deleteUserObj.pass" type="password">
+				</div>
+
+				<button type="`submit" ng-click="deleteAccount()">Delete Account</button>
+			</form>
+		</div>
+
+		
+	</div>
+
+</div>
