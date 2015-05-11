@@ -10,7 +10,7 @@
 
 				<li ng-repeat="climb in spot.climbs">
 					<div class="climbResult">
-						<div class="addToList" ng-click="addToList(climb)">
+						<div class="addToList" ng-click="showAddListCont(climb)">
 							<i class="fa fa-plus-circle"></i>
 						</div>
 						<div class="climbRating">{{climb.grade}}</div>
@@ -20,6 +20,40 @@
 
 			</ul>
 		</div>
+	</div>
+
+
+	<div class="listAddCont" ng-show="addListCont">
+
+		<div class="closeListAddBtn" ng-click="hideListCont()">
+			<i class="fa fa-times"></i>
+		</div>
+
+		<div class="listView" ng-if="userProfile.lists">
+			<h3>My Lists</h3>
+			<div class="listItemCont" ng-repeat="(name, list) in userProfile.lists">
+				<div class="clickListItem" ng-click="addToList(list)">
+					<div class="listName">{{name}}</div>
+					<i class="fa fa-plus-circle"></i>
+				</div>
+			</div>
+
+			<h3 class="clickable" ng-click="toggleAddNewList()">Create new list</h3>
+			<div class="addNewListCont" ng-show="addNewListCont">
+				<label for="listName">Name</label>
+				<input type="text" name="listName" ng-model="tempListName">
+				<button id="addListBtn" ng-click="addList()">Save</button>
+			</div>
+
+		</div>
+
+
+		<div class="createListView" ng-if="!userProfile.lists">
+			<h3>Create your first list</h3>
+			<input type="text" name="listName">
+			<button id="addListBtn" ng-click="addList()">Save</button>
+		</div>
+
 	</div>
 
 </div>

@@ -1,5 +1,5 @@
 
-app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
+app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 	return {
 		restrict: 'E',
 		templateUrl: "directives/mapFilter.html",
@@ -368,14 +368,74 @@ app.directive('jdMapFilter', ['ClimbData', function(ClimbData){
 
 			scope.toggleFilter = function(cat) {
 				scope.filter[cat].showing = !scope.filter[cat].showing;
-			}
+			};
 
 
-			// CREATE LISTS
+			// MANAGE LISTS
 			//=======================
-			scope.addToList = function(climb){
+			scope.userProfile = User.user;
+			scope.tempListName;
+			scope.currentClimb;
 
-			}
+			// Show/hide
+			scope.addListCont = false;
+			scope.addNewListCont = false;
+
+			scope.showAddListCont = function(climb) {
+
+				// TODO: add window position
+				var newPos;
+
+				scope.currentClimb = climb;
+				scope.addListCont = true;
+			};
+			scope.hideListCont = function() {
+				scope.addListCont = false;
+			};
+			scope.toggleAddNewList = function() {
+				scope.addNewListCont = !scope.addNewListCont;
+			};
+
+			// Create/add lists
+			scope.addList = function() {
+
+				if (User.user.lists == undefined) {
+					User.user.lists = {};
+				}
+
+				User.user.lists[scope.tempListName] = [];
+				User.save(User.user).then(
+					function(response){
+						console.log('list added to user object:');
+						console.log(User.user);
+						console.log(response);
+					},
+					function(err) {
+						console.error('Error creating list: '+ err);
+					}
+				);
+
+			};
+
+			// Add climb to list
+			scope.addToList = function(list){
+				list.push(scope.currentClimb);
+				User.save(User.user).then(
+					function(response){
+						console.log('Climb added to list:');
+						console.log(User.user);
+						console.log(response);
+					},
+					function(err) {
+						console.error('Error adding climb to list: '+ err);
+					}
+				);
+			};
+
+			// Remove climb from list
+
+			// Delete list
+
 		}
 	}
 }]);
