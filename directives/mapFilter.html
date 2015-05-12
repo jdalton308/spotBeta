@@ -3,14 +3,14 @@
 <div class="resultList" ng-class="{open: showResultList}">
 	<h2>Included Climbs</h2>
 
-	<div class="resultSpot" ng-repeat="(key, spot) in filteredList">
+	<div class="resultSpot" ng-repeat="(key, spot) in filteredList track by spot.key">
 		<div class="spotDetails">
 			<h3 class="clickable" ng-click="showMarker(spot.key)">{{spot.name}}</h3>
 			<ul class="spotClimbs">
 
-				<li ng-repeat="climb in spot.climbs">
-					<div class="climbResult">
-						<div class="addToList" ng-click="showAddListCont(climb)">
+				<li ng-repeat="climb in spot.climbs track by $index">
+					<div id="{{spot.name}}{{$index}}" class="climbResult">
+						<div class="addToList" ng-click="showAddListCont(climb, $event)">
 							<i class="fa fa-plus-circle"></i>
 						</div>
 						<div class="climbRating">{{climb.grade}}</div>
@@ -28,6 +28,7 @@
 		<div class="closeListAddBtn" ng-click="hideListCont()">
 			<i class="fa fa-times"></i>
 		</div>
+		<h4>Adding {{currentClimb.name}}</h4>
 
 		<div class="listView" ng-if="userProfile.lists">
 			<h3>My Lists</h3>

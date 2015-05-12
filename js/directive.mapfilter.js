@@ -381,10 +381,36 @@ app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 			scope.addListCont = false;
 			scope.addNewListCont = false;
 
-			scope.showAddListCont = function(climb) {
+			scope.showAddListCont = function(climb, event) {
 
 				// TODO: add window position
-				var newPos;
+				// var newPos = 
+
+				console.log('Event object:');
+				console.log(event);
+
+				var popup = $('.listAddCont');
+				// var popupWidth = $(popup).width() + 50; // extra 50 is padding and space
+				var popupHeight = $(popup).height();
+
+				// var newLeft = event.pageX - popupWidth;
+				var newTop = event.pageY - (popupHeight/2);
+
+				angular.element('.listAddCont').css('top', newTop);
+
+				// var targetPos = $(targetClimb).position();
+				// var newLeft = targetPos.left;
+				// var newRight = targetPos.top;
+
+
+
+				// var targetClimb = angular.element('#'+spotName + index);
+				// console.log(targetClimb);
+
+				// console.log('newLeft: '+ newLeft);
+				// console.log('newRight: '+ newRight);
+
+
 
 				scope.currentClimb = climb;
 				scope.addListCont = true;
