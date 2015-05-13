@@ -208,7 +208,7 @@ app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 			}
 
 
-			// INITIALIZE
+			// INITIALIZE and LOAD DATA
 			//=====================
 
 			var originalData;
@@ -217,8 +217,8 @@ app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 
 			ClimbData.$loaded()
 				.then(function(data){
-					// console.log('Data in directive');
-					// console.log(data);
+					console.log('Data in directive');
+					console.log(data);
 
 					originalData = angular.copy(data);
 					scope.filteredData = angular.copy(data);
@@ -381,22 +381,22 @@ app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 			scope.addListCont = false;
 			scope.addNewListCont = false;
 
-			scope.showAddListCont = function(climb, event) {
+			scope.showAddListCont = function(name) {
 
 				// TODO: add window position
 				// var newPos = 
 
-				console.log('Event object:');
-				console.log(event);
+				// console.log('Event object:');
+				// console.log(event);
 
-				var popup = $('.listAddCont');
-				// var popupWidth = $(popup).width() + 50; // extra 50 is padding and space
-				var popupHeight = $(popup).height();
+				// var popup = $('.listAddCont');
+				// // var popupWidth = $(popup).width() + 50; // extra 50 is padding and space
+				// var popupHeight = $(popup).height();
 
-				// var newLeft = event.pageX - popupWidth;
-				var newTop = event.pageY - (popupHeight/2);
+				// // var newLeft = event.pageX - popupWidth;
+				// var newTop = event.pageY - (popupHeight/2);
 
-				angular.element('.listAddCont').css('top', newTop);
+				// angular.element('.listAddCont').css('top', newTop);
 
 				// var targetPos = $(targetClimb).position();
 				// var newLeft = targetPos.left;
@@ -409,6 +409,8 @@ app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 
 				// console.log('newLeft: '+ newLeft);
 				// console.log('newRight: '+ newRight);
+
+				scope[name] = true;
 
 
 
