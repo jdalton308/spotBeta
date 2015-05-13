@@ -373,91 +373,100 @@ app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 
 			// MANAGE LISTS
 			//=======================
-			scope.userProfile = User.user;
+			scope.userProfile = User.user();
 			scope.tempListName;
 			scope.currentClimb;
 
-			// Show/hide
-			scope.addListCont = false;
-			scope.addNewListCont = false;
+			// // Show/hide
+			// scope.addListCont = false;
+			// scope.addNewListCont = false;
 
-			scope.showAddListCont = function(name) {
+			// scope.showAddListCont = function(name) {
 
-				// TODO: add window position
-				// var newPos = 
+			// 	// TODO: add window position
+			// 	// var newPos = 
 
-				// console.log('Event object:');
-				// console.log(event);
+			// 	// console.log('Event object:');
+			// 	// console.log(event);
 
-				// var popup = $('.listAddCont');
-				// // var popupWidth = $(popup).width() + 50; // extra 50 is padding and space
-				// var popupHeight = $(popup).height();
+			// 	// var popup = $('.listAddCont');
+			// 	// // var popupWidth = $(popup).width() + 50; // extra 50 is padding and space
+			// 	// var popupHeight = $(popup).height();
 
-				// // var newLeft = event.pageX - popupWidth;
-				// var newTop = event.pageY - (popupHeight/2);
+			// 	// // var newLeft = event.pageX - popupWidth;
+			// 	// var newTop = event.pageY - (popupHeight/2);
 
-				// angular.element('.listAddCont').css('top', newTop);
+			// 	// angular.element('.listAddCont').css('top', newTop);
 
-				// var targetPos = $(targetClimb).position();
-				// var newLeft = targetPos.left;
-				// var newRight = targetPos.top;
-
-
-
-				// var targetClimb = angular.element('#'+spotName + index);
-				// console.log(targetClimb);
-
-				// console.log('newLeft: '+ newLeft);
-				// console.log('newRight: '+ newRight);
-
-				scope[name] = true;
+			// 	// var targetPos = $(targetClimb).position();
+			// 	// var newLeft = targetPos.left;
+			// 	// var newRight = targetPos.top;
 
 
 
-				scope.currentClimb = climb;
-				scope.addListCont = true;
-			};
-			scope.hideListCont = function() {
-				scope.addListCont = false;
-			};
-			scope.toggleAddNewList = function() {
-				scope.addNewListCont = !scope.addNewListCont;
-			};
+			// 	// var targetClimb = angular.element('#'+spotName + index);
+			// 	// console.log(targetClimb);
+
+			// 	// console.log('newLeft: '+ newLeft);
+			// 	// console.log('newRight: '+ newRight);
+
+			// 	scope[name] = true;
+
+
+
+			// 	scope.currentClimb = climb;
+			// 	scope.addListCont = true;
+			// };
+			// scope.hideListCont = function() {
+			// 	scope.addListCont = false;
+			// };
+			// scope.toggleAddNewList = function() {
+			// 	scope.addNewListCont = !scope.addNewListCont;
+			// };
+
 
 			// Create/add lists
-			scope.addList = function() {
+			scope.addList = function(listName) {
 
-				if (User.user.lists == undefined) {
-					User.user.lists = {};
+				if (scope.userProfile.lists == undefined) {
+					scope.userProfile.lists = {};
 				}
 
-				User.user.lists[scope.tempListName] = [];
-				User.save(User.user).then(
-					function(response){
-						console.log('list added to user object:');
-						console.log(User.user);
-						console.log(response);
-					},
-					function(err) {
-						console.error('Error creating list: '+ err);
-					}
-				);
+				scope.userProfile.lists[listName] = [];
+
+				console.log('Adding list to client object:');
+				console.log(scope.userProfile);
+
+				// User.save(User.user).then(
+				// 	function(response){
+				// 		console.log('list added and saved to user object:');
+				// 		console.log(scope.userProfile);
+				// 		console.log(response);
+				// 	},
+				// 	function(err) {
+				// 		console.error('Error creating list: '+ err);
+				// 	}
+				// );
 
 			};
 
 			// Add climb to list
-			scope.addToList = function(list){
-				list.push(scope.currentClimb);
-				User.save(User.user).then(
-					function(response){
-						console.log('Climb added to list:');
-						console.log(User.user);
-						console.log(response);
-					},
-					function(err) {
-						console.error('Error adding climb to list: '+ err);
-					}
-				);
+			scope.addToList = function(climb, list){
+				list.push(climb);
+
+				console.log(climb.name +' added to list');
+				console.log(scope.userProfile);
+
+				// User.save(User.user).then(
+				// 	function(response){
+				// 		console.log('Climb added and saved to list:');
+				// 		console.log(User.user);
+				// 		console.log(response);
+				// 	},
+				// 	function(err) {
+				// 		console.error('Error adding climb to list: '+ err);
+				// 	}
+				// );
 			};
 
 			// Remove climb from list

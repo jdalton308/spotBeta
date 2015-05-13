@@ -21,7 +21,7 @@ app.factory('User', ['$firebaseObject', 'FIREBASE_URL',
 			return usersObj.$save(); // returns promise
 		},
 		save: function(obj) {
-			return obj.$save; // returns promise. Obj is firebase object
+			return obj.$save(); // returns promise. Obj is firebase object
 		},
 		user: function(){
 			return userObj;
