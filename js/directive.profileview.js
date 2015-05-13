@@ -1,5 +1,5 @@
 
-app.directive('jdProfileView', ['ClimbData', 'User', function(ClimbData, User){
+app.directive('jdProfileView', ['User', function(User){
 	return {
 		restrict: 'E',
 		templateUrl: "directives/profileView.html",

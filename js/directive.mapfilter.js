@@ -404,6 +404,9 @@ app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 
 			// Add climb to list
 			scope.addToList = function(climb, list){
+
+				// TODO: add test for if climb is already in the list
+
 				list.push(climb);
 
 				console.log(climb.name +' added to list');

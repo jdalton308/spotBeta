@@ -1,0 +1,23 @@
+<div class="listView">
+	<div class="wrapper">
+
+		<h1>Your Lists</h1>
+
+		<div class="listCont" ng-repeat="(name, list) in userProfile.lists">
+			<h2>{{name}}</h2>
+			<ul class="climbs" ng-if="list.length > 0">
+				<li class="climb" ng-repeat="climb in list">
+					<h3>{{climb.name}}</h3>
+					<!-- TODO: add remove btn -->
+					<!-- TODO: link to climb view -->
+					<!-- TODO: link to a map view OR show a map view -->
+				</li>
+			</ul>
+
+			<div class="emptyListHolder" ng-if="list.length == 0">
+				<h3>Empty list. Find more climbs</h3>
+			</div>
+		</div>
+		
+	</div>
+</div>
