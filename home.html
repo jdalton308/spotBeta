@@ -7,9 +7,18 @@
 	<div class="searchForm">
 		<form id="homeSearch">
 			<h3>find rocks...</h3>
-			<input type="text" name="location">
-			<button type="submit" class="submitBtn">GO</button>
+			<input type="text" name="location" ng-model="query" ng-keyup="autocomplete(query)" autofocus>
+			<!-- <button type="submit" class="submitBtn">GO</button> -->
 		</form>
+	</div>
+	<div class="resultsList" ng-show="predictions">
+		<h3 ng-if="!predictions">Location results will display here</h3>
+		<h3 ng-if="predictions">Choose a place</h3>
+		<ul class="results">
+			<li ng-repeat="city in predictions">
+				<a ng-href="" ng-click="showMap(city)">{{city.description}}</a>
+			</li>
+		</ul>
 	</div>
 </section>
 

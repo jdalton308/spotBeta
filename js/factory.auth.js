@@ -92,6 +92,8 @@ app.factory('Auth', ["$firebaseAuth", '$firebaseObject', "FIREBASE_URL", 'User',
 			// logged out...
 			console.log('logged out');
 			angular.copy({}, Auth.user);
+
+			// TODO: signal to scope that logged out
 		}
 	});
 

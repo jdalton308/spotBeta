@@ -1,5 +1,5 @@
 
-app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
+app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData, Places, User){
 	return {
 		restrict: 'E',
 		templateUrl: "directives/mapFilter.html",
@@ -9,8 +9,15 @@ app.directive('jdMapFilter', ['ClimbData', 'User', function(ClimbData, User){
 			//====================
 
 			// Draw map
-			var currentLat = 37.8717;
-			var currentLong = -122.2728;
+			if (Places.currentSearch) {
+				// Check for search results
+				var currentLat = Places.currentSearch.geometry.location.A;
+				var currentLong = Places.currentSearch.geometry.location.F;
+			} else {
+				// Default location = Berkely, cA
+				var currentLat = 37.8717;
+				var currentLong = -122.2728;
+			}
 
 			var mapElement = document.getElementById("googleMap");
 			var mapOptions = {

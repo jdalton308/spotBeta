@@ -7,14 +7,7 @@ app.directive('jdListView', ['User', function(User){
 
 			scope.userProfile = User.user();
 
-			// SHOW/HIDE
-			//==========================
-
-			scope.showLists = false;
-
-			scope.toggleLists = function() {
-				scope.showLists = !scope.showLists;
-			};
+			
 
 		}
 	};

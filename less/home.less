@@ -14,16 +14,39 @@
 	}
 	.searchForm {
 		width: 100%;
-		max-width: 700px;
+		max-width: 600px;
 		margin: 0 auto 100px;
 		text-align: center;
 
 		input {
-			width: 70%;
+			width: 100%;
 			margin: 0 10px 0 0;
 		}
 		button {
 			width: 80px;
+		}
+	}
+	.resultsList {
+		max-width: 900px;
+		margin: 0 auto;
+
+		h3 {
+			text-align: center;
+		}
+		.results {
+
+			li {
+				margin-bottom: 10px;
+
+				a {
+					font-size: 1.3em;
+					.transition;
+
+					&:hover {
+						color: @linkHoverColor;
+					}
+				}
+			}
 		}
 	}
 }

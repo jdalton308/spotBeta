@@ -11,15 +11,10 @@ app.directive('jdProfileView', ['User', function(User){
 
 			// SHOW/HIDE CONTROLS
 			//==================================
-			scope.showProfile = false;
-
 			scope.updatePassForm = false;
 			scope.updateEmailForm = false;
 			scope.deleteUserForm = false;
 
-			scope.toggleProfile = function(){
-				scope.showProfile = !scope.showProfile;
-			};
 			scope.showUpdatePass = function(){
 				scope.updatePassForm = true;
 				scope.updateEmailForm = false;

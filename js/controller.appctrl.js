@@ -1,6 +1,6 @@
 
-app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 'ClimbData', 'User', 
-	function($scope, $location, FIREBASE_URL, Auth, ClimbData, User){
+app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 'ClimbData', 'User', 'Places',
+	function($scope, $location, FIREBASE_URL, Auth, ClimbData, User, Places){
 
 
 	// User creation and authentication
@@ -84,14 +84,61 @@ app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 
 		$scope.loginShowing = false;
 	};
 
+	// Other views
+	$scope.showProfile = false;
+	$scope.showLists = false;
+
+	$scope.toggleProfile = function(){
+		$scope.showProfile = !$scope.showProfile;
+		$scope.showLists = false;
+	};
+	$scope.toggleLists = function() {
+		$scope.showLists = !$scope.showLists;
+		$scope.showProfile = false;
+	};
 
 
-	// Location data
+
+	// LOCATION SEARCHING
+	//===============================
+
+	// Demo Location data
 	$scope.searchResult = {
 		name: 'Berkeley',
 		lat: 37.8717,
 		lng: -122.2728
-	}
+	};
+
+	$scope.predictions;
+	$scope.autocomplete = function(query) {
+		Places.autocomplete(query)
+			.then(function(predictions){
+				console.log('Autocomplete returned:');
+				console.log(predictions);
+
+				$scope.predictions = predictions;
+
+			}, function(err){
+				console.error(err);
+			});
+	};
+
+	$scope.showMap = function(cityObj) {
+		console.log(cityObj);
+
+		Places.geocode(cityObj.description)
+			.then(function(results){
+				console.log('Place details recieved:');
+				console.log(results);
+
+				Places.currentSearch = results[0]; //results is an array
+
+				$location.path('/app');
+
+			}, function(error) {
+				console.error(error);
+			});
+	};
 
 }]);
 
