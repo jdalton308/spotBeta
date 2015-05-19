@@ -109,6 +109,39 @@
 				</label>
 
 			</div>
+			<div class="ropedGrades" ng-show="filter.grade.roped.showing">
+				roped grades
+			</div>
 		</div>
 	</div>
+
+	<div class="filterSection">
+		<h3 class="clickable" ng-click="toggleFilter('rating')">Rating</h3>
+
+		<div class="filters" ng-show="filter.rating.showing">
+
+			<label ng-repeat="(star, val) in filter.rating.stars">
+				<input type="checkbox" checked="checked" ng-model="filter.rating.stars[star]" ng-change="filterStarRating(star)">
+				{{star}}
+			</label>
+
+		</div>
+	</div>
+
+	<div class="filterSection">
+		<h3 class="clickable" ng-click="toggleFilter('height')">Height</h3>
+
+		<div class="filters" ng-show="filter.height.showing">
+			<label ng-repeat="(height, val) in filter.height.groups">
+				<input type="checkbox" checked="checked" ng-model="val" ng-change="filterHeight(height)">
+				{{height}} feet
+			</label>
+		</div>
+	</div>
+
+	<div class="filterSection">
+		<button ng-click="resetFilters(true)" class="resetBtn">Show all</button>
+		<button ng-click="resetFilters(false)" class="resetBtn">Hide all</button>
+	</div>
+
 </article>

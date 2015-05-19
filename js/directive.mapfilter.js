@@ -304,6 +304,31 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 						'15b': true,
 						'15c': true,
 					}
+				},
+				rating: {
+					showing: true,
+					stars: {
+						1: true,
+						2: true,
+						3: true,
+						4: true,
+						5: true
+					}
+				},
+				height: {
+					showing: true,
+					groups: {
+						'<10': true,
+						'10-15': true,
+						'15-20': true,
+						'20-30': true,
+						'30-40': true,
+						'40-50': true,
+						'50-70': true,
+						'70-100': true,
+						'100-150': true,
+						'150+': true
+					}
 				}
 			};
 
@@ -358,6 +383,76 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 				drawMarkers(scope.filteredData);
 				buildFilterList(scope.filteredData);
+			};
+
+			scope.filterStarRating = function(star) {
+				console.log(scope.filter);
+
+				angular.forEach(scope.filteredData, function(value, key){
+
+					var spotClimbs = value.climbs;
+
+					angular.forEach(spotClimbs, function(climb, key){
+						// loop through each climb
+
+						if (climb.rating == star) {
+							console.log('Climb found with star rating:');
+							console.log(climb);
+
+							climb.included = scope.filter.rating.stars[star];
+						}
+					});
+
+				});
+
+				drawMarkers(scope.filteredData);
+				buildFilterList(scope.filteredData);
+			};
+
+			scope.filterHeight = function(height) {
+				console.log(height);
+
+
+			};
+
+			scope.resetFilters = function(bool) {
+
+				// define recursive function for filter obj
+				var loopFilter = function(obj){
+
+					angular.forEach(obj, function(val, key){
+
+						if (angular.isArray(val) || angular.isObject(val)) {
+							loopFilter(val); // call self if object
+						} else if (key != 'showing') { // don't change controls view
+							obj[key] = bool;
+						}
+					});
+				};
+
+				// show/hide all climbs
+				var showClimbs = function(data, booli) {
+					angular.forEach( data, function(val, key){
+						// Loop through each climb spot
+						val.included = booli;
+
+						// for each route, construct the HTML within infobox
+						angular.forEach( val.climbs, function(climb, key){
+							climb.included = booli;
+						});
+					});
+
+				};
+
+				loopFilter(scope.filter);
+				showClimbs(scope.filteredData, bool);				
+				drawMarkers(scope.filteredData);
+				buildFilterList(scope.filteredData);
+
+				console.log('Filter');
+				console.log(scope.filter);
+				console.log('Climbs');
+				console.log(scope.filteredData);
 			};
 
 
@@ -435,6 +530,6 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 			// Delete list
 
-		}
-	}
+		} // end link
+	} // end return obj
 }]);

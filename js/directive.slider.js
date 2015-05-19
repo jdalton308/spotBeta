@@ -1,0 +1,4 @@
+
+app.directive('jdSlider', [function(){
+
+}]);

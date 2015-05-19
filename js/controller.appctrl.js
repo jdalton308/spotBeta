@@ -109,7 +109,7 @@ app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 
 		lng: -122.2728
 	};
 
-	$scope.predictions;
+	$scope.predictions = false;
 	$scope.autocomplete = function(query) {
 		Places.autocomplete(query)
 			.then(function(predictions){
@@ -120,6 +120,7 @@ app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 
 
 			}, function(err){
 				console.error(err);
+				$scope.predictions = false;
 			});
 	};
 
@@ -137,6 +138,7 @@ app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 
 
 			}, function(error) {
 				console.error(error);
+				Places.currentSearch = false;
 			});
 	};
 
