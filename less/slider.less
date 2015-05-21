@@ -1,0 +1,36 @@
+.slider-container {
+	position: relative;
+	width: 100%;
+	height: 100px;
+
+	.slider-bar {
+		height: 10px;
+		width: 100%;
+		margin: 20px 0 50px;
+		border-radius: 5px;
+		background-color: @white;
+	}
+	.slider-marker {
+		position: absolute;
+		z-index: 2;
+		top: 5px;
+		cursor: pointer;
+
+		&#slider-min {
+			left: 2%;
+		}
+		&#slider-max {
+			left: 98%;
+		}
+
+		.slider-marker-icon {
+			height: 20px;
+			width: 5px;
+			background-color: @betaLightGreen;
+			box-shadow: 0 0 10px @grey;			
+		}
+		.slider-label {
+			text-align: center;
+		}
+	}
+}

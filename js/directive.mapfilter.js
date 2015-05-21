@@ -396,8 +396,8 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 						// loop through each climb
 
 						if (climb.rating == star) {
-							console.log('Climb found with star rating:');
-							console.log(climb);
+							// console.log('Climb found with star rating:');
+							// console.log(climb);
 
 							climb.included = scope.filter.rating.stars[star];
 						}
@@ -493,9 +493,8 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 				User.save(scope.userProfile).then(
 					function(response){
-						console.log('list added and saved to user object:');
+						console.log('list added and saved to user firebase object:');
 						console.log(scope.userProfile);
-						console.log(response);
 					},
 					function(err) {
 						console.error('Error creating list: '+ err);
