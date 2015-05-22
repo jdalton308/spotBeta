@@ -1,11 +1,10 @@
 <div class="slider-container">
-	<div class="slider-bar">f</div>
+	<div class="slider-bar"></div>
 	<div class="slider-marker" id="slider-min" ng-mousedown="startMove('min',$event)">
 		<div class="slider-marker-icon"></div>
 		<div class="slider-label" id="min-label">{{currentMin}}</div>
 	</div>
-	<div class="slider-marker" id="slider-max" 
-		ng-mousedown="startMove('max', $event)" ng-mousemove="moveSlideMarker()" ng-mouseup="stopMove()">
+	<div class="slider-marker" id="slider-max" ng-mousedown="startMove('max', $event)">
 		<div class="slider-marker-icon"></div>
 		<div class="slider-label" id="min-label">{{currentMax}}</div>
 	</div>

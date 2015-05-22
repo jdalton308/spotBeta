@@ -1,58 +1,77 @@
 
-app.directive('jdSlider', [function(){
+app.directive('jdSlider', ['$document', function($document){
 	return {
 		restrict: 'E',
 		templateUrl: 'directives/slider.html',
 		link: function(scope, element, attributes) {
 			
-			var fullWidth = element.width();
+			var fullWidth = angular.element('.slider-container').width();
 			var gradeWidth = fullWidth/16;
+			console.log('gradeWidth: '+ gradeWidth);
 			var gradePerc = 1/16*100;
 
 			// Initialize
 			scope.currentMin = 0;
 			scope.currentMax = 16;
+			scope.currentMinPos = 0;
+			scope.currentMaxPos = fullWidth;
 			scope.currentSlider = null;
 
-			var lastPos = 0;
+			var elStartPos;
 			var clickedEl;
 			var clickDownPos = 0;
-			var clickUpPos = 0;
 
 
 			scope.startMove = function(id, event) {
 				scope.currentSlider = id;
+
 				// Get current element
 				clickedEl = angular.element('#slider-'+id);
-				console.log('Current clickedEl:');
-				console.log(clickedEl);
+				elStartPos = parseInt( clickedEl.css('left'), 10);
 
 				// Get initial mouse pos
-				console.log('Event object:');
-				console.log(event);
 				clickDownPos = event.pageX;
-				console.log('Started at: '+ clickDownPos);
+
+				// Set-up drag behavior
+				$document.on('mousemove', moveMarker);
+				$document.on('mouseup', stopMarker);	
 			}
 
-			scope.moveSlideMarker = function(event) {
-				if (scope.currentSlider) {
-					console.log('Moving marker');
-					// step the markers position
-					// get the mouse distan
-					var currentMousePos = event.pageX;
-					var distanceMoved = clickDownPos - currentMousePos;
-					console.log(distanceMoved + 'px');
+			var moveMarker = function(e) {
+				var mousePos = e.pageX;
+				var movedDist = mousePos - clickDownPos;
+				var elPos = elStartPos + movedDist;
+				var newElPos;
+				
+				if (scope.currentSlider == 'min') {
 
-					// update slider pos
-						// ensure pos is not across other min/max
-					// calc newPos as percentage of slider width
-					// round position to nearest 16th
-					// update scope.min/max value 
+					newElPos = (elPos > scope.currentMaxPos) ? scope.currentMaxPos : 
+									(elPos < 0) ? 0 : elPos;
+
+					var newGrade = Math.round(newElPos/gradeWidth);
+					scope.$apply( scope.currentMin = newGrade );
+					scope.currentMinPos = newElPos;
+					console.log('Updated currentMin: '+ scope.currentMin);
+				} else {
+
+					newElPos = (elPos > fullWidth) ? fullWidth : 
+									(elPos < scope.currentMinPos) ? scope.currentMinPos : elPos;
+
+					var newGrade = Math.round(newElPos/gradeWidth);
+					scope.$apply( scope.currentMax = newGrade );
+					scope.currentMaxPos = newElPos;
+					console.log('Updated currentMax: '+ scope.currentMax);
 				}
+
+				clickedEl.css('left', newElPos);
 			}
-			scope.stopMove = function() {
-				scope.currentSlider = false;
-				clickedEl = null;
+
+			var stopMarker = function(e) {				
+				$document.off('mousemove', moveMarker);
+				$document.off('mouseup', stopMarker);
+
+				scope.clickedEl = null;
+				scope.currentSlider = null;
 			}
 		}
 	}
