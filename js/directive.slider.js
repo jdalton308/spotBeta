@@ -4,13 +4,13 @@ app.directive('jdSlider', ['$document', function($document){
 		restrict: 'E',
 		templateUrl: 'directives/slider.html',
 		link: function(scope, element, attributes) {
-			
+
+			// Initialize			
 			var fullWidth = angular.element('.slider-container').width();
 			var gradeWidth = fullWidth/16;
 			console.log('gradeWidth: '+ gradeWidth);
 			var gradePerc = 1/16*100;
 
-			// Initialize
 			scope.currentMin = 0;
 			scope.currentMax = 16;
 			scope.currentMinPos = 0;

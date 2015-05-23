@@ -3,10 +3,12 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 	return {
 		restrict: 'E',
 		templateUrl: "directives/mapFilter.html",
-		link: function(scope, element, attributes) {
+		controller : function($scope) {
+
+			var controller = this; 
 
 			// RENDERING
-			//====================
+			//=====================
 
 			// Draw map
 			if (Places.currentSearch) {
@@ -26,10 +28,10 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 				mapTypeId: google.maps.MapTypeId.TERRAIN
 			};
 
-			scope.map = new google.maps.Map(mapElement, mapOptions);
+			$scope.map = new google.maps.Map(mapElement, mapOptions);
 
-			if (scope.markers === undefined) {
-				scope.markers = {};
+			if ($scope.markers === undefined) {
+				$scope.markers = {};
 			}
 
 			var infoWindow = new google.maps.InfoWindow();
@@ -39,8 +41,11 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 			});
 
 
+			// UTILITY FUNCTIONS
+			//========================
+
 			// Markers/Marker click events function
-			var drawMarkers = function(data) {
+			this.drawMarkers = function(data) {
 
 				// Determine what is included and create infobox
 				//---------------------------
@@ -54,7 +59,6 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 					// Hide each marker by default, then show if route included
 					val.included = false;
-
 
 					// Create info box for each marker
 					var boxContent =
@@ -103,23 +107,23 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 					if (val.included) {
 						// console.log('Spot included');
 
-						if (scope.markers[key]) {
+						if ($scope.markers[key]) {
 							// console.log('Marker exists');
 
 							// marker exists, so just update info box
-							scope.markers[key].boxContent = boxContent;
+							$scope.markers[key].boxContent = boxContent;
 
 							// If infowindow is open, update the content w/o closing it
 							if (infoWindow.isOpen) {
 								// console.log('Infowindow open');
 
 								var infoPos = infoWindow.getPosition();
-								var markerPos = scope.markers[key].getPosition();
+								var markerPos = $scope.markers[key].getPosition();
 
 								if (infoPos == markerPos) {
 									// console.log('Infowindow found');
 									infoWindow.close();
-									new google.maps.event.trigger( scope.markers[key], 'click' );
+									new google.maps.event.trigger( $scope.markers[key], 'click' );
 								}
 
 							}
@@ -131,7 +135,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 							var marker = new google.maps.Marker({
 								title: spotTitle,
 								position: new google.maps.LatLng(thisLat, thisLong),
-								map: scope.map,
+								map: $scope.map,
 								animation: 'drop',
 								boxContent: boxContent
 							});
@@ -139,30 +143,30 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 							// Marker click event
 							google.maps.event.addListener(marker, 'click', function(){
 					            infoWindow.setContent(marker.boxContent);
-					            infoWindow.open(scope.map, marker);
-								scope.map.panTo( marker.getPosition() );
+					            infoWindow.open($scope.map, marker);
+								$scope.map.panTo( marker.getPosition() );
 
 								//for tracking open/closed status
 								infoWindow.isOpen = true;
 							});
 
-							scope.markers[key] = marker;
+							$scope.markers[key] = marker;
 						}
 
 					} else {
 						// Destroy the marker, infobox, and click-event listner
-						if (scope.markers[key]) {
+						if ($scope.markers[key]) {
 
 							var infoPos = infoWindow.getPosition();
-							var markerPos = scope.markers[key].getPosition();
+							var markerPos = $scope.markers[key].getPosition();
 
 							if (infoPos == markerPos) {
 								// Marker is being deleted, but the infowindow is open in that spot
 								infoWindow.isOpen = false;
 							}
 
-							scope.markers[key].setMap(null);
-							scope.markers[key] = null;
+							$scope.markers[key].setMap(null);
+							$scope.markers[key] = null;
 
 						}
 					}
@@ -171,7 +175,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 			}; // end drawMarkers()
 
 
-			var buildFilterList = function(data) {
+			this.buildFilterList = function(data) {
 
 				angular.forEach( data, function(spot, key) {
 					// Loop through each climb spot
@@ -202,10 +206,10 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 							}
 						});
 
-						scope.filteredList[thisSpot.key] = thisSpot;
+						$scope.filteredList[thisSpot.key] = thisSpot;
 
 					} else {
-						delete scope.filteredList[key];
+						delete $scope.filteredList[key];
 					}
 
 				}); // end forEach
@@ -215,12 +219,11 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 			}
 
 
-			// INITIALIZE and LOAD DATA
-			//=====================
+			// INITIALIZE FILTERS
+			//=========================
 
-			var originalData;
-			scope.filteredData;
-			scope.filteredList = {};
+			$scope.filteredData;
+			$scope.filteredList = {};
 
 			ClimbData.$loaded()
 				.then(function(data){
@@ -228,10 +231,10 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 					console.log(data);
 
 					originalData = angular.copy(data);
-					scope.filteredData = angular.copy(data);
+					$scope.filteredData = angular.copy(data);
 
-					drawMarkers(scope.filteredData);
-					buildFilterList(scope.filteredData);
+					controller.drawMarkers($scope.filteredData);
+					controller.buildFilterList($scope.filteredData);
 				})
 				.catch(function(err){
 					console.error(err);	
@@ -239,7 +242,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 
 			// initialize the filter
-			scope.filter = {
+			$scope.filter = {
 				type: {
 					showing: true,
 					roped: true,
@@ -330,7 +333,9 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 						'150+': true
 					}
 				}
-			};
+			};	
+		},
+		link: function(scope, element, attributes, controller) {
 
 
 			// FILTERING
@@ -356,8 +361,8 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 					});
 				});
 
-				drawMarkers(scope.filteredData);
-				buildFilterList(scope.filteredData);
+				controller.drawMarkers(scope.filteredData);
+				controller.buildFilterList(scope.filteredData);
 			};
 
 			scope.filterBoulderGrade = function(grade) {
@@ -381,8 +386,8 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 					});
 				});
 
-				drawMarkers(scope.filteredData);
-				buildFilterList(scope.filteredData);
+				controller.drawMarkers(scope.filteredData);
+				controller.buildFilterList(scope.filteredData);
 			};
 
 			scope.filterStarRating = function(star) {
@@ -405,8 +410,8 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 				});
 
-				drawMarkers(scope.filteredData);
-				buildFilterList(scope.filteredData);
+				controller.drawMarkers(scope.filteredData);
+				controller.buildFilterList(scope.filteredData);
 			};
 
 			scope.filterHeight = function(height) {
@@ -446,8 +451,8 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 				loopFilter(scope.filter);
 				showClimbs(scope.filteredData, bool);				
-				drawMarkers(scope.filteredData);
-				buildFilterList(scope.filteredData);
+				controller.drawMarkers(scope.filteredData);
+				controller.buildFilterList(scope.filteredData);
 
 				console.log('Filter');
 				console.log(scope.filter);
