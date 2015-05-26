@@ -98,7 +98,7 @@
 			<div class="boulderGrades" ng-show="filter.type.boulder">
 
 				<!-- Split in two to keep order -->
-				<label ng-repeat="(grade, val)  in filter.grade.boulder.small">
+				<!-- <label ng-repeat="(grade, val)  in filter.grade.boulder.small">
 					<input type="checkbox" checked="checked" ng-model="filter.grade.boulder.small[grade]" ng-change="filterBoulderGrade(grade)">
 					V{{grade}}
 				</label>
@@ -106,14 +106,15 @@
 				<label ng-repeat="(grade, val)  in filter.grade.boulder.large">
 					<input type="checkbox" checked="checked" ng-model="filter.grade.boulder.large[grade]" ng-change="filterBoulderGrade(grade)">
 					V{{grade}}
-				</label>
+				</label> -->
+				<p>Boulder Grades</p>
+				<jd-slider type="boulder" filter="filter"></jd-slider>
 
 			</div>
 			<div class="ropedGrades" ng-show="filter.grade.roped.showing">
-				roped grades
+				Roped Grades
+				<jd-slider type="roped" filter="filter"></jd-slider>
 			</div>
-
-			<jd-slider></jd-slider>
 
 		</div>
 	</div>

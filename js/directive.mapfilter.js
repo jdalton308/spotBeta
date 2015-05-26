@@ -279,33 +279,75 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 					},
 					roped: {
 						showing: true,
-						6: true,
-						7: true,
-						8: true,
-						9: true,
-						'10a': true,
-						'10b': true,
-						'10c': true,
-						'10d': true,
-						'11a': true,
-						'11b': true,
-						'11c': true,
-						'11d': true,
-						'12a': true,
-						'12b': true,
-						'12c': true,
-						'12d': true,
-						'13a': true,
-						'13b': true,
-						'13c': true,
-						'13d': true,
-						'14a': true,
-						'14b': true,
-						'14c': true,
-						'14d': true,
-						'15a': true,
-						'15b': true,
-						'15c': true,
+						grades: {
+							0: {
+								grade: 6,
+								include: true,
+								conversion: 6
+							},
+							1: {
+								grade: 7,
+								include: true,
+								conversion: 7
+							},
+							2: {
+								grade: 8,
+								include: true,
+								conversion: 8
+							},
+							3: {
+								grade: 9,
+								include: true,
+								conversion: 9
+							},
+							4: {
+								grade: '10a',
+								include: true,
+								conversion: 10.1
+							},
+							5: {
+								grade: '10b',
+								include: true,
+								conversion: 10.2
+							},
+							6: {
+								grade: '10c',
+								include: true,
+								conversion: 10.3
+							},
+							7: {
+								grade: '10d',
+								include: true,
+								conversion: 10.4
+							},
+							8: {
+								grade: '11a',
+								include: true,
+								conversion: 11.1
+							},
+							9: {
+								grade: '11a',
+								include: true,
+								conversion: 11.2
+							}
+						}
+						// '11c': true,
+						// '11d': true,
+						// '12a': true,
+						// '12b': true,
+						// '12c': true,
+						// '12d': true,
+						// '13a': true,
+						// '13b': true,
+						// '13c': true,
+						// '13d': true,
+						// '14a': true,
+						// '14b': true,
+						// '14c': true,
+						// '14d': true,
+						// '15a': true,
+						// '15b': true,
+						// '15c': true,
 					}
 				},
 				rating: {
@@ -334,6 +376,38 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 					}
 				}
 			};	
+
+			// FILTERING 
+			//==================
+
+			// this is in the controller to be accessable to the slider
+			this.filterBoulderGrade = function(min, max) {
+
+				angular.forEach($scope.filteredData, function(spot, key){
+					// loop through each climbing spot 
+					var spotClimbs = spot.climbs;
+
+					angular.forEach(spotClimbs, function(climb, key){
+						// loop through each climb
+
+						if (climb.grade >= min && climb.grade <= max) {
+							climb.included = true;
+						} else {
+							climb.included = false;
+						}
+					});
+				});
+
+				controller.drawMarkers($scope.filteredData);
+				controller.buildFilterList($scope.filteredData);
+			}
+
+			this.filterRopedGrade = function(min, max) {
+				// convert letter rating to floats to sort, then convert back...or edit the model
+
+				console.log('Filtering rope grade: '+ min + ' to '+ max);
+			}
+
 		},
 		link: function(scope, element, attributes, controller) {
 
@@ -358,31 +432,6 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 							// identify the climbs that will be filtered, then set to bool, kept track in checkbox
 							climb.included = scope.filter.type[type];
 						}
-					});
-				});
-
-				controller.drawMarkers(scope.filteredData);
-				controller.buildFilterList(scope.filteredData);
-			};
-
-			scope.filterBoulderGrade = function(grade) {
-
-				// console.log(scope.filter);
-
-				angular.forEach(scope.filteredData, function(value, key){
-					// loop through each climbing spot 
-					var spotClimbs = value.climbs;
-
-					angular.forEach(spotClimbs, function(climb, key){
-						// loop through each climb
-
-						if (climb.grade == grade) {
-						// identify the climbs that will be filtered, then set to bool, kept track in checkbox
-							climb.included = (grade > 9) ?
-								scope.filter.grade.boulder.large[grade] :
-								scope.filter.grade.boulder.small[grade];
-						}
-						
 					});
 				});
 
