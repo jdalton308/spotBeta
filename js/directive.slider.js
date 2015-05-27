@@ -23,7 +23,8 @@ app.directive('jdSlider', ['$document', function($document){
 				var gradeWidth = fullWidth/16;
 				scope.currentMin = 0;
 				scope.currentMax = 16;
-				updateFunc = mapCtrl.filterBoulderGrade(scope.currentMinIndex, scope.currentMaxIndex);
+				scope.currentMinIndex = 0;
+				scope.currentMaxIndex = 16;
 
 			} else if (attr.type == 'roped') {
 
@@ -36,7 +37,8 @@ app.directive('jdSlider', ['$document', function($document){
 				var gradeWidth = fullWidth/(listLength-1);
 				scope.currentMin = ropedGradeList[0].grade;
 				scope.currentMax = ropedGradeList[listLength-1].grade;
-				updateFunc = mapCtrl.filterRopedGrade(scope.currentMinIndex, scope.currentMaxIndex);
+				scope.currentMinIndex = 0;
+				scope.currentMaxIndex = listLength-1;
 
 			} else {
 				console.error('Please enter a valid "type" attribute for the slider');
@@ -80,6 +82,8 @@ app.directive('jdSlider', ['$document', function($document){
 
 					if (attr.type == 'roped') {
 						newGrade = ropedGradeList[newIndex].grade;
+					} else {
+						newGrade = newIndex;
 					}
 
 					scope.$apply( scope.currentMin = newGrade );
@@ -95,6 +99,8 @@ app.directive('jdSlider', ['$document', function($document){
 
 					if (attr.type == 'roped') {
 						newGrade = ropedGradeList[newIndex].grade;
+					} else {
+						newGrade = newIndex;
 					}
 
 					scope.$apply( scope.currentMax = newGrade );
@@ -124,7 +130,15 @@ app.directive('jdSlider', ['$document', function($document){
 				scope.currentSlider = null;
 
 				// Update map and model
-				updateFunc;
+				// console.log('Calling...');
+				// console.log(updateFunc);
+				// updateFunc;
+
+				if (attr.type == 'roped') {
+					mapCtrl.filterRopedGrade(scope.currentMinIndex, scope.currentMaxIndex);
+				} else {
+					mapCtrl.filterBoulderGrade(scope.currentMinIndex, scope.currentMaxIndex);
+				}
 			}
 		}
 	}

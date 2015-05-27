@@ -404,8 +404,28 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 			this.filterRopedGrade = function(min, max) {
 				// convert letter rating to floats to sort, then convert back...or edit the model
+				var filterList = $scope.filter.grade.roped.grades;
 
-				console.log('Filtering rope grade: '+ min + ' to '+ max);
+				console.log('Filtering rope grades: '+ filterList[min].grade + ' to '+ filterList[max].grade);
+
+				// angular.forEach($scope.filteredData, function(spot, key){
+				// 	// loop through each climbing spot 
+				// 	var spotClimbs = spot.climbs;
+
+				// 	angular.forEach(spotClimbs, function(climb, key){
+				// 		// loop through each climb
+
+				// 		if (climb.grade >= min && climb.grade <= max) {
+				// 			climb.included = true;
+				// 		} else {
+				// 			climb.included = false;
+				// 		}
+				// 	});
+				// });
+
+				// controller.drawMarkers($scope.filteredData);
+				// controller.buildFilterList($scope.filteredData);
+
 			}
 
 		},
