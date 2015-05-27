@@ -8,10 +8,14 @@
 		<form id="homeSearch">
 			<h3>find rocks...</h3>
 			<input type="text" name="location" ng-model="query" ng-keyup="autocomplete(query)" autofocus>
-			<!-- <button type="submit" class="submitBtn">GO</button> -->
+			<div claas="error" ng-show="searchError">{{errorMessage}}</div>
+			<div class="btnContainer">
+				<button type="button" ng-class="{current: !latSearch}">by place</button>
+				<button type="button" ng-class="{current: latSearch}">by lat, lng</button>
+			</div>
 		</form>
 	</div>
-	<div class="resultsList">
+	<div class="resultsList" ng-if="!latSearch">
 		<h3 ng-hide="predictions">Location results will display here</h3>
 		<h3 ng-show="predictions">Choose a place</h3>
 		<ul class="results">
@@ -19,6 +23,9 @@
 				<a ng-href="" ng-click="showMap(city)">{{city.description}}</a>
 			</li>
 		</ul>
+	</div>
+	<div class="latGoBtn">
+		<button type="button" class="submit" ng-class="{disabled: latInvalid}" ng-click="findLat(query)">Search</button>
 	</div>
 </section>
 

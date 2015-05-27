@@ -1,6 +1,6 @@
 
-app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 'ClimbData', 'User', 'Places',
-	function($scope, $location, FIREBASE_URL, Auth, ClimbData, User, Places){
+app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_URL", 'Auth', 'ClimbData', 'User', 'Places',
+	function($scope, $location, $timeout, FIREBASE_URL, Auth, ClimbData, User, Places){
 
 
 	// User creation and authentication
@@ -109,19 +109,36 @@ app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 
 		lng: -122.2728
 	};
 
+	$scope.latSearch = false;
+	$scope.toggleLatSearch = function() {
+		$scope.latSearch = !$scope.latSearch;
+	}
+
 	$scope.predictions = false;
+	$scope.latInvalid = true;
+
 	$scope.autocomplete = function(query) {
-		Places.autocomplete(query)
-			.then(function(predictions){
-				console.log('Autocomplete returned:');
-				console.log(predictions);
+		if ($scope.latSearch) {
+			// perform validation on lat,lng
+			// - set timeout
+			// - divide string at comma
+			// - trim white space
+			// - ensure only integer or float
+			// - enable submit btn
 
-				$scope.predictions = predictions;
+		} else {
+			Places.autocomplete(query)
+				.then(function(predictions){
+					console.log('Autocomplete returned:');
+					console.log(predictions);
 
-			}, function(err){
-				console.error(err);
-				$scope.predictions = false;
-			});
+					$scope.predictions = predictions;
+
+				}, function(err){
+					console.error(err);
+					$scope.predictions = false;
+				});
+		}
 	};
 
 	$scope.showMap = function(cityObj) {
@@ -141,6 +158,13 @@ app.controller('appController', ['$scope', '$location', "FIREBASE_URL", 'Auth', 
 				Places.currentSearch = false;
 			});
 	};
+
+	$scope.findLat = function(query) {
+		// break into two numbers
+		// set as LatLng object for google maps
+		// set as Places.currentSearch object
+		// change $loaction
+	}
 
 }]);
 
