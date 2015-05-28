@@ -31,12 +31,15 @@ app.factory('Places', ['$q', function($q){
 				});
 			}
 		}, //end autocomplete()
-		geocode: function(address) {
+		geocode: function(param) {
+			// can be used with lat/lng or autocomplete place name as param
 
-			if (address != "") {
+			if (param != "") {
+
+				var detailsObj = (angular.isString(param)) ? {'address': param} : {'latLng': param}
 
 				return $q(function(resolve, reject){
-					geocoder.geocode( { 'address': address}, function(result, status) {
+					geocoder.geocode( detailsObj, function(result, status) {
 						if (status != google.maps.GeocoderStatus.OK) {
 							reject('Error retrieving place coordinates: '+ status);	
 						} else {

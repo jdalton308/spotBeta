@@ -169,10 +169,23 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		}
 	};
 
-	$scope.showMap = function(cityObj) {
-		console.log(cityObj);
+	$scope.showMap = function(input) {
 
-		Places.geocode(cityObj.description)
+		var query;
+
+		if ($scope.latSearch) {
+			// use lat/lng
+			var lat = $scope.latLgnQuery[0];
+			var lng = $scope.latLgnQuery[1];
+			query = new google.maps.LatLng(lat, lng);
+		} else {
+			// use autocomplete object
+			query = input.description;
+		}
+		console.log('Query: ');
+		console.log(query);
+
+		Places.geocode(query)
 			.then(function(results){
 				console.log('Place details recieved:');
 				console.log(results);
