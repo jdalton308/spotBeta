@@ -114,7 +114,24 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 	$scope.latSearch = false;
 	$scope.latInvalid = true;
 
-	// Test if can use user geolocation
+	var getGeocode = function(query) {
+		Places.geocode(query)
+			.then(function(results){
+				console.log('Place details recieved:');
+				console.log(results);
+
+				Places.currentSearch = results[0]; //results is an array
+
+				$location.path('/app');
+
+			}, function(error) {
+				console.error(error);
+				Places.currentSearch = false;
+			});
+	}
+
+	// USER GEOLOCATION
+	//-----------------
 	if (Places.userLocation) {
 		$scope.canUseLocation = true;
 	} else {
@@ -126,7 +143,13 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 			});
 	}
 
-	$scope.autocomplete = function(query) {
+	$scope.useCurrentLocation = function() {
+		getGeocode(Places.userLocation);
+	}
+
+	// SEARCH BY PLACE or LAT/LNG
+	//----------------------------
+	$scope.inputKeyup = function(query) {
 		if ($scope.latSearch) {
 			// perform validation on lat,lng
 
@@ -176,22 +199,6 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		}
 	};
 
-	var getGeocode = function(query) {
-		Places.geocode(query)
-			.then(function(results){
-				console.log('Place details recieved:');
-				console.log(results);
-
-				Places.currentSearch = results[0]; //results is an array
-
-				$location.path('/app');
-
-			}, function(error) {
-				console.error(error);
-				Places.currentSearch = false;
-			});
-	}
-
 	$scope.showMap = function(input) {
 
 		var query;
@@ -209,38 +216,7 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		console.log(query);
 
 		getGeocode(query);
-		// Places.geocode(query)
-		// 	.then(function(results){
-		// 		console.log('Place details recieved:');
-		// 		console.log(results);
-
-		// 		Places.currentSearch = results[0]; //results is an array
-
-		// 		$location.path('/app');
-
-		// 	}, function(error) {
-		// 		console.error(error);
-		// 		Places.currentSearch = false;
-		// 	});
 	};
-
-	$scope.useCurrentLocation = function() {
-		getGeocode(Places.userLocation);
-
-		// Places.geocode($scope.userLocObj)
-		// 	.then(function(results){
-		// 		console.log('Place details recieved:');
-		// 		console.log(results);
-
-		// 		Places.currentSearch = results[0]; //results is an array
-
-		// 		$location.path('/app');
-
-		// 	}, function(error) {
-		// 		console.error(error);
-		// 		Places.currentSearch = false;
-		// 	});
-	}
 
 }]);
 

@@ -7,7 +7,7 @@
 	<div class="searchForm">
 		<form id="homeSearch">
 			<h3>find rocks...</h3>
-			<input type="text" name="location" ng-model="query" ng-keyup="autocomplete(query)" autofocus>
+			<input type="text" name="location" ng-model="query" ng-keyup="inputKeyup(query)" autofocus>
 			<div claas="error" ng-show="latInvalid">{{errorMessage}}</div>
 			<div class="btnContainer">
 				<button type="button" ng-class="{disabled: !latSearch}" ng-click="latSearch = false">by place</button>
