@@ -12,6 +12,7 @@
 			<div class="btnContainer">
 				<button type="button" ng-class="{disabled: !latSearch}" ng-click="latSearch = false">by place</button>
 				<button type="button" ng-class="{disabled: latSearch}" ng-click="latSearch = true">by lat, lng</button>
+				<button type="button" ng-show="canUseLocation" ng-click="useCurrentLocation()">search by current location</button>
 			</div>
 		</form>
 	</div>

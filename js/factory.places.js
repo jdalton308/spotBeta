@@ -1,13 +1,13 @@
 
 app.factory('Places', ['$q', function($q){
-	
+
 	// var places = new google.maps.places.PlacesService(map);
 	var autoComplete = new google.maps.places.AutocompleteService();
 	var geocoder = new google.maps.Geocoder();
 
 	var places = {
 		autocomplete: function(query) {
-			
+
 			if (query) {
 				var searchObj = {
 					input: query,
@@ -49,7 +49,42 @@ app.factory('Places', ['$q', function($q){
 				});
 			}
 		}, //end geocode
-		currentSearch: false // store geocode result here to use with map
+		currentSearch: false, // store geocode result here to use with map
+
+		userLocation: false,
+		setUserLocation: function() {
+
+			return $q(function(resolve, reject){
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function(geoObj){
+						var userLat = geoObj.coords.latitude;
+						var userLng = geoObj.coords.longitude;
+						places.userLocation = new google.maps.LatLng(userLat, userLng);
+						console.log('Can use location:');
+						console.log(places);
+						resolve(true);
+					});
+				} else {
+					console.log('User browser does not support geolocation. Please upadate your browser.');
+					reject(false);
+				}
+
+			});
+
+			// if (navigator.geolocation) {
+			// 	navigator.geolocation.getCurrentPosition(function(geoObj){
+			// 		var userLat = geoObj.coords.latitude;
+			// 		var userLng = geoObj.coords.longitude;
+			// 		places.userLocation = new google.maps.LatLng(userLat, userLng);
+			// 		console.log('Can use location:');
+			// 		console.log(places);
+			// 		return true;
+			// 	});
+			// } else {
+			// 	console.log('User browser does not support geolocation. Please upadate your browser.');
+			// 	return false;
+			// }
+		}
 	}
 
 	return places;

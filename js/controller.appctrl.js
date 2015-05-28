@@ -114,10 +114,21 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 	$scope.latSearch = false;
 	$scope.latInvalid = true;
 
+	// Test if can use user geolocation
+	if (Places.userLocation) {
+		$scope.canUseLocation = true;
+	} else {
+		Places.setUserLocation()
+			.then(function(){
+				$scope.canUseLocation = true;
+			}, function(){
+				$scope.canUseLocation = false;
+			});
+	}
+
 	$scope.autocomplete = function(query) {
 		if ($scope.latSearch) {
 			// perform validation on lat,lng
-			// - set timeout
 
 			var latLng = [];
 			var numbers = query.split(',');
@@ -145,14 +156,10 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 				}
 			}
 
+			// Since made it to the end, input is valid. Set the view appropriately
 			$scope.errorMessage = false;
 			$scope.latInvalid = false;
 			$scope.latLgnQuery = latLng;
-
-			// - divide string at comma
-			// - trim white space
-			// - ensure only integer or float
-			// - enable submit btn
 
 		} else {
 			Places.autocomplete(query)
@@ -168,6 +175,22 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 				});
 		}
 	};
+
+	var getGeocode = function(query) {
+		Places.geocode(query)
+			.then(function(results){
+				console.log('Place details recieved:');
+				console.log(results);
+
+				Places.currentSearch = results[0]; //results is an array
+
+				$location.path('/app');
+
+			}, function(error) {
+				console.error(error);
+				Places.currentSearch = false;
+			});
+	}
 
 	$scope.showMap = function(input) {
 
@@ -185,29 +208,38 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		console.log('Query: ');
 		console.log(query);
 
-		Places.geocode(query)
-			.then(function(results){
-				console.log('Place details recieved:');
-				console.log(results);
+		getGeocode(query);
+		// Places.geocode(query)
+		// 	.then(function(results){
+		// 		console.log('Place details recieved:');
+		// 		console.log(results);
 
-				Places.currentSearch = results[0]; //results is an array
+		// 		Places.currentSearch = results[0]; //results is an array
 
-				$location.path('/app');
+		// 		$location.path('/app');
 
-			}, function(error) {
-				console.error(error);
-				Places.currentSearch = false;
-			});
+		// 	}, function(error) {
+		// 		console.error(error);
+		// 		Places.currentSearch = false;
+		// 	});
 	};
 
-	$scope.findLat = function(query) {
-		// break into two numbers
-		// set as LatLng object for google maps
-		// set as Places.currentSearch object
-		// change $loaction
+	$scope.useCurrentLocation = function() {
+		getGeocode(Places.userLocation);
 
-		console.log('latLng: ');
-		console.log($scope.latLgnQuery);
+		// Places.geocode($scope.userLocObj)
+		// 	.then(function(results){
+		// 		console.log('Place details recieved:');
+		// 		console.log(results);
+
+		// 		Places.currentSearch = results[0]; //results is an array
+
+		// 		$location.path('/app');
+
+		// 	}, function(error) {
+		// 		console.error(error);
+		// 		Places.currentSearch = false;
+		// 	});
 	}
 
 }]);
