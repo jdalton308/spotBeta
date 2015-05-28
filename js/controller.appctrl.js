@@ -109,18 +109,46 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		lng: -122.2728
 	};
 
-	$scope.latSearch = false;
-	$scope.toggleLatSearch = function() {
-		$scope.latSearch = !$scope.latSearch;
-	}
-
 	$scope.predictions = false;
+
+	$scope.latSearch = false;
 	$scope.latInvalid = true;
 
 	$scope.autocomplete = function(query) {
 		if ($scope.latSearch) {
 			// perform validation on lat,lng
 			// - set timeout
+
+			var latLng = [];
+			var numbers = query.split(',');
+
+			// check if two numbers
+			if (numbers.length != 2) {
+				// console.error('Please enter two numbers seperated by a comma for searching by latitude and longitude');
+				$scope.errorMessage = "Please enter two numbers seperated by a comma for searching by latitude and longitude";
+				$scope.latInvalid = true;
+				return
+			}
+
+			// check if strings are numbers
+			for (var i = 0; i < numbers.length; i++) {
+				var number = numbers[i].trim();
+				var thisFloat = parseFloat(number);
+
+				if (isNaN(thisFloat)) {
+					// console.error('Please enter only numbers for latitude and longitude search');
+					$scope.errorMessage = "Please enter only numbers for latitude and longitude search";
+					$scope.latInvalid = true;
+					return;
+				} else {
+					latLng.push(thisFloat);
+				}
+			}
+
+			$scope.errorMessage = false;
+			$scope.latInvalid = false;
+			$scope.latLgnQuery = latLng;
+
 			// - divide string at comma
 			// - trim white space
 			// - ensure only integer or float
@@ -164,6 +192,9 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		// set as LatLng object for google maps
 		// set as Places.currentSearch object
 		// change $loaction
+
+		console.log('latLng: ');
+		console.log($scope.latLgnQuery);
 	}
 
 }]);

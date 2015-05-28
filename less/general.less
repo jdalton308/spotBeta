@@ -89,6 +89,14 @@ button {
 		color: @white;
 		background-color: @betaGreen;
 	}
+	&.disabled {
+		cursor: default;
+		background-color: @lightGrey;
+
+		&:hover {
+			background-color: @lightGrey;
+		}
+	}
 }
 nav.menuBar {
 	position: relative;
