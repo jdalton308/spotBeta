@@ -5,7 +5,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 		templateUrl: "directives/mapFilter.html",
 		controller : function($scope) {
 
-			var controller = this; 
+			var controller = this;
 
 			// RENDERING
 			//=====================
@@ -34,6 +34,16 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 				$scope.markers = {};
 			}
 
+			// Set map bounds
+			var mapBounds;
+
+			google.maps.event.addListener($scope.map, 'bounds_changed', function() {
+				console.log('Bounds changed:');
+				mapBounds = $scope.map.getBounds();
+				console.log(mapBounds);
+			});
+
+			// Info Window
 			var infoWindow = new google.maps.InfoWindow();
 
 			google.maps.event.addListener(infoWindow, 'closeclick', function(){
@@ -44,10 +54,11 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 			// UTILITY FUNCTIONS
 			//========================
 
-			// Markers/Marker click events function
+			// Markers/Marker click events function. A BIG FUNCTION.
+			// This is also where the data is filtered for included climbs
 			this.drawMarkers = function(data) {
 
-				// Determine what is included and create infobox
+				// 1) Determine what is included and create HTML for infobox
 				//---------------------------
 				angular.forEach( data, function(val, key){
 					// Loop through each climb spot
@@ -59,6 +70,12 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 					// Hide each marker by default, then show if route included
 					val.included = false;
+
+					//======
+					// TODO: check if bounds are within mapBounds
+					// // remove default false statement (above 3 lines)
+					// // create if statement for following forEach block, if (within bounds)
+					//===========
 
 					// Create info box for each marker
 					var boxContent =
@@ -88,7 +105,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 								grade = "5." + climb.grade;
 							}
 
-							var routeElement = 
+							var routeElement =
 								'<div class="boxRoute">' +
 									'<span class="boxRating">' + grade + '</span>' +
 									'<a href="#">' + routeTitle + '</a>' +
@@ -96,13 +113,13 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 							boxContent += routeElement;
 						}
-					});
+					}); // end forEach() of climbs. Still in climbing spot
 
 					boxContent += '</div>';
-				
 
-				// Create the marker and add infobox
-				//---------------------------
+
+					// 2) Create the marker and add infobox
+					//---------------------------
 					// If included routes, create new marker for each location
 					if (val.included) {
 						// console.log('Spot included');
@@ -171,11 +188,12 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 						}
 					}
 
-				}); // end forEach()
+				}); // end forEach() of data
 			}; // end drawMarkers()
 
 
 			this.buildFilterList = function(data) {
+				// Builds the displayed list that shows the included climbs
 
 				angular.forEach( data, function(spot, key) {
 					// Loop through each climb spot
@@ -222,23 +240,23 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 			// INITIALIZE FILTERS
 			//=========================
 
-			$scope.filteredData;
-			$scope.filteredList = {};
+			// $scope.filteredData;
+			// $scope.filteredList = {};
 
-			ClimbData.$loaded()
-				.then(function(data){
-					console.log('Data in directive');
-					console.log(data);
+			// ClimbData.$loaded()
+			// 	.then(function(data){
+			// 		console.log('Data in directive');
+			// 		console.log(data);
 
-					originalData = angular.copy(data);
-					$scope.filteredData = angular.copy(data);
+			// 		originalData = angular.copy(data);
+			// 		$scope.filteredData = angular.copy(data);
 
-					controller.drawMarkers($scope.filteredData);
-					controller.buildFilterList($scope.filteredData);
-				})
-				.catch(function(err){
-					console.error(err);	
-				});
+			// 		controller.drawMarkers($scope.filteredData);
+			// 		controller.buildFilterList($scope.filteredData);
+			// 	})
+			// 	.catch(function(err){
+			// 		console.error(err);
+			// 	});
 
 
 			// initialize the filter
@@ -257,7 +275,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 						showing: true,
 						small: {
 							0: true,
-							1: true, 
+							1: true,
 							2: true,
 							3: true,
 							4: true,
@@ -326,28 +344,101 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 								conversion: 11.1
 							},
 							9: {
-								grade: '11a',
+								grade: '11b',
 								include: true,
 								conversion: 11.2
+							},
+							10: {
+								grade: '11c',
+								include: true,
+								conversion: 11.3
+							},
+							11: {
+								grade: '11d',
+								include: true,
+								conversion: 11.4
+							},
+							12: {
+								grade: '12a',
+								include: true,
+								conversion: 12.1
+							},
+							13: {
+								grade: '12b',
+								include: true,
+								conversion: 12.2
+							},
+							14: {
+								grade: '12c',
+								include: true,
+								conversion: 12.3
+							},
+							15: {
+								grade: '12d',
+								include: true,
+								conversion: 12.4
+							},
+							16: {
+								grade: '13a',
+								include: true,
+								conversion: 13.1
+							},
+							17: {
+								grade: '13b',
+								include: true,
+								conversion: 13.2
+							},
+							18: {
+								grade: '13c',
+								include: true,
+								conversion: 13.3
+							},
+							19: {
+								grade: '13d',
+								include: true,
+								conversion: 13.4
+							},
+							20: {
+								grade: '14a',
+								include: true,
+								conversion: 14.1
+							},
+							21: {
+								grade: '14b',
+								include: true,
+								conversion: 14.2
+							},
+							22: {
+								grade: '14c',
+								include: true,
+								conversion: 14.3
+							},
+							23: {
+								grade: '14d',
+								include: true,
+								conversion: 14.4
+							},
+							24: {
+								grade: '15a',
+								include: true,
+								conversion: 15.1
+							},
+							25: {
+								grade: '15b',
+								include: true,
+								conversion: 15.2
+							},
+							26: {
+								grade: '15c',
+								include: true,
+								conversion: 15.3
+							},
+							27: {
+								grade: '15d',
+								include: true,
+								conversion: 15.4
 							}
 						}
-						// '11c': true,
-						// '11d': true,
-						// '12a': true,
-						// '12b': true,
-						// '12c': true,
-						// '12d': true,
-						// '13a': true,
-						// '13b': true,
-						// '13c': true,
-						// '13d': true,
-						// '14a': true,
-						// '14b': true,
-						// '14c': true,
-						// '14d': true,
-						// '15a': true,
-						// '15b': true,
-						// '15c': true,
 					}
 				},
 				rating: {
@@ -375,9 +466,9 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 						'150+': true
 					}
 				}
-			};	
+			};
 
-			// FILTERING 
+			// FILTERING
 			//==================
 
 			// this is in the controller to be accessable to the slider
@@ -429,7 +520,28 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 			}
 
 		},
+
 		link: function(scope, element, attributes, controller) {
+
+			// LOAD DATA
+			//====================
+			scope.filteredData;
+			scope.filteredList = {};
+
+			ClimbData.$loaded()
+				.then(function(data){
+					console.log('Data in directive');
+					console.log(data);
+
+					originalData = angular.copy(data);
+					scope.filteredData = angular.copy(data);
+
+					controller.drawMarkers(scope.filteredData);
+					controller.buildFilterList(scope.filteredData);
+				})
+				.catch(function(err){
+					console.error(err);
+				});
 
 
 			// FILTERING

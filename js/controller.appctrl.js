@@ -187,8 +187,8 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		} else {
 			Places.autocomplete(query)
 				.then(function(predictions){
-					console.log('Autocomplete returned:');
-					console.log(predictions);
+					// console.log('Autocomplete returned:');
+					// console.log(predictions);
 
 					$scope.predictions = predictions;
 
@@ -212,8 +212,8 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 			// use autocomplete object
 			query = input.description;
 		}
-		console.log('Query: ');
-		console.log(query);
+		// console.log('Query: ');
+		// console.log(query);
 
 		getGeocode(query);
 	};

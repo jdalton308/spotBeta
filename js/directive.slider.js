@@ -18,8 +18,8 @@ app.directive('jdSlider', ['$document', function($document){
 			scope.currentMaxPos = fullWidth;
 			scope.currentSlider = null;
 
-			if (attr.type == 'boulder') {		
-			
+			if (attr.type == 'boulder') {
+
 				var gradeWidth = fullWidth/16;
 				scope.currentMin = 0;
 				scope.currentMax = 16;
@@ -29,10 +29,10 @@ app.directive('jdSlider', ['$document', function($document){
 			} else if (attr.type == 'roped') {
 
 				ropedGradeList = scope.filter.grade.roped.grades;
-				console.log('ropedGradeList:');
-				console.log(ropedGradeList);
+				// console.log('ropedGradeList:');
+				// console.log(ropedGradeList);
 				var listLength = Object.keys(ropedGradeList).length;
-				console.log('Length: '+ listLength);
+				// console.log('Length: '+ listLength);
 
 				var gradeWidth = fullWidth/(listLength-1);
 				scope.currentMin = ropedGradeList[0].grade;
@@ -72,7 +72,7 @@ app.directive('jdSlider', ['$document', function($document){
 				var movedDist = mousePos - clickDownPos;
 				var elPos = elStartPos + movedDist;
 				var newElPos;
-				
+
 				if (scope.currentSlider == 'min') {
 
 					newElPos = (elPos > scope.currentMaxPos) ? scope.currentMaxPos : 
@@ -89,7 +89,7 @@ app.directive('jdSlider', ['$document', function($document){
 					scope.$apply( scope.currentMin = newGrade );
 					scope.currentMinIndex = newIndex;
 					scope.currentMinPos = newElPos;
-					console.log('Updated currentMin: '+ scope.currentMin);
+					// console.log('Updated currentMin: '+ scope.currentMin);
 				} else {
 
 					newElPos = (elPos > fullWidth) ? fullWidth : 
@@ -106,13 +106,13 @@ app.directive('jdSlider', ['$document', function($document){
 					scope.$apply( scope.currentMax = newGrade );
 					scope.currentMaxIndex = newIndex;
 					scope.currentMaxPos = newElPos;
-					console.log('Updated currentMax: '+ scope.currentMax);
+					// console.log('Updated currentMax: '+ scope.currentMax);
 				}
 
 				clickedEl.css('left', newElPos);
 			}
 
-			var stopMarker = function(e) {				
+			var stopMarker = function(e) {
 				$document.off('mousemove', moveMarker);
 				$document.off('mouseup', stopMarker);
 

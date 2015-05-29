@@ -70,7 +70,7 @@
 				<input type="checkbox" checked="checked" ng-model="filter.type.roped" ng-change="filterType('roped')">
 				Roped
 			</label>
-			<div class="ropeSubTypes" ng-show="filter.type.roped">			
+			<div class="ropeSubTypes" ng-show="filter.type.roped">
 				<label>
 					<input type="checkbox" checked="checked" ng-model="filter.type.sport" ng-change="filterType('sport')">
 					Sport
@@ -111,7 +111,7 @@
 				<jd-slider type="boulder" filter="filter"></jd-slider>
 
 			</div>
-			<div class="ropedGrades" ng-show="filter.grade.roped.showing">
+			<div class="ropedGrades" ng-show="filter.type.roped">
 				Roped Grades
 				<jd-slider type="roped" filter="filter"></jd-slider>
 			</div>
