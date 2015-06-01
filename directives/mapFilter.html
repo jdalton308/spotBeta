@@ -1,5 +1,46 @@
 <div id='googleMap' ng-class="{open: showResultList}"></div>
 
+<div class="climbDetailsView" ng-class="{thin: showResultList}" ng-show="showClimbDetails">
+	<div class="closeDetailsBtn" ng-click="showClimbDetails = false">
+		<i class="fa fa-times"></i>
+	</div>
+	<div class="climbDetailsWrapper">
+		<h2>{{currentClimb.name}}</h2>
+		<ul class="detailsList">
+			<li class="detailsList-detail" ng-repeat="(key, val) in currentClimb">
+				<p><strong>{{key}}:</strong> {{val}}</p>
+			</li>
+		</ul>
+
+		<p ng-click="addToListView = !addToListView" ng-show="signedIn()">Add to list</p>
+		<div class="listAddCont" ng-show="addToListView">
+			<div class="listAddList" ng-if="userProfile.lists">
+				<h3>My Lists</h3>
+				<div class="listItemCont" ng-repeat="(name, list) in userProfile.lists">
+					<div class="clickListItem" ng-click="addToList(climb, list)">
+						<div class="listName">{{name}}</div>
+						<i class="fa fa-plus-circle"></i>
+					</div>
+				</div>
+
+				<p class="clickable" ng-click="showNewList = !showNewList"><i class="fa fa-plus-circle"></i>Create new list</p>
+				<div class="addNewListCont" ng-show="showNewList">
+					<label for="listName">Name</label>
+					<input type="text" name="listName" ng-model="listName">
+					<button id="addListBtn" ng-click="addList(listName)">Save</button>
+				</div>
+			</div>
+
+			<div class="createListView" ng-if="!userProfile.lists">
+				<h3>Create your first list</h3>
+				<input type="text" name="listName" ng-model="listName">
+				<button id="addListBtn" ng-click="addList(listName)">Save</button>
+			</div>
+
+		</div>
+	</div>
+</div>
+
 <div class="resultList" ng-class="{open: showResultList}">
 	<h2>Included Climbs</h2>
 
@@ -11,16 +52,16 @@
 				<li ng-repeat="climb in spot.climbs">
 					<div class="climbResult">
 						<!-- <div class="addToList" ng-click="showAddListCont(climb, $event)"> -->
-						<div class="addToList" ng-click="showAddList = !showAddList">
+						<div class="addToList" ng-click="showAddList = !showAddList" ng-show="signedIn()">
 							<i class="fa fa-plus-circle"></i>
 						</div>
 						<div class="climbRating">{{climb.grade}}</div>
-						<a href="#" ng-click="">{{climb.name}}</a>
+						<a href="#" ng-click="showDetails(climb)">{{climb.name}}</a>
 					</div>
 
 					<div class="listAddCont" ng-show="showAddList">
 
-						<div class="listView" ng-if="userProfile.lists">
+						<div class="listAddList" ng-if="userProfile.lists">
 							<h3>My Lists</h3>
 							<div class="listItemCont" ng-repeat="(name, list) in userProfile.lists">
 								<div class="clickListItem" ng-click="addToList(climb, list)">
@@ -29,7 +70,7 @@
 								</div>
 							</div>
 
-							<h3 class="clickable" ng-click="showNewList = !showNewList">Create new list</h3>
+							<p class="clickable" ng-click="showNewList = !showNewList"><i class="fa fa-plus-circle"></i>Create new list</p>
 							<div class="addNewListCont" ng-show="showNewList">
 								<label for="listName">Name</label>
 								<input type="text" name="listName" ng-model="listName">

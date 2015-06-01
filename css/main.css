@@ -270,6 +270,15 @@ nav.menuBar .rightList {
 .results .resultList .resultSpot ul.spotClimbs li .climbResult a:hover {
   color: #ff851a;
 }
+.results .listAddCont {
+  background-color: #ffffff;
+}
+.results .listAddCont .clickListitem {
+  cursor: pointer;
+}
+.results .listAddCont .clickListitem .listName {
+  display: inline-block;
+}
 .results .filterBar {
   position: relative;
   z-index: 4;
@@ -362,7 +371,8 @@ nav.menuBar .rightList {
   z-index: 8;
   width: 100%;
   height: calc(100% - 34px);
-  background-color: #ffffff;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.95);
 }
 .listView .wrapper {
   width: 100%;
@@ -402,4 +412,27 @@ nav.menuBar .rightList {
 .slider-container .slider-marker .slider-label {
   text-align: center;
   cursor: pointer;
+}
+.climbDetailsView {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow-y: auto;
+  width: 80%;
+  padding: 100px 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.climbDetailsView.thin {
+  width: 60%;
+}
+.climbDetailsView .closeDetailsBtn {
+  display: inline-block;
+  float: right;
+}
+.climbDetailsView .climbDetailsWrapper {
+  width: 100%;
+  max-width: 800px;
 }

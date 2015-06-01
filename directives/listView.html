@@ -7,7 +7,20 @@
 			<h2>{{name}}</h2>
 			<ul class="climbs" ng-if="list.length > 0">
 				<li class="climb" ng-repeat="climb in list">
-					<h3>{{climb.name}}</h3>
+					<h3 class="clickable" ng-click="showDetails = !showDetails"><i class="fa fa-chevron-down"></i>{{climb.name}}</h3>
+					<div class="climbDetails" ng-show="showDetails">
+						<ul class="actionList">
+							<li class="action">View on map</li>
+							<li class="action">Remove climb</li>
+							<li class="action">Mark complete</li>
+						</ul>
+						<ul class="detailsList">
+							<li class="detailsList-detail" ng-repeat="(key, val) in climb">
+								<p><strong>{{key}}:</strong></p>
+								<p>{{val}}</p>
+							</li>
+						</ul>
+					</div>
 					<!-- TODO: add remove btn -->
 					<!-- TODO: link to climb view -->
 					<!-- TODO: link to a map view OR show a map view -->

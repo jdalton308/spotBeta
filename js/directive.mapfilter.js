@@ -1,5 +1,5 @@
 
-app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData, Places, User){
+app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', function(ClimbData, Places, User, $compile){
 	return {
 		restrict: 'E',
 		templateUrl: "directives/mapFilter.html",
@@ -88,7 +88,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 						// insert html creation for infobox
 						// Create info box for each marker
-						var boxContent =
+						var rawBoxContent =
 							'<div class="mapInfoBox">' +
 									'<h2>' + spotTitle + '</h2>';
 
@@ -106,7 +106,6 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 								// show spot's marker, since at least one climb is shown
 								spot.included = true;
 
-								var routeTitle = climb.name;
 								var grade;
 
 								if (climb.type = 'boulder') {
@@ -118,14 +117,17 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 								var routeElement =
 									'<div class="boxRoute">' +
 										'<span class="boxRating">' + grade + '</span>' +
-										'<a href="#">' + routeTitle + '</a>' +
+										'<a href="#" ng-click="viewResultsList()">' + climb.name + '</a>' +
 									'</div>';
 
-								boxContent += routeElement;
+								rawBoxContent += routeElement;
 							}
 						}); // end forEach() of climbs. Still in climbing spot
 
-						boxContent += '</div>';
+						rawBoxContent += '</div>';
+
+						var boxContent = $compile(rawBoxContent)($scope);
+						boxContent = boxContent[0];
 
 					} else {
 						spot.included = false;
@@ -173,9 +175,9 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 							// Marker click event
 							google.maps.event.addListener(marker, 'click', function(){
-					            infoWindow.setContent(marker.boxContent);
-					            infoWindow.open($scope.map, marker);
-								$scope.map.panTo( marker.getPosition() );
+								infoWindow.setContent(marker.boxContent);
+								infoWindow.open($scope.map, marker);
+								// $scope.map.panTo( marker.getPosition() );
 
 								//for tracking open/closed status
 								infoWindow.isOpen = true;
@@ -486,7 +488,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 				controller.drawMarkers($scope.filteredData);
 				controller.buildFilterList($scope.filteredData);
-			}
+			};
 
 			this.filterRopedGrade = function(min, max) {
 				// convert letter rating to floats to sort, then convert back...or edit the model
@@ -512,7 +514,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 				// controller.drawMarkers($scope.filteredData);
 				// controller.buildFilterList($scope.filteredData);
 
-			}
+			};
 
 		},
 
@@ -631,7 +633,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 				};
 
 				loopFilter(scope.filter);
-				showClimbs(scope.filteredData, bool);				
+				showClimbs(scope.filteredData, bool);
 				controller.drawMarkers(scope.filteredData);
 				controller.buildFilterList(scope.filteredData);
 
@@ -648,6 +650,9 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 			scope.toggleList = function() {
 				scope.showResultList = !scope.showResultList;
+			};
+			scope.viewResultsList = function() {
+				scope.showResultList = true;
 			};
 
 			scope.showMarker = function(key) {
@@ -715,6 +720,44 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 			// Delete list
 
+
+
+
+			// CLIMB DETAILS
+			//=====================
+			scope.currentClimb;
+			scope.showClimbDetails = false
+
+			scope.showDetails = function(climb){
+				scope.currentClimb = climb;
+				scope.showClimbDetails = true;
+			};
+			// scope.showClimbFromInfo = function(name) {
+			// 	// loop through each climb to find the object
+			// 	angular.forEach(scope.filteredData, function(spot, key){
+			// 		// loop through each climbing spot 
+			// 		var spotClimbs = spot.climbs;
+
+			// 		angular.forEach(spotClimbs, function(climb, key){
+			// 			if (name == climb.name) {
+			// 				scope.showDetails(climb);
+			// 				return;
+			// 			}
+			// 		});
+			// 	});
+			// }
+
 		} // end link
 	} // end return obj
 }]);
+
+
+
+
+
+
+
+
+
+
+

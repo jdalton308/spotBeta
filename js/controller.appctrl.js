@@ -102,12 +102,7 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 	// LOCATION SEARCHING
 	//===============================
 
-	// Demo Location data
-	$scope.searchResult = {
-		name: 'Berkeley',
-		lat: 37.8717,
-		lng: -122.2728
-	};
+	$scope.currentSearch = Places.currentSearch;
 
 	$scope.predictions = false;
 
@@ -218,5 +213,23 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		getGeocode(query);
 	};
 
+
 }]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
