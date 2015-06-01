@@ -254,6 +254,9 @@ nav.menuBar .rightList {
 .results .resultList .resultSpot ul.spotClimbs li {
   margin: 0 0 5px;
 }
+.results .resultList .resultSpot ul.spotClimbs li .climbResult .addToList {
+  display: inline-block;
+}
 .results .resultList .resultSpot ul.spotClimbs li .climbResult .climbRating {
   display: inline-block;
   margin-right: 5px;

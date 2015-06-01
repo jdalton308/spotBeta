@@ -139,6 +139,9 @@ app.directive('jdSlider', ['$document', function($document){
 				} else {
 					mapCtrl.filterBoulderGrade(scope.currentMinIndex, scope.currentMaxIndex);
 				}
+
+				// update the filter list
+				scope.$apply();
 			}
 		}
 	}

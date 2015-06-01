@@ -34,14 +34,19 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 				$scope.markers = {};
 			}
 
-			// Set map bounds
-			var mapBounds;
+
+			// Get map bounds for filtering
+			$scope.mapBounds;
 
 			google.maps.event.addListener($scope.map, 'bounds_changed', function() {
 				console.log('Bounds changed:');
-				mapBounds = $scope.map.getBounds();
-				console.log(mapBounds);
+				$scope.mapBounds = $scope.map.getBounds();
+				console.log($scope.mapBounds);
+
+				// mapBounds[0] = longitude
+				// mapBounds[1] = latitude
 			});
+
 
 			// Info Window
 			var infoWindow = new google.maps.InfoWindow();
@@ -60,16 +65,12 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 				// 1) Determine what is included and create HTML for infobox
 				//---------------------------
-				angular.forEach( data, function(val, key){
+				angular.forEach( data, function(spot, key){
 					// Loop through each climb spot
 
-					var spotTitle = val.name;
-					var thisLong = val.location.long;
-					var thisLat = val.location.lat;
-
-
-					// Hide each marker by default, then show if route included
-					val.included = false;
+					var spotTitle = spot.name;
+					var thisLong = spot.location.long;
+					var thisLat = spot.location.lat;
 
 					//======
 					// TODO: check if bounds are within mapBounds
@@ -77,51 +78,64 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 					// // create if statement for following forEach block, if (within bounds)
 					//===========
 
-					// Create info box for each marker
-					var boxContent =
-						'<div class="mapInfoBox">' +
-								'<h2>' + spotTitle + '</h2>';
+					// Show spot if within map's bounds
+					if ( ($scope.mapBounds.qa.A >= thisLong && thisLong >= $scope.mapBounds.qa.j) &&
+						 ($scope.mapBounds.za.A <= thisLat && thisLat <= $scope.mapBounds.za.j) ) {
 
-					// for each route, construct the HTML within infobox
-					angular.forEach( val.climbs, function(climb, key){
+						// spot is not included until a climb is included
+						spot.included = false;
+						console.log(spot.name +' is within bounds');
 
-						// Initial rendering creates the included var for filtering
-						if (climb.included === undefined) {
-							climb.included = true;
-						}
+						// insert html creation for infobox
+						// Create info box for each marker
+						var boxContent =
+							'<div class="mapInfoBox">' +
+									'<h2>' + spotTitle + '</h2>';
 
-						// Test if climb should be included
-						if (climb.included) {
+						// for each route, construct the HTML within infobox
+						angular.forEach( spot.climbs, function(climb, key){
 
-							// show spot's marker, since at least one climb is shown
-							val.included = true;
-
-							var routeTitle = climb.name;
-							var grade;
-
-							if (climb.type = 'boulder') {
-								grade = "V" + climb.grade;
-							} else {
-								grade = "5." + climb.grade;
+							// Initial rendering creates the included var for filtering
+							if (climb.included === undefined) {
+								climb.included = true;
 							}
 
-							var routeElement =
-								'<div class="boxRoute">' +
-									'<span class="boxRating">' + grade + '</span>' +
-									'<a href="#">' + routeTitle + '</a>' +
-								'</div>';
+							// Test if climb should be included
+							if (climb.included) {
 
-							boxContent += routeElement;
-						}
-					}); // end forEach() of climbs. Still in climbing spot
+								// show spot's marker, since at least one climb is shown
+								spot.included = true;
 
-					boxContent += '</div>';
+								var routeTitle = climb.name;
+								var grade;
+
+								if (climb.type = 'boulder') {
+									grade = "V" + climb.grade;
+								} else {
+									grade = "5." + climb.grade;
+								}
+
+								var routeElement =
+									'<div class="boxRoute">' +
+										'<span class="boxRating">' + grade + '</span>' +
+										'<a href="#">' + routeTitle + '</a>' +
+									'</div>';
+
+								boxContent += routeElement;
+							}
+						}); // end forEach() of climbs. Still in climbing spot
+
+						boxContent += '</div>';
+
+					} else {
+						spot.included = false;
+					}
 
 
 					// 2) Create the marker and add infobox
 					//---------------------------
 					// If included routes, create new marker for each location
-					if (val.included) {
+					if (spot.included) {
 						// console.log('Spot included');
 
 						if ($scope.markers[key]) {
@@ -239,25 +253,6 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 
 			// INITIALIZE FILTERS
 			//=========================
-
-			// $scope.filteredData;
-			// $scope.filteredList = {};
-
-			// ClimbData.$loaded()
-			// 	.then(function(data){
-			// 		console.log('Data in directive');
-			// 		console.log(data);
-
-			// 		originalData = angular.copy(data);
-			// 		$scope.filteredData = angular.copy(data);
-
-			// 		controller.drawMarkers($scope.filteredData);
-			// 		controller.buildFilterList($scope.filteredData);
-			// 	})
-			// 	.catch(function(err){
-			// 		console.error(err);
-			// 	});
-
 
 			// initialize the filter
 			$scope.filter = {
@@ -528,20 +523,25 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', function(ClimbData,
 			scope.filteredData;
 			scope.filteredList = {};
 
-			ClimbData.$loaded()
-				.then(function(data){
-					console.log('Data in directive');
-					console.log(data);
+			// After map renders, pans, or zooms, and data loaded, create markers
+			google.maps.event.addListener(scope.map, 'idle', function() {
+				ClimbData.$loaded()
+					.then(function(climbData){
 
-					originalData = angular.copy(data);
-					scope.filteredData = angular.copy(data);
+						if (scope.filteredData === undefined) {
+							scope.filteredData = angular.copy(climbData);
+						}
 
-					controller.drawMarkers(scope.filteredData);
-					controller.buildFilterList(scope.filteredData);
-				})
-				.catch(function(err){
-					console.error(err);
-				});
+						console.log('Filtered climb data:');
+						console.log(scope.filteredData);
+
+						controller.drawMarkers(scope.filteredData);
+						controller.buildFilterList(scope.filteredData);
+					})
+					.catch(function(err){
+						console.error(err);
+					});
+			});
 
 
 			// FILTERING
