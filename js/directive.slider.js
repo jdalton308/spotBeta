@@ -17,6 +17,8 @@ app.directive('jdSlider', ['$document', function($document){
 			scope.currentMinPos = 0;
 			scope.currentMaxPos = fullWidth;
 			scope.currentSlider = null;
+			scope.lastMaxIndex;
+			scope.lastMinIndex;
 
 			if (attr.type == 'boulder') {
 
@@ -43,8 +45,8 @@ app.directive('jdSlider', ['$document', function($document){
 				var listLength = Object.keys(heightList).length;
 				var gradeWidth = fullWidth/(listLength-1);
 
-				scope.currentMin = heightList[0].height;
-				scope.currentMax = heightList[listLength-1].height;
+				scope.currentMin = heightList[0].height.toString() + '\'';
+				scope.currentMax = heightList[listLength-1].height.toString() + '\'';
 				scope.currentMinIndex = 0;
 				scope.currentMaxIndex = listLength-1;
 
@@ -70,6 +72,10 @@ app.directive('jdSlider', ['$document', function($document){
 				// Get initial mouse pos
 				clickDownPos = event.pageX;
 
+				// Set inital index
+				scope.lastMaxIndex = angular.copy(scope.currentMaxIndex);
+				scope.lastMinIndex = angular.copy(scope.currentMinIndex);
+
 				// Set-up drag behavior
 				$document.on('mousemove', moveMarker);
 				$document.on('mouseup', stopMarker);
@@ -91,7 +97,7 @@ app.directive('jdSlider', ['$document', function($document){
 					if (attr.type == 'roped') {
 						newGrade = ropedGradeList[newIndex].grade;
 					} else if ( attr.type == 'height') {
-						newGrade = heightList[newIndex].height;
+						newGrade = heightList[newIndex].height.toString() + '\'';
 					} else {
 						newGrade = newIndex;
 					}
@@ -110,7 +116,7 @@ app.directive('jdSlider', ['$document', function($document){
 					if (attr.type == 'roped') {
 						newGrade = ropedGradeList[newIndex].grade;
 					} else if ( attr.type == 'height') {
-						newGrade = heightList[newIndex].height;
+						newGrade = heightList[newIndex].height.toString() + '\'';
 					} else {
 						newGrade = newIndex;
 					}
@@ -140,13 +146,19 @@ app.directive('jdSlider', ['$document', function($document){
 				scope.clickedEl = null;
 				scope.currentSlider = null;
 
-				// Call the filter function to update map
-				if (attr.type == 'roped') {
-					mapCtrl.filterRopedGrade(scope.currentMinIndex, scope.currentMaxIndex);
-				} else if ( attr.type == 'height') {
-					mapCtrl.filterHeight( heightList[scope.currentMinIndex].height, heightList[scope.currentMaxIndex].height);
+				// Test if values actually changed
+				if (scope.currentMaxIndex == scope.lastMaxIndex && scope.currentMinIndex == scope.lastMinIndex) {
+					console.log('...Slider values remained the same...')
+					return;
 				} else {
-					mapCtrl.filterBoulderGrade(scope.currentMinIndex, scope.currentMaxIndex);
+					// Call the filter function to update map
+					if (attr.type == 'roped') {
+						mapCtrl.filterRopedGrade( ropedGradeList[scope.currentMinIndex].grade, ropedGradeList[scope.currentMaxIndex].grade );
+					} else if ( attr.type == 'height') {
+						mapCtrl.filterHeight( heightList[scope.currentMinIndex].height, heightList[scope.currentMaxIndex].height);
+					} else {
+						mapCtrl.filterBoulderGrade(scope.currentMinIndex, scope.currentMaxIndex);
+					}
 				}
 
 				// update the filter list

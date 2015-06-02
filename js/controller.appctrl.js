@@ -108,6 +108,16 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 
 	$scope.latSearch = false;
 	$scope.latInvalid = true;
+	$scope.searchType = 'placeSearch'; //initialize the options
+	$scope.setSearchType = function(searchType) {
+		if (searchType == 'placeSearch') {
+			$scope.latSearch = false;
+		} else if (searchType == 'latSearch') {
+			$scope.latSearch = true;
+		} else if (searchType == 'currentSearch') {
+			$scope.useCurrentLocation();
+		}
+	}
 
 	var getGeocode = function(query) {
 		Places.geocode(query)

@@ -10,9 +10,15 @@
 			<input type="text" name="location" ng-model="query" ng-keyup="inputKeyup(query)" autofocus>
 			<div claas="error" ng-show="latInvalid">{{errorMessage}}</div>
 			<div class="btnContainer">
-				<button type="button" ng-class="{disabled: !latSearch}" ng-click="latSearch = false">by place</button>
+				<select class="searchSelect" ng-model="searchType" ng-change="setSearchType(searchType)">
+					<option value="placeSearch" selected="selected" autofocus>by Place</option>
+					<option value="latSearch">by Lat, Lng</option>
+					<option value="currentSearch" ng-disabled="!canUseLocation">use current location</option>
+				</select>
+
+				<!-- <button type="button" ng-class="{disabled: !latSearch}" ng-click="latSearch = false">by place</button>
 				<button type="button" ng-class="{disabled: latSearch}" ng-click="latSearch = true">by lat, lng</button>
-				<button type="button" ng-show="canUseLocation" ng-click="useCurrentLocation()">search by current location</button>
+				<button type="button" ng-show="canUseLocation" ng-click="useCurrentLocation()">search by current location</button> -->
 			</div>
 		</form>
 	</div>

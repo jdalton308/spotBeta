@@ -66,12 +66,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 			$scope.mapBounds;
 
 			google.maps.event.addListener($scope.map, 'bounds_changed', function() {
-				// console.log('Bounds changed:');
 				$scope.mapBounds = $scope.map.getBounds();
-				// console.log($scope.mapBounds);
-
-				// mapBounds[0] = longitude
-				// mapBounds[1] = latitude
 			});
 
 
@@ -99,19 +94,13 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 					var thisLong = spot.location.long;
 					var thisLat = spot.location.lat;
 
-					//======
-					// TODO: check if bounds are within mapBounds
-					// // remove default false statement (above 3 lines)
-					// // create if statement for following forEach block, if (within bounds)
-					//===========
-
 					// Show spot if within map's bounds
 					if ( ($scope.mapBounds.qa.A >= thisLong && thisLong >= $scope.mapBounds.qa.j) &&
 						 ($scope.mapBounds.za.A <= thisLat && thisLat <= $scope.mapBounds.za.j) ) {
 
 						// spot is not included until a climb is included
 						spot.included = false;
-						console.log(spot.name +' is within bounds');
+						// console.log(spot.name +' is within bounds');
 
 						// insert html creation for infobox
 						// Create info box for each marker
@@ -288,9 +277,11 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 				type: {
 					showing: true,
 					roped: true,
-					sport: true,
-					trad: true,
-					topRope: true,
+					subtypes: {
+						sport: true,
+						trad: true,
+						topRope: true,
+					},
 					boulder: true
 				},
 				grade: {
@@ -575,10 +566,12 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 					angular.forEach(spotClimbs, function(climb, key){
 						// loop through each climb
 
-						if (climb.grade >= min && climb.grade <= max) {
-							climb.included = true;
-						} else {
-							climb.included = false;
+						if (climb.type == 'boulder') {
+							if (climb.grade >= min && climb.grade <= max) {
+								climb.included = true;
+							} else {
+								climb.included = false;
+							}
 						}
 					});
 				});
@@ -591,25 +584,27 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 				// convert letter rating to floats to sort, then convert back...or edit the model
 				var filterList = $scope.filter.grade.roped.grades;
 
-				console.log('Filtering rope grades: '+ filterList[min].grade + ' to '+ filterList[max].grade);
+				console.log('Filtering rope grades: '+ min + ' to '+ max);
 
-				// angular.forEach($scope.filteredData, function(spot, key){
-				// 	// loop through each climbing spot 
-				// 	var spotClimbs = spot.climbs;
+				angular.forEach($scope.filteredData, function(spot, key){
+					// loop through each climbing spot 
+					var spotClimbs = spot.climbs;
 
-				// 	angular.forEach(spotClimbs, function(climb, key){
-				// 		// loop through each climb
+					angular.forEach(spotClimbs, function(climb, key){
+						// loop through each climb
 
-				// 		if (climb.grade >= min && climb.grade <= max) {
-				// 			climb.included = true;
-				// 		} else {
-				// 			climb.included = false;
-				// 		}
-				// 	});
-				// });
+						if (climb.type == 'roped') {
+							if (climb.grade >= min && climb.grade <= max) {
+								climb.included = true;
+							} else {
+								climb.included = false;
+							}
+						}
+					});
+				});
 
-				// controller.drawMarkers($scope.filteredData);
-				// controller.buildFilterList($scope.filteredData);
+				controller.drawMarkers($scope.filteredData);
+				controller.buildFilterList($scope.filteredData);
 
 			};
 
@@ -640,9 +635,6 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 						}
 					});
 				});
-
-				console.log('Current Min Height: '+ min);
-				console.log('Current Max Height: '+ max);
 
 				controller.drawMarkers($scope.filteredData);
 				controller.buildFilterList($scope.filteredData);
@@ -685,7 +677,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 
 			scope.filterType = function(type) {
 
-				// console.log(scope.filter);
+				var subfilter = (type == 'sport' || type == 'trad' || type == 'topRope') ? true : false;
 
 				angular.forEach(scope.filteredData, function(value, key){
 					// loop through each climbing spot 
@@ -694,7 +686,11 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 					angular.forEach(spotClimbs, function(climb, key){
 						// loop through each climb
 
-						if (climb.type == type) {
+						if (subfilter) {
+							if (climb.subtype == type) {
+								climb.included = scope.filter.type.subtype[type];
+							}
+						} else if (climb.type == type) {
 							// identify the climbs that will be filtered, then set to bool, kept track in checkbox
 							climb.included = scope.filter.type[type];
 						}
@@ -706,7 +702,6 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 			};
 
 			scope.filterStarRating = function(star) {
-				console.log(scope.filter);
 
 				angular.forEach(scope.filteredData, function(value, key){
 
@@ -716,9 +711,6 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 						// loop through each climb
 
 						if (climb.rating == star) {
-							// console.log('Climb found with star rating:');
-							// console.log(climb);
-
 							climb.included = scope.filter.rating.stars[star];
 						}
 					});
