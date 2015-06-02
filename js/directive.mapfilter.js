@@ -1,5 +1,5 @@
 
-app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', function(ClimbData, Places, User, $compile){
+app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$routeParams', function(ClimbData, Places, User, $compile, $routeParams){
 	return {
 		restrict: 'E',
 		templateUrl: "directives/mapFilter.html",
@@ -10,11 +10,38 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', functio
 			// RENDERING
 			//=====================
 
+			if ($routeParams) {
+				console.log('Route Params:');
+				console.log($routeParams);
+			}
+
 			// Draw map
 			if (Places.currentSearch) {
 				// Check for search results
 				var currentLat = Places.currentSearch.geometry.location.A;
 				var currentLong = Places.currentSearch.geometry.location.F;
+
+			} else if ($routeParams.latitude) {
+				// User navicated directly to page
+				var currentLat = $routeParams.latitude;
+				var currentLong = $routeParams.longitude;
+
+				// get full geolocation object
+				var query = new google.maps.LatLng(currentLat, currentLong);
+
+				Places.geocode(query).then(
+					function(results){
+						console.log('Place details recieved:');
+						console.log(results);
+
+						Places.currentSearch = results[0]; //results is an array
+
+					}, function(error) {
+						console.error(error);
+						Places.currentSearch = false;
+					}
+				);
+
 			} else {
 				// Default location = Berkely, cA
 				var currentLat = 37.8717;
@@ -39,9 +66,9 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', functio
 			$scope.mapBounds;
 
 			google.maps.event.addListener($scope.map, 'bounds_changed', function() {
-				console.log('Bounds changed:');
+				// console.log('Bounds changed:');
 				$scope.mapBounds = $scope.map.getBounds();
-				console.log($scope.mapBounds);
+				// console.log($scope.mapBounds);
 
 				// mapBounds[0] = longitude
 				// mapBounds[1] = latitude
@@ -450,17 +477,87 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', functio
 				},
 				height: {
 					showing: true,
-					groups: {
-						'<10': true,
-						'10-15': true,
-						'15-20': true,
-						'20-30': true,
-						'30-40': true,
-						'40-50': true,
-						'50-70': true,
-						'70-100': true,
-						'100-150': true,
-						'150+': true
+					values: {
+						0: {
+							height: 0,
+							units: 'feet',
+							included: true
+						},
+						1: {
+							height: 10,
+							units: 'feet',
+							included: true
+						},
+						2: {
+							height: 15,
+							units: 'feet',
+							included: true
+						},
+						3: {
+							height: 20,
+							units: 'feet',
+							included: true
+						},
+						4: {
+							height: 25,
+							units: 'feet',
+							included: true
+						},
+						5: {
+							height: 30,
+							units: 'feet',
+							included: true
+						},
+						6: {
+							height: 40,
+							units: 'feet',
+							included: true
+						},
+						7: {
+							height: 50,
+							units: 'feet',
+							included: true
+						},
+						8: {
+							height: 60,
+							units: 'feet',
+							included: true
+						},
+						9: {
+							height: 70,
+							units: 'feet',
+							included: true
+						},
+						10: {
+							height: 80,
+							units: 'feet',
+							included: true
+						},
+						11: {
+							height: 90,
+							units: 'feet',
+							included: true
+						},
+						12: {
+							height: 100,
+							units: 'feet',
+							included: true
+						},
+						13: {
+							height: 120,
+							units: 'feet',
+							included: true
+						},
+						14: {
+							height: 140,
+							units: 'feet',
+							included: true
+						},
+						15: {
+							height: '140+',
+							units: 'feet',
+							included: true
+						}
 					}
 				}
 			};
@@ -515,6 +612,41 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', functio
 				// controller.buildFilterList($scope.filteredData);
 
 			};
+
+			this.filterHeight = function(min, max) {
+
+				var minOnly = (isNaN(max)) ? true : false;
+
+				angular.forEach($scope.filteredData, function(spot, key){
+					// loop through each climbing spot 
+					var spotClimbs = spot.climbs;
+
+					angular.forEach(spotClimbs, function(climb, key){
+						// loop through each climb
+
+						if (minOnly) {
+							// no max value, so only test min
+							if (climb.height >= min) {
+								climb.included = true;
+							} else {
+								climb.included = false;
+							}
+						} else {
+							if (climb.height >= min && climb.height <= max) {
+								climb.included = true;
+							} else {
+								climb.included = false;
+							}
+						}
+					});
+				});
+
+				console.log('Current Min Height: '+ min);
+				console.log('Current Max Height: '+ max);
+
+				controller.drawMarkers($scope.filteredData);
+				controller.buildFilterList($scope.filteredData);
+			}
 
 		},
 

@@ -117,7 +117,10 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 
 				Places.currentSearch = results[0]; //results is an array
 
-				$location.path('/app');
+				var lat = Places.currentSearch.geometry.location.A; //37
+				var long = Places.currentSearch.geometry.location.F; //122
+
+				$location.path('/app').search({latitude: lat, longitude: long});
 
 			}, function(error) {
 				console.error(error);

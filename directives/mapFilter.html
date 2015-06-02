@@ -177,10 +177,7 @@
 		<h3 class="clickable" ng-click="toggleFilter('height')">Height</h3>
 
 		<div class="filters" ng-show="filter.height.showing">
-			<label ng-repeat="(height, val) in filter.height.groups">
-				<input type="checkbox" checked="checked" ng-model="val" ng-change="filterHeight(height)">
-				{{height}} feet
-			</label>
+			<jd-slider type="height" filter="filter"></jd-slider>
 		</div>
 	</div>
 
