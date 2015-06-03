@@ -87,11 +87,13 @@ button:hover {
   color: #ffffff;
   background-color: #09b212;
 }
-button.disabled {
+button.disabled,
+button[disabled] {
   cursor: default;
   background-color: #aaaaaa;
 }
-button.disabled:hover {
+button.disabled:hover,
+button[disabled]:hover {
   background-color: #aaaaaa;
 }
 nav.menuBar {
@@ -435,4 +437,60 @@ nav.menuBar .rightList {
 .climbDetailsView .climbDetailsWrapper {
   width: 100%;
   max-width: 800px;
+}
+.uploadView {
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+.uploadView .wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+.uploadView .closeLink {
+  display: inline-block;
+  float: right;
+  padding: 10px 20px;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #aaaaaa;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.uploadView .closeLink:hover {
+  color: #444444;
+}
+.uploadView form .label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+.uploadView form .message {
+  display: block;
+  margin-bottom: 5px;
+  color: #09b212;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.uploadView form .message.error {
+  color: #dd0000;
+}
+.uploadView form label {
+  display: block;
+  margin-bottom: 20px;
+}
+.uploadView form label input.ng-invalid.ng-touched,
+.uploadView form label textarea.ng-invalid.ng-touched,
+.uploadView form label select.ng-invalid.ng-touched {
+  border-color: #dd0000;
+}
+.uploadView form .setLocationContainer {
+  margin-bottom: 50px;
 }

@@ -43,14 +43,14 @@
 	</div>
 	<div class="rightList">
 		<!-- signed-out links -->
-		<a ng-hide="signedIn()" ng-click="showSignup()">Sign-up</a>
-		<a ng-hide="signedIn()" ng-click="showLogin()">Login</a>
+		<a href="#" ng-hide="signedIn()" ng-click="showSignup()">Sign-up</a>
+		<a href="#" ng-hide="signedIn()" ng-click="showLogin()">Login</a>
 
 		<!-- signed-in links -->
-		<a href="/upload" ng-show="signedIn()">Add Climb</a>
+		<a href="#" ng-show="signedIn()" ng-click="toggleUpload()" ng-class="{active: showUpload}">Add Climb</a>
 		<a href="/app" ng-show="signedIn()">Profile</a>
 		<a href="/app" ng-show="signedIn()">Lists</a>
-		<a ng-show="signedIn()" ng-click="logout()">Logout</a>
+		<a href="#" ng-show="signedIn()" ng-click="logout()">Logout</a>
 	</div>
 
 	<form id="signupForm" ng-submit="register()" ng-show="signupShowing">

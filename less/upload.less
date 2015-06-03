@@ -1,0 +1,63 @@
+.uploadView {
+	position: fixed;
+	z-index: 3;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	overflow-y: auto;
+	background-color: @white;
+
+	.wrapper {
+		width: 100%;
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 50px 0;
+	}
+	.closeLink {
+		display: inline-block;
+		float: right;
+		padding: 10px 20px;
+		font-size: 1.5em;
+		cursor: pointer;
+		color: @lightGrey;
+		.transition;
+
+		&:hover {
+			color: @darkGrey;
+		}
+	}
+
+	form {
+		.label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: 700;
+		}
+		.message {
+			display: block;
+			margin-bottom: 5px;
+			color: @betaGreen;
+			.transition(.2s);
+
+			&.error {
+				color: @red;
+			}
+		}
+		label {
+			display: block;
+			margin-bottom: 20px;
+
+			input,
+			textarea,
+			select {
+				&.ng-invalid.ng-touched {
+					border-color: @red;
+				}
+			}
+		}
+		.setLocationContainer {
+			margin-bottom: 50px;
+		}
+	}
+}

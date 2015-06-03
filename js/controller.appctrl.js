@@ -23,7 +23,7 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		}, function(error) {
 			$scope.error = error.toString();
 		});
-	}
+	};
 
 	$scope.register = function() {
 		Auth.register($scope.user).then(function(userData){
@@ -56,7 +56,14 @@ app.controller('appController', ['$scope', '$location', '$timeout', "FIREBASE_UR
 		}, function(error) {
 			$scope.error = error.toString();
 		});
-	}
+	};
+
+	// Climb Uploads
+	//=============================
+	$scope.showUpload = false;
+	$scope.toggleUpload = function() {
+		$scope.showUpload = !$scope.showUpload;
+	};
 
 
 	// User Profile
