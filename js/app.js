@@ -18,14 +18,6 @@ var app = angular.module('spotBeta', [
 				templateUrl: 'app.html',
 				controller: 'appController'
 			})
-			.when('/profile', {
-				templateUrl: 'app.html',
-				controller: 'appController'
-			})
-			.when('/lists', {
-				templateUrl: 'app.html',
-				controller: 'appController'
-			})
 			.otherwise({
 				redirectTo: '/'
 			});

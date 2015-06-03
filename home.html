@@ -36,7 +36,6 @@
 	</div>
 </section>
 
-
 <nav class="menuBar">
 	<div class="leftList">
 		<a href="#about">about</a>
@@ -48,8 +47,9 @@
 		<a ng-hide="signedIn()" ng-click="showLogin()">Login</a>
 
 		<!-- signed-in links -->
-		<a href="/profile" ng-show="signedIn()">Profile</a>
-		<a href="/lists" ng-show="signedIn()">Lists</a>
+		<a href="/upload" ng-show="signedIn()">Add Climb</a>
+		<a href="/app" ng-show="signedIn()">Profile</a>
+		<a href="/app" ng-show="signedIn()">Lists</a>
 		<a ng-show="signedIn()" ng-click="logout()">Logout</a>
 	</div>
 
@@ -100,3 +100,5 @@
 		</div>
 	</div>
 </main>
+
+<jd-upload-view ng-show="showUpload"></jd-upload-view>
