@@ -91,17 +91,17 @@
 			<div class="formGroup">
 				<span class="label">Climb location</span>
 				<label for="knownLocation">
-					<input type="radio" name="climbLocation" id="knownLocation" ng-model="newClimb.newLocation" value="exist" selected>
+					<input type="radio" name="climbLocation" id="knownLocation" ng-model="newClimb.newOrOld" value="old" selected>
 					Existing spot
 				</label>
-				<select class="oldLocations" ng-show="newClimb.newLocation == 'old'" ng-options="spot.name for (key, spot) in climbData" ng-model="newClimb.climbLocation" name="climbLocation"></select>
+				<select class="oldLocations" ng-show="newClimb.newOrOld == 'old'" ng-options="spot.name for (key, spot) in climbData" ng-model="newClimb.climbLocation" name="climbLocation"></select>
 
 				<label for="newLocation">
-					<input type="radio" name="climbLocation" id="newLocation" ng-model="newClimb.newLocation" value="new">
+					<input type="radio" name="climbLocation" id="newLocation" ng-model="newClimb.newOrOld" value="new">
 					Create a new spot
 				</label>
 
-				<div class="newLocationCont" ng-show="newClimb.newLocation == 'new'">
+				<div class="newLocationCont" ng-show="newClimb.newOrOld == 'new'">
 					<div class="formGroup">
 						<label for="newSpotName">
 							Spot name
@@ -109,19 +109,9 @@
 						</label>
 					</div>
 					<p><strong>Spot details</strong></p>
-					<!-- <div class="formGroup">
-						<label for="newLat">
-							New Latitude
-							<input type="text" name="newSpotLat" id="newLat" ng-model="newClimb.location.newLat">
-						</label>
-						<label for="newLong">
-							New Longitude
-							<input type="text" name="newSpotLong" id="newLong" ng-model="newClimb.location.newLong">
-						</label>
-					</div> -->
-					<p>Select location on a map, or manually enter the coordinates. (Please be precise)</p>
+					<p>Select location on a map, or manually enter the coordinates. (Please be precise, and be sure the spot doesn't already exist)</p>
 
-					<jd-map-select newClimb="newClimb"></jd-map-select>
+					<jd-map-select newclimb="newClimb"></jd-map-select>
 
 				</div>
 			</div> <!-- end Location formGroup -->

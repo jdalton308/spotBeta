@@ -89,7 +89,7 @@ app.directive('jdSlider', ['$document', function($document){
 
 				if (scope.currentSlider == 'min') {
 
-					newElPos = (elPos > scope.currentMaxPos) ? scope.currentMaxPos : 
+					newElPos = (elPos > scope.currentMaxPos) ? scope.currentMaxPos :
 									(elPos < 0) ? 0 : elPos;
 
 					var newIndex = Math.round(newElPos/gradeWidth);
@@ -108,7 +108,7 @@ app.directive('jdSlider', ['$document', function($document){
 					// console.log('Updated currentMin: '+ scope.currentMin);
 				} else {
 
-					newElPos = (elPos > fullWidth) ? fullWidth : 
+					newElPos = (elPos > fullWidth) ? fullWidth :
 									(elPos < scope.currentMinPos) ? scope.currentMinPos : elPos;
 
 					var newIndex = Math.round(newElPos/gradeWidth);

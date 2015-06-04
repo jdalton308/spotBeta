@@ -2,11 +2,13 @@
 <div class="formGroup">
 	<label for="newLat">
 		New Latitude
-		<input type="text" name="newSpotLat" id="newLat" ng-model="newClimb.location.newLat">
+		<input type="number" name="newSpotLat" id="newLat" ng-model="newClimb.newLocation.latitude">
 	</label>
 	<label for="newLong">
 		New Longitude
-		<input type="text" name="newSpotLong" id="newLong" ng-model="newClimb.location.newLong">
+		<input type="number" name="newSpotLong" id="newLong" ng-model="newClimb.newLocation.longitude">
 	</label>
+
+	<div id="locationMapCanvas"></div>
+
 </div>
-<div class="mapSelectCanvas"></div>

@@ -10,10 +10,10 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 			// RENDERING
 			//=====================
 
-			if ($routeParams) {
-				console.log('Route Params:');
-				console.log($routeParams);
-			}
+			// if ($routeParams) {
+			// 	console.log('Route Params:');
+			// 	console.log($routeParams);
+			// }
 
 			// Draw map
 			if (Places.currentSearch) {
@@ -31,8 +31,8 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 
 				Places.geocode(query).then(
 					function(results){
-						console.log('Place details recieved:');
-						console.log(results);
+						// console.log('Place details recieved:');
+						// console.log(results);
 
 						Places.currentSearch = results[0]; //results is an array
 
