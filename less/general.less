@@ -58,7 +58,9 @@ a {
 input[type='text'],
 input[type='email'],
 input[type='password'],
-textarea {
+input[type='number'],
+textarea,
+select {
 	border: 1px solid @lightGrey;
 	padding: 5px 10px 4px;
 	border-radius: 5px;
@@ -70,6 +72,9 @@ textarea {
 		border-color: @betaGreen;
 		outline: none;
 	}
+}
+select {
+	min-width: 120px;
 }
 button {
 	background: none;

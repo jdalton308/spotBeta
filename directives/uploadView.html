@@ -5,87 +5,126 @@
 		</div>
 
 		<h2>Add Your Climb</h2>
-		<p>Please double-check that the climb does not already exist. Once the route is created, only SpotBeta can remove or re-classify the route, so make sure the information is accurate.</p>
+		<p>Please double-check that the climb does not already exist on SpotBeta. Once the route is created, only SpotBeta can remove or re-classify the route, so please make sure the information is unique and accurate.</p>
 
 		<form name="uploadForm" novalidate>
-			<label for="climbName">
-				<span class="label">Climb name</span>
-				<input type="text" ng-model="newClimb.climbName" name="climbName" required>
+			<div class="formGroup">
+				<label for="climbName">
+					<span class="label">Climb name</span>
+					<input type="text" ng-model="newClimb.climbName" name="climbName" required>
 
-				<!-- <span class="message" ng-show="uploadForm.climbName.$touched">This was touched</span>
-				<span class="message" ng-show="uploadForm.climbName.$valid">This is valid</span>
-				<span class="message error" ng-show="uploadForm.climbName.$invalid">This is NOT valid</span> -->
-				<span class="message error" ng-show="uploadForm.climbName.$error.required && uploadForm.climbName.$touched">A name is required</span>
-			</label>
+					<!-- <span class="message" ng-show="uploadForm.climbName.$touched">This was touched</span>
+					<span class="message" ng-show="uploadForm.climbName.$valid">This is valid</span>
+					<span class="message error" ng-show="uploadForm.climbName.$invalid">This is NOT valid</span> -->
+				</label>
+				<p class="message error" ng-show="uploadForm.climbName.$error.required && uploadForm.climbName.$touched">A name is required</p>
+			</div>
 
-			<label for="climbGrade">
-				<span class="label">Grade</span>
-				<input type="text" ng-model="newClimb.climbGrade" name="climbGrade" required>
-				<span class="message error" ng-show="uploadForm.climbGrade.$error.required && uploadForm.climbGrade.$touched">The grade is required</span>
-			</label>
+			<div class="formGroup">
+				<label for="climbGrade">
+					<span class="label">Grade</span>
+					<input type="text" ng-model="newClimb.climbGrade" name="climbGrade" required>
+				</label>
+				<p class="message error" ng-show="uploadForm.climbGrade.$error.required && uploadForm.climbGrade.$touched">The grade is required</p>
+			</div>
 
-			<label for="climbType">
-				<span class="label">Type</span>
-				<select ng-model="newClimb.climbType" name="climbType" required>
-					<option value="boulder">Boulder</option>
-					<option value="roped">Roped</option>
-				</select>
-				<span class="message error" ng-show="uploadForm.climbType.$error.required && uploadForm.climbType.$touched">The climb's type is required</span>
-				<span>Note: If a route has bolts but still requires gear placement, please use the Trad option</span>
-			</label>
+			<div class="formGroup">
+				<label for="climbType">
+					<span class="label">Type</span>
+					<select ng-model="newClimb.climbType" name="climbType" required>
+						<option value="boulder">Boulder</option>
+						<option value="roped">Roped</option>
+					</select>
+				</label>
+				<p class="message error" ng-show="uploadForm.climbType.$error.required && uploadForm.climbType.$touched">The climb's type is required</p>
+				<p>Note: If a route has bolts but still requires gear placement, please use the Trad option</p>
+			</div>
 
-			<label for="climbSubtype" ng-show=" newClimb.climbType=='roped' ">
-				<span class="label">Sub-type</span>
-				<select ng-model="newClimb.climbSubtype" name="climbSubtype" required>
-					<option value="topRope">Top Rope</option>
-					<option value="sport">Sport</option>
-					<option value="trad">Trad</option>
-				</select>
-				<span class="message error" ng-show="uploadForm.climbSubtype.$error.required && uploadForm.climbSubtype.$touched">A sub-type is required for roped climbs</span>
-			</label>
+			<div class="formGroup">
+				<label for="climbSubtype" ng-show=" newClimb.climbType=='roped' ">
+					<span class="label">Sub-type</span>
+					<select ng-model="newClimb.climbSubtype" name="climbSubtype" required>
+						<option value="topRope">Top Rope</option>
+						<option value="sport">Sport</option>
+						<option value="trad">Trad</option>
+					</select>
+				</label>
+				<p class="message error" ng-show="uploadForm.climbSubtype.$error.required && uploadForm.climbSubtype.$touched">A sub-type is required for roped climbs</p>
+			</div>
 
-			<label for="climbHeight">
-				<span class="label">Height (in feet)</span>
-				<input type="number" ng-model="newClimb.climbHeight" name="climbHeight" required>
+			<div class="formGroup">
+				<label for="climbHeight">
+					<span class="label">Height (in feet)</span>
+					<input type="number" ng-model="newClimb.climbHeight" name="climbHeight" required>
 
-				<!-- <span class="message" ng-show="uploadForm.climbHeight.$touched">This was touched</span>
-				<span class="message" ng-show="uploadForm.climbHeight.$valid">This is valid</span>
-				<span class="message error" ng-show="uploadForm.climbHeight.$invalid">This is NOT valid</span> -->
-				<span class="message error" ng-show="uploadForm.climbHeight.$error.number">Please enter an integer</span>
-				<span class="message error" ng-show="uploadForm.climbHeight.$error.required && uploadForm.climbHeight.$touched">A height value is required</span>
-			</label>
+					<!-- <span class="message" ng-show="uploadForm.climbHeight.$touched">This was touched</span>
+					<span class="message" ng-show="uploadForm.climbHeight.$valid">This is valid</span>
+					<span class="message error" ng-show="uploadForm.climbHeight.$invalid">This is NOT valid</span> -->
+				</label>
+				<p class="message error" ng-show="uploadForm.climbHeight.$error.number">Please enter an integer</p>
+				<p class="message error" ng-show="uploadForm.climbHeight.$error.required && uploadForm.climbHeight.$touched">A height value is required</p>
+			</div>
 
-			<label for="climbRating">
-				<span class="label">Rating (star rating)</span>
-				<select ng-model="newClimb.climbRating" name="climbRating" required>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-				</select>
-				<span class="message error" ng-show="uploadForm.climbRating.$error.required && uploadForm.climbRating.$touched">A rating is required</span>
-			</label>
+			<div class="formGroup">
+				<label for="climbRating">
+					<span class="label">Rating (star rating)</span>
+					<select ng-model="newClimb.climbRating" name="climbRating" required>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+				</label>
+				<p class="message error" ng-show="uploadForm.climbRating.$error.required && uploadForm.climbRating.$touched">A rating is required</p>
+			</div>
 
-			<label for="climbDescription">
-				<span class="label">Description</span>
-				<textarea ng-model="climbDescription" name="climbDescription" required></textarea>
-				<span class="message error" ng-show="uploadForm.climbDescription.$error.required && uploadForm.climbDescription.$touched">A description is required</span>
-				<span>Please include details about the climb, such as features, direction, hold locations, bolts, gear placement, anything to be avoided, and  and  and if the location is new, anything notable about the approach. And especially anything that is a safety concern.</span>
-			</label>
+			<div class="formGroup">
+				<label for="climbDescription">
+					<span class="label">Description</span>
+					<textarea ng-model="newClimb.climbDescription" name="climbDescription" required></textarea>
+				</label>
+				<p class="message error" ng-show="uploadForm.climbDescription.$error.required && uploadForm.climbDescription.$touched">A description is required</p>
+				<p>Please include details about the climb, such as features, direction, hold locations, bolts, gear placement, anything to be avoided, and  and  and if the location is new, anything notable about the approach. And especially anything that is a safety concern.</p>
+			</div>
 
-			<div class="setLocationContainer">
+			<div class="formGroup">
 				<span class="label">Climb location</span>
-				<label for="climbLocation">
-					Use Existing Location
-					<select ng-options="spot.name for (key, spot) in climbData" ng-model="newClimb.climbLocation" name="climbLocation"></select>
+				<label for="knownLocation">
+					<input type="radio" name="climbLocation" id="knownLocation" ng-model="newClimb.newLocation" value="exist" selected>
+					Existing spot
+				</label>
+				<select class="oldLocations" ng-show="newClimb.newLocation == 'old'" ng-options="spot.name for (key, spot) in climbData" ng-model="newClimb.climbLocation" name="climbLocation"></select>
+
+				<label for="newLocation">
+					<input type="radio" name="climbLocation" id="newLocation" ng-model="newClimb.newLocation" value="new">
+					Create a new spot
 				</label>
 
-				<button ng-click="toggleNewLocationMap()">Create new location</button>
-				<div ng-show="viewNewLocMap">
-					<!-- Show map with an input field for lat/lng -->
+				<div class="newLocationCont" ng-show="newClimb.newLocation == 'new'">
+					<div class="formGroup">
+						<label for="newSpotName">
+							Spot name
+							<input type="text" id="newSpotName" ng-model="newClimb.location.name" name="newSpotName">
+						</label>
+					</div>
+					<p><strong>Spot details</strong></p>
+					<!-- <div class="formGroup">
+						<label for="newLat">
+							New Latitude
+							<input type="text" name="newSpotLat" id="newLat" ng-model="newClimb.location.newLat">
+						</label>
+						<label for="newLong">
+							New Longitude
+							<input type="text" name="newSpotLong" id="newLong" ng-model="newClimb.location.newLong">
+						</label>
+					</div> -->
+					<p>Select location on a map, or manually enter the coordinates. (Please be precise)</p>
+
+					<jd-map-select newClimb="newClimb"></jd-map-select>
+
 				</div>
-			</div>
+			</div> <!-- end Location formGroup -->
 
 			<button type="submit" ng-click="createNewClimb(uploadForm)" ng-disabled="uploadForm.$invalid">See Preview</button>
 			<p>After confirming the preview, you will be able to post the climb.</p>
@@ -97,14 +136,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-

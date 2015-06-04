@@ -55,7 +55,9 @@ a {
 input[type='text'],
 input[type='email'],
 input[type='password'],
-textarea {
+input[type='number'],
+textarea,
+select {
   border: 1px solid #aaaaaa;
   padding: 5px 10px 4px;
   border-radius: 5px;
@@ -66,9 +68,14 @@ textarea {
 input[type='text']:focus,
 input[type='email']:focus,
 input[type='password']:focus,
-textarea:focus {
+input[type='number']:focus,
+textarea:focus,
+select:focus {
   border-color: #09b212;
   outline: none;
+}
+select {
+  min-width: 120px;
 }
 button {
   background: none;
@@ -156,7 +163,10 @@ nav.menuBar .rightList {
 }
 .titleSection .searchForm input {
   width: 100%;
-  margin: 0 10px 0 0;
+  text-align: center;
+}
+.titleSection .searchForm .btnContainer {
+  padding-top: 10px;
 }
 .titleSection .resultsList {
   max-width: 900px;
@@ -467,13 +477,7 @@ nav.menuBar .rightList {
 .uploadView .closeLink:hover {
   color: #444444;
 }
-.uploadView form .label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 700;
-}
 .uploadView form .message {
-  display: block;
   margin-bottom: 5px;
   color: #09b212;
   -webkit-transition: all 0.2s ease;
@@ -482,15 +486,30 @@ nav.menuBar .rightList {
 .uploadView form .message.error {
   color: #dd0000;
 }
-.uploadView form label {
-  display: block;
+.uploadView form .formGroup {
   margin-bottom: 20px;
 }
-.uploadView form label input.ng-invalid.ng-touched,
-.uploadView form label textarea.ng-invalid.ng-touched,
-.uploadView form label select.ng-invalid.ng-touched {
+.uploadView form .formGroup .label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+.uploadView form .formGroup label {
+  display: block;
+}
+.uploadView form .formGroup input.ng-invalid.ng-touched,
+.uploadView form .formGroup textarea.ng-invalid.ng-touched,
+.uploadView form .formGroup select.ng-invalid.ng-touched {
   border-color: #dd0000;
 }
-.uploadView form .setLocationContainer {
-  margin-bottom: 50px;
+.uploadView form .formGroup input[type='radio'] {
+  margin: 5px 0;
+}
+.uploadView form .formGroup p {
+  margin: 0 0 5px;
+}
+.uploadView form .newLocationCont {
+  margin-top: 10px;
+  padding: 10px 0 10px 20px;
+  border-left: 3px solid #dddddd;
 }
