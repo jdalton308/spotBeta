@@ -21,6 +21,25 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 			scope.newClimb.newOrOld = 'old';
 			scope.newClimb.newLocation = {};
 
+			scope.validateClimbGrade = function(input){
+				// TODO: disable the grade input until type is chosen
+				if (scope.newClimb.climbType == 'roped') {
+					// Confirm whole string is <5 characters (5.15a == 5 characters)
+					// If input == xx+letter,
+						// ensure that xx < 16
+						// and letter == a,b,c, or d,
+						// then add '5.' to front
+					// If input == xx,
+						// ensure that xx <= 9,
+						// if 9 < xx < 16, prompt for a letter grade
+						// then add '5.' to front
+
+					// Then convert letter grade to decimal
+				} else {
+
+				}
+			};
+
 
 			// Submit
 			//--------------------------
@@ -29,6 +48,9 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 				// TODO: Process the grade
 				// // if boulder, unsure only number
 				// // if roped, create grade conversion and translated grade
+				if (scope.newClimb.climbType == 'roped') {
+					// strip of 
+				}
 
 				console.log('Upload Form:');
 				console.log(scope.uploadForm);
@@ -39,7 +61,8 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 					height: scope.newClimb.climbHeight,
 					name: scope.newClimb.climbName,
 					rating: parseInt(scope.newClimb.climbRating),
-					type: scope.newClimb.climbType
+					type: scope.newClimb.climbType,
+					subtype: scope.newClimb.climbSubType
 				};
 
 				console.log('New Climb Obj:');
@@ -149,7 +172,9 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 												function(ref){
 													console.log(climbObj.name +' successfully added to '+ newSpotObj.name);
 
-													// TODO: Show success/thanks message and route user to app view
+													// TODO:
+														// Show success/thanks message but stay in upload (once it is it's own route)
+														// Reset the upload route form to empty
 												},
 												function(err){
 													console.error('ERROR: Error adding '+ climbObj.name +' to '+ newSpotObj.name);
