@@ -1,10 +1,10 @@
 
-app.factory('ClimbData', ["FIREBASE_URL", "$firebaseObject", 
-	function(FIREBASE_URL, $firebaseObject){
+app.factory('ClimbData', ["FIREBASE_URL", "$firebaseArray", 
+	function(FIREBASE_URL, $firebaseArray){
 
 	// Get data
 	var ref = new Firebase(FIREBASE_URL + '/data');
-	var data = $firebaseObject(ref);
+	var data = $firebaseArray(ref);
 
 	return data; // returns a promise for the data. Use $loaded method
 }]);

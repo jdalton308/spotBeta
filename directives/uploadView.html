@@ -91,14 +91,14 @@
 			<div class="formGroup">
 				<span class="label">Climb location</span>
 				<label for="knownLocation">
-					<input type="radio" name="climbLocation" id="knownLocation" ng-model="newClimb.newOrOld" value="old" selected>
+					<input type="radio" name="climbLocation" id="knownLocation" ng-model="newClimb.newOrOld" value="old" selected required>
 					Existing spot
 				</label>
 				<select class="oldLocations" ng-show="newClimb.newOrOld == 'old'" 
 				ng-options="key as spot.name for (key, spot) in climbData" ng-model="newClimb.climbLocation" name="climbLocation"></select>
 
 				<label for="newLocation">
-					<input type="radio" name="climbLocation" id="newLocation" ng-model="newClimb.newOrOld" value="new" ng-click="resizeMap()">
+					<input type="radio" name="climbLocation" id="newLocation" ng-model="newClimb.newOrOld" value="new" ng-click="resizeMap()" required>
 					Create a new spot
 				</label>
 
@@ -106,7 +106,7 @@
 					<div class="formGroup">
 						<label for="newSpotName">
 							Spot name
-							<input type="text" id="newSpotName" ng-model="newClimb.location.name" name="newSpotName">
+							<input type="text" id="newSpotName" ng-model="newClimb.newLocation.name" name="newSpotName">
 						</label>
 					</div>
 					<p><strong>Spot details</strong></p>

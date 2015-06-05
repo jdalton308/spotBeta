@@ -47,7 +47,7 @@ app.factory('Auth', ["$firebaseAuth", '$firebaseObject', "FIREBASE_URL", 'User',
 				function(err) {
 					console.error('Error retrieving user profile:' + err);
 				}
-			);			
+			);
 		},
 		logout: function() {
 			auth.$unauth();
