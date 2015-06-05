@@ -12,13 +12,15 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 				console.log(scope.climbData);
 			});
 
-			// Form Data
+
+			// Form Data Initialization
 			//-------------------------------
 			scope.newClimb = {};
 
 			// These are just for reference
 			scope.newClimb.newOrOld = 'old';
 			scope.newClimb.newLocation = {};
+
 
 			// Submit
 			//--------------------------
@@ -43,7 +45,7 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 				console.log('New Climb Obj:');
 				console.log(climbObj);
 
-				// IF ADDING TO EXISTING CLIMB
+				// If adding to existing climb
 				//-------------------------------
 				if (scope.newClimb.newOrOld == 'old') {
 
@@ -67,7 +69,7 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 					);
 
 
-				// IF CREATING A NEW SPOT
+				// If creating a new spot
 				//---------------------------------
 				} else {
 
@@ -137,6 +139,25 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 							ClimbData.$add(newSpotObj).then(
 								function(ref){
 									//TODO: get id of ref, then call SpotData.get(id), then $add the climbObj
+									console.log(newSpotObj.name +' added to database. Adding climb to spot...');
+									var id = ref.key();
+
+									// 4) Add climb to spot
+									SpotData.get(id).$loaded(
+										function(data){
+											data.$add(climbObj).then(
+												function(ref){
+													console.log(climbObj.name +' successfully added to '+ newSpotObj.name);
+												},
+												function(err){
+													console.error('ERROR: Error adding '+ climbObj.name +' to '+ newSpotObj.name);
+												}
+											);
+										},
+										function(err){
+											console.error('ERROR: Error retrieving the new location\'s climb data: '+ err);
+										}
+									);
 								},
 								function(err){
 
