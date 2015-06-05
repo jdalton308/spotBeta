@@ -21,14 +21,6 @@
 			</div>
 
 			<div class="formGroup">
-				<label for="climbGrade">
-					<span class="label">Grade</span>
-					<input type="text" ng-model="newClimb.climbGrade" name="climbGrade" required>
-				</label>
-				<p class="message error" ng-show="uploadForm.climbGrade.$error.required && uploadForm.climbGrade.$touched">The grade is required</p>
-			</div>
-
-			<div class="formGroup">
 				<label for="climbType">
 					<span class="label">Type</span>
 					<select ng-model="newClimb.climbType" name="climbType" required>
@@ -41,9 +33,17 @@
 			</div>
 
 			<div class="formGroup">
+				<label for="climbGrade">
+					<span class="label">Grade</span>
+					<input type="text" ng-model="newClimb.climbGrade" name="climbGrade" required>
+				</label>
+				<p class="message error" ng-show="uploadForm.climbGrade.$error.required && uploadForm.climbGrade.$touched">The grade is required</p>
+			</div>
+
+			<div class="formGroup">
 				<label for="climbSubtype" ng-show=" newClimb.climbType=='roped' ">
 					<span class="label">Sub-type</span>
-					<select ng-model="newClimb.climbSubtype" name="climbSubtype" required>
+					<select ng-model="newClimb.climbSubtype" name="climbSubtype">
 						<option value="topRope">Top Rope</option>
 						<option value="sport">Sport</option>
 						<option value="trad">Trad</option>
@@ -94,10 +94,11 @@
 					<input type="radio" name="climbLocation" id="knownLocation" ng-model="newClimb.newOrOld" value="old" selected>
 					Existing spot
 				</label>
-				<select class="oldLocations" ng-show="newClimb.newOrOld == 'old'" ng-options="spot.name for (key, spot) in climbData" ng-model="newClimb.climbLocation" name="climbLocation"></select>
+				<select class="oldLocations" ng-show="newClimb.newOrOld == 'old'" 
+				ng-options="key as spot.name for (key, spot) in climbData" ng-model="newClimb.climbLocation" name="climbLocation"></select>
 
 				<label for="newLocation">
-					<input type="radio" name="climbLocation" id="newLocation" ng-model="newClimb.newOrOld" value="new">
+					<input type="radio" name="climbLocation" id="newLocation" ng-model="newClimb.newOrOld" value="new" ng-click="resizeMap()">
 					Create a new spot
 				</label>
 
@@ -109,7 +110,7 @@
 						</label>
 					</div>
 					<p><strong>Spot details</strong></p>
-					<p>Select location on a map, or manually enter the coordinates. (Please be precise, and be sure the spot doesn't already exist)</p>
+					<p>Use the marker to select location on a map, or manually enter the coordinates. (Please be precise, and be sure the spot does not already exist on SpotBeta)</p>
 
 					<jd-map-select newclimb="newClimb"></jd-map-select>
 

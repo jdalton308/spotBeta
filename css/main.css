@@ -512,9 +512,19 @@ nav.menuBar .rightList {
   margin: 0 0 5px;
 }
 .uploadView form .newLocationCont {
-  margin-top: 10px;
-  padding: 10px 0 10px 20px;
+  margin: 15px 0 30px 0;
+  padding: 0 0 0 20px;
   border-left: 3px solid #dddddd;
+}
+.uploadView form .newLocationCont label {
+  margin-bottom: 10px;
+}
+.uploadView form .newLocationCont .locationMapControls {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.uploadView form .newLocationCont .locationMapControls button {
+  margin: 0 20px 0 0;
 }
 .uploadView form .newLocationCont #locationMapCanvas {
   width: 100%;

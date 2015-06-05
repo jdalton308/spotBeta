@@ -1,10 +1,6 @@
 app.directive('jdMapSelect', [ function(){
 	return {
 		restrict: 'E',
-		// require: '^jdUploadView',
-		// scope: {
-		// 	newClimb: '=newclimb'
-		// },
 		templateUrl: 'directives/mapSelect.html',
 		link: function(scope, element, attributes) {
 
@@ -27,7 +23,7 @@ app.directive('jdMapSelect', [ function(){
 			var mapElement = document.getElementById("locationMapCanvas");
 			var mapOptions = {
 				center: mapCenter,
-				zoom: 10,
+				zoom: 5,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			};
 
@@ -42,38 +38,51 @@ app.directive('jdMapSelect', [ function(){
 				draggable: true,
 			});
 
-			console.log('New Climb Obj:');
-			console.log(scope.newClimb);
-
-			console.log('Scope:');
-			console.log(scope);
-
 
 			// EVENTS
 			//=====================
+			// Fix map rendering bug
+			scope.resizeMap = function(){
+				google.maps.event.trigger(scope.locationMap, 'resize');
+				scope.locationMap.setZoom( scope.locationMap.getZoom() )
+				scope.locationMap.setCenter( scope.locationMarker.getPosition() );
+			};
 
-			// Add keyup events to lat,lng inputs for when updating manually. => Pan the map and marker
+			// Typing Lat, Lng
+			//---------------------
+			scope.manualCoordUpdate = function(){
+				var center = new google.maps.LatLng(scope.newClimb.newLocation.latitude, scope.newClimb.newLocation.longitude);
+				scope.locationMap.setCenter(center);
+				scope.locationMarker.setPosition(center);
+			};
 
 			// Marker Drag
+			//-----------------
 			google.maps.event.addListener(scope.locationMarker, 'drag', function(){
 				// update the scope's newLat and newLong
 				var markerPos = scope.locationMarker.getPosition();
 
-				console.log('MarkerPos:');
-				console.log(markerPos);
-
 				scope.$apply( scope.newClimb.newLocation.latitude = markerPos.lat() );
 				scope.$apply( scope.newClimb.newLocation.longitude = markerPos.lng() );
-
-				console.log('New Marker Lat: '+ scope.newClimb.newLocation.latitude);
-				// console.log('New Marker Lat: '+ markerPos.lat());
-				console.log('New Marker Lng: '+ scope.newClimb.newLocation.longitude);
-				// console.log('New Marker Lng: '+ markerPos.lng());
 			});
 
+			// Center Marker
+			//-----------------
+			scope.centerMarker = function() {
+				// Get map center
+				var center = scope.locationMap.getCenter();
+				// Set marker position
+				scope.locationMarker.setPosition(center);
+			};
+
 			// Marker Lock and Map Drag
+			//------------------------------
 			scope.markerLocked = false;
+			var dragStart;
+			var dragMove;
+
 			scope.toggleMarkerLock = function() {
+
 				scope.markerLocked = !scope.markerLocked;
 
 				if (scope.markerLocked){
@@ -84,7 +93,7 @@ app.directive('jdMapSelect', [ function(){
 					var markerStartLat;
 					var markerStartLng;
 
-					var dragStart = google.maps.event.addListener(scope.locationMap, 'dragstart', function(){
+					dragStart = google.maps.event.addListener(scope.locationMap, 'dragstart', function(){
 						var startMapCenter = scope.locationMap.getCenter();
 						mapStartLat = startMapCenter.lat();
 						mapStartLng = startMapCenter.lng();
@@ -93,7 +102,7 @@ app.directive('jdMapSelect', [ function(){
 						markerStartLat = markerPos.lat();
 						markerStartLng = markerPos.lng();
 					});
-					var dragMove = google.maps.event.addListener(scope.locationMap, 'drag', function(){
+					dragMove = google.maps.event.addListener(scope.locationMap, 'drag', function(){
 						// Move the marker the same distance as the map
 						var newMapCenter = scope.locationMap.getCenter();
 						mapNewLat = newMapCenter.lat();
@@ -102,15 +111,12 @@ app.directive('jdMapSelect', [ function(){
 						var movedLat = mapStartLat - mapNewLat;
 						var movedLng = mapStartLng - mapNewLng;
 
-						var newMarkerLat = markerStartLat + movedLat;
-						var newMarkerLng = markerStartLng + movedLng;
+						var newMarkerLat = markerStartLat - movedLat;
+						var newMarkerLng = markerStartLng - movedLng;
 
 						// update scope
-						scope.newClimb.location.newLat = newMarkerLat;
-						scope.newClimb.location.newLng = newMarkerLng;
-
-						console.log('New Marker Lat: '+ newMarkerLat);
-						console.log('New Marker Lng: '+ newMarkerLng);
+						scope.$apply( scope.newClimb.newLocation.latitude = newMarkerLat );
+						scope.$apply( scope.newClimb.newLocation.longitude = newMarkerLng );
 
 						// update position
 						var updatedMarkerPos = new google.maps.LatLng(newMarkerLat, newMarkerLng);
