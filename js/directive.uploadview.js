@@ -148,6 +148,8 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 											data.$add(climbObj).then(
 												function(ref){
 													console.log(climbObj.name +' successfully added to '+ newSpotObj.name);
+
+													// TODO: Show success/thanks message and route user to app view
 												},
 												function(err){
 													console.error('ERROR: Error adding '+ climbObj.name +' to '+ newSpotObj.name);
