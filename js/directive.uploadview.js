@@ -40,6 +40,38 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 				}
 			};
 
+			scope.setGradeOptions = function(){
+				if (scope.newClimb.climbType == 'boulder') {
+					scope.gradeOptions = [
+						{number: 0, fullGrade: 'V0'},
+						{number: 1, fullGrade: 'V1'},
+						{number: 2, fullGrade: 'V2'},
+						{number: 3, fullGrade: 'V3'},
+						{number: 4, fullGrade: 'V4'},
+						{number: 5, fullGrade: 'V5'},
+						{number: 6, fullGrade: 'V6'},
+						{number: 7, fullGrade: 'V7'},
+						{number: 8, fullGrade: 'V8'},
+						{number: 9, fullGrade: 'V9'},
+						{number: 10, fullGrade: 'V10'},
+						{number: 11, fullGrade: 'V11'},
+						{number: 12, fullGrade: 'V12'},
+						{number: 13, fullGrade: 'V13'},
+						{number: 14, fullGrade: 'V14'},
+						{number: 15, fullGrade: 'V15'},
+						{number: 16, fullGrade: 'V16'}
+					];
+				} else {
+					scope.gradeOptions = [
+						{number: 6, fullGrade: '5.6'},
+						{number: 7, fullGrade: '5.7'},
+						{number: 8, fullGrade: '5.8'},
+						{number: 9, fullGrade: '5.9'},
+						{number: 10, fullGrade: '5.10'}
+					];
+				}
+			};
+
 
 			// Submit
 			//--------------------------

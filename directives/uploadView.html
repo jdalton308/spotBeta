@@ -23,21 +23,13 @@
 			<div class="formGroup">
 				<label for="climbType">
 					<span class="label">Type</span>
-					<select ng-model="newClimb.climbType" name="climbType" required>
+					<select ng-model="newClimb.climbType" name="climbType" ng-change="setGradeOptions()" required>
 						<option value="boulder">Boulder</option>
 						<option value="roped">Roped</option>
 					</select>
 				</label>
 				<p class="message error" ng-show="uploadForm.climbType.$error.required && uploadForm.climbType.$touched">The climb's type is required</p>
 				<p>Note: If a route has bolts but still requires gear placement, please use the Trad option</p>
-			</div>
-
-			<div class="formGroup">
-				<label for="climbGrade">
-					<span class="label">Grade</span>
-					<input type="text" ng-model="newClimb.climbGrade" name="climbGrade" required>
-				</label>
-				<p class="message error" ng-show="uploadForm.climbGrade.$error.required && uploadForm.climbGrade.$touched">The grade is required</p>
 			</div>
 
 			<div class="formGroup">
@@ -50,6 +42,18 @@
 					</select>
 				</label>
 				<p class="message error" ng-show="uploadForm.climbSubtype.$error.required && uploadForm.climbSubtype.$touched">A sub-type is required for roped climbs</p>
+			</div>
+
+			<div class="formGroup">
+				<!-- <label for="climbGrade">
+					<span class="label">Grade</span>
+					<input type="text" ng-model="newClimb.climbGrade" name="climbGrade" required>
+				</label> -->
+				<label for="climbGrade">
+					<span class="label">Grade</span>
+					<select ng-options="grade.fullGrade for grade in gradeOptions track by grade.number" ng-model="newClimb.climbGrade" name="climbGrade" required><select>
+				</label>
+				<p class="message error" ng-show="uploadForm.climbGrade.$error.required && uploadForm.climbGrade.$touched">The grade is required</p>
 			</div>
 
 			<div class="formGroup">
