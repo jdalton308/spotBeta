@@ -21,25 +21,6 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 			scope.newClimb.newOrOld = 'old';
 			scope.newClimb.newLocation = {};
 
-			scope.validateClimbGrade = function(input){
-				// TODO: disable the grade input until type is chosen
-				if (scope.newClimb.climbType == 'roped') {
-					// Confirm whole string is <5 characters (5.15a == 5 characters)
-					// If input == xx+letter,
-						// ensure that xx < 16
-						// and letter == a,b,c, or d,
-						// then add '5.' to front
-					// If input == xx,
-						// ensure that xx <= 9,
-						// if 9 < xx < 16, prompt for a letter grade
-						// then add '5.' to front
-
-					// Then convert letter grade to decimal
-				} else {
-
-				}
-			};
-
 			scope.setGradeOptions = function(){
 				if (scope.newClimb.climbType == 'boulder') {
 					scope.gradeOptions = [
@@ -67,7 +48,30 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 						{number: 7, fullGrade: '5.7'},
 						{number: 8, fullGrade: '5.8'},
 						{number: 9, fullGrade: '5.9'},
-						{number: 10, fullGrade: '5.10'}
+						{number: 10.1, fullGrade: '5.10a'},
+						{number: 10.2, fullGrade: '5.10b'},
+						{number: 10.3, fullGrade: '5.10c'},
+						{number: 10.4, fullGrade: '5.10d'},
+						{number: 11.1, fullGrade: '5.11a'},
+						{number: 11.2, fullGrade: '5.11b'},
+						{number: 11.3, fullGrade: '5.11c'},
+						{number: 11.4, fullGrade: '5.11d'},
+						{number: 12.1, fullGrade: '5.12a'},
+						{number: 12.2, fullGrade: '5.12b'},
+						{number: 12.3, fullGrade: '5.12c'},
+						{number: 12.4, fullGrade: '5.12d'},
+						{number: 13.1, fullGrade: '5.13a'},
+						{number: 13.2, fullGrade: '5.13b'},
+						{number: 13.3, fullGrade: '5.13c'},
+						{number: 13.4, fullGrade: '5.13d'},
+						{number: 14.1, fullGrade: '5.14a'},
+						{number: 14.2, fullGrade: '5.14b'},
+						{number: 14.3, fullGrade: '5.14c'},
+						{number: 14.4, fullGrade: '5.14d'},
+						{number: 15.1, fullGrade: '5.15a'},
+						{number: 15.2, fullGrade: '5.15b'},
+						{number: 15.3, fullGrade: '5.15c'},
+						{number: 15.4, fullGrade: '5.15d'},
 					];
 				}
 			};
@@ -87,9 +91,52 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 				console.log('Upload Form:');
 				console.log(scope.uploadForm);
 
+				var setGrade = function(climbGrade, climbType) {
+					if (climbType == 'boulder') {
+						return parseInt(climbGrade);
+					} else {
+						console.log('Original climbGrade: ');
+						console.log(climbGrade);
+						var gradeObj = {};
+						// var gradeInt = parseInt(climbGrade);
+
+						if (climbGrade.number > 9) {
+							// divide at '.' and set letter
+							// var letters = ['a', 'b', 'c', 'd'];
+							// var splitGradeArr = climbGrade.split('.');
+							// console.log('Split Grade: ');
+							// console.log(splitGradeArr);
+
+							// var letterIndex = parseInt(splitGradeArr[1]);
+							// console.log('Letter Index: '+ letterIndex);
+
+							// var letterGrade = letters[letterIndex-1];
+							// console.log('New letter grade: '+ letterGrade);
+
+							// var climbLetterGrade = splitGradeArr[0] + letterGrade;
+
+							// console.log('Full letter grade: '+ climbLetterGrade);
+
+							var shortGrade = climbGrade.fullGrade.split('.')[1];
+
+							gradeObj = {
+								grade: shortGrade,
+								conversion: climbGrade.number
+							}
+
+						} else {
+							gradeObj = {
+								grade: gradeInt,
+								conversion: gradeInt
+							}
+						}
+						return gradeObj;
+					}
+				}
+
 				var climbObj = {
 					description: scope.newClimb.climbDescription,
-					grade: parseInt(scope.newClimb.climbGrade), //if type == boulder
+					grade: setGrade(scope.newClimb.climbGrade, scope.newClimb.climbType),
 					height: scope.newClimb.climbHeight,
 					name: scope.newClimb.climbName,
 					rating: parseInt(scope.newClimb.climbRating),
@@ -110,18 +157,18 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 					// console.log(targetSpot);
 
 					// 1) Retrieve the climb array as a firebaseArray
-					SpotData.get(targetId).$loaded(
-						function(data){
-							console.log('Climbs within desired spot recieved as FirebaseArray:');
-							console.log(data);
+					// SpotData.get(targetId).$loaded(
+					// 	function(data){
+					// 		console.log('Climbs within desired spot recieved as FirebaseArray:');
+					// 		console.log(data);
 
-							// 2) Push new climb to firebase
-							data.$add(climbObj);
-						},
-						function(err){
-							console.error('ERROR: Could not retrieve sibling climbs. '+ err);
-						}
-					);
+					// 		// 2) Push new climb to firebase
+					// 		// data.$add(climbObj);
+					// 	},
+					// 	function(err){
+					// 		console.error('ERROR: Could not retrieve sibling climbs. '+ err);
+					// 	}
+					// );
 
 
 				// If creating a new spot
