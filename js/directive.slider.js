@@ -153,7 +153,7 @@ app.directive('jdSlider', ['$document', function($document){
 				} else {
 					// Call the filter function to update map
 					if (attr.type == 'roped') {
-						mapCtrl.filterRopedGrade( ropedGradeList[scope.currentMinIndex].grade, ropedGradeList[scope.currentMaxIndex].grade );
+						mapCtrl.filterRopedGrade( ropedGradeList[scope.currentMinIndex].conversion, ropedGradeList[scope.currentMaxIndex].conversion );
 					} else if ( attr.type == 'height') {
 						mapCtrl.filterHeight( heightList[scope.currentMinIndex].height, heightList[scope.currentMaxIndex].height);
 					} else {

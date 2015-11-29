@@ -81,13 +81,6 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 			//--------------------------
 			scope.createNewClimb = function() {
 
-				// TODO: Process the grade
-				// // if boulder, unsure only number
-				// // if roped, create grade conversion and translated grade
-				if (scope.newClimb.climbType == 'roped') {
-					// strip of 
-				}
-
 				console.log('Upload Form:');
 				console.log(scope.uploadForm);
 
@@ -95,28 +88,11 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 					if (climbType == 'boulder') {
 						return parseInt(climbGrade);
 					} else {
-						console.log('Original climbGrade: ');
-						console.log(climbGrade);
+						// console.log('Original climbGrade: ');
+						// console.log(climbGrade);
 						var gradeObj = {};
-						// var gradeInt = parseInt(climbGrade);
 
 						if (climbGrade.number > 9) {
-							// divide at '.' and set letter
-							// var letters = ['a', 'b', 'c', 'd'];
-							// var splitGradeArr = climbGrade.split('.');
-							// console.log('Split Grade: ');
-							// console.log(splitGradeArr);
-
-							// var letterIndex = parseInt(splitGradeArr[1]);
-							// console.log('Letter Index: '+ letterIndex);
-
-							// var letterGrade = letters[letterIndex-1];
-							// console.log('New letter grade: '+ letterGrade);
-
-							// var climbLetterGrade = splitGradeArr[0] + letterGrade;
-
-							// console.log('Full letter grade: '+ climbLetterGrade);
-
 							var shortGrade = climbGrade.fullGrade.split('.')[1];
 
 							gradeObj = {
@@ -153,22 +129,26 @@ app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(Climb
 
 					var targetSpot = scope.climbData[scope.newClimb.climbLocation];
 					var targetId = targetSpot.$id;
-					// console.log('Target Spot:');
-					// console.log(targetSpot);
+					console.log('Target Spot:');
+					console.log(targetSpot);
 
 					// 1) Retrieve the climb array as a firebaseArray
-					// SpotData.get(targetId).$loaded(
-					// 	function(data){
-					// 		console.log('Climbs within desired spot recieved as FirebaseArray:');
-					// 		console.log(data);
+					SpotData.get(targetId).$loaded(
+						function(data){
+							console.log('Climbs within desired spot recieved as FirebaseArray:');
+							console.log(data);
 
-					// 		// 2) Push new climb to firebase
-					// 		// data.$add(climbObj);
-					// 	},
-					// 	function(err){
-					// 		console.error('ERROR: Could not retrieve sibling climbs. '+ err);
-					// 	}
-					// );
+							// 2) Push new climb to firebase
+							data.$add(climbObj).then(
+								function(ref){
+									console.log(climbObj.name +' successfully added to '+ targetSpot.name)
+								}
+							);
+						},
+						function(err){
+							console.error('ERROR: Could not retrieve sibling climbs. '+ err);
+						}
+					);
 
 
 				// If creating a new spot

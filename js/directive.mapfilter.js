@@ -127,8 +127,10 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 								if (climb.type = 'boulder') {
 									grade = "V" + climb.grade;
 								} else {
-									grade = "5." + climb.grade;
+									grade = "5." + climb.grade.grade;
 								}
+
+								//TODO: FIX THE RATING FOR ROPED CLIMBS
 
 								var routeElement =
 									'<div class="boxRoute">' +
@@ -250,7 +252,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 							if (angular.isNumber(climb.grade)) {
 								var newGrade = (climb.type == 'boulder') ?
 									'V' + climb.grade.toString() :
-									'5.' + climb.grade.toString();
+									'5.' + climb.grade.grade;
 
 								climb.grade = newGrade;
 							}
@@ -594,7 +596,7 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 						// loop through each climb
 
 						if (climb.type == 'roped') {
-							if (climb.grade >= min && climb.grade <= max) {
+							if (climb.grade.conversion >= min && climb.grade.conversion <= max) {
 								climb.included = true;
 							} else {
 								climb.included = false;
