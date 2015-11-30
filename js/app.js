@@ -22,6 +22,6 @@ var app = angular.module('spotBeta', [
 				redirectTo: '/'
 			});
 
-		// $locationProvider.html5Mode(true);
+		$locationProvider.html5Mode(true);
 	});
 
