@@ -1,7 +1,7 @@
 app.directive('jdUploadView', ['ClimbData', 'SpotData', 'Places', function(ClimbData, SpotData, Places){
 	return {
 		restrict: 'E',
-		templateUrl: 'directives/uploadView.html',
+		templateUrl: 'js/directives/uploadView.html',
 		link: function(scope, element, attributes) {
 
 			// Attach climb data to scope

@@ -2,7 +2,7 @@
 app.directive('jdSlider', ['$document', function($document){
 	return {
 		restrict: 'E',
-		templateUrl: 'directives/slider.html',
+		templateUrl: 'js/directives/slider.html',
 		require: '^jdMapFilter',
 		scope: {
 			filter: '='

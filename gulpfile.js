@@ -10,17 +10,16 @@ var webserver = require('gulp-webserver');
 
 var styleFiles = [
 		'node_modules/normalize.css/normalize.css',
-        'css/less/main.less'
+        'less/main.less'
     ];
 var jsLibFiles = [
 		'node_modules/jquery/dist/jquery.js',
 		'node_modules/angular/angular.js',
 		'node_modules/angular-animate/angular-animate.js',
 		'node_modules/angular-resource/angular-resource.js',
-		'node_modules/angular-route/angular-route.js',
-		'node_modules/firebase/lib/firebase-web.js',
-		'node_modules/angularfire/dist/angularfire.js',
-		'js/*.js'
+		'node_modules/angular-route/angular-route.js'
+		// 'node_modules/firebase/lib/firebase-node.js',
+		// 'node_modules/angularfire/dist/angularfire.js'
 	];
 var jsAppFiles = [
 		'js/*.js'
@@ -31,12 +30,14 @@ var directives = [
 var html = [
 		'./*.html'
 	];
-
+var assets = [
+		'./assets/*'
+	]
 
 gulp.task('styles', function() {
     gulp.src(styleFiles)
-        .pipe(concat('main.css'))
         .pipe(less())
+        .pipe(concat('main.css'))
 		// .pipe(gzip())
         .pipe(gulp.dest('build/css/'));
 });
@@ -44,7 +45,7 @@ gulp.task('styles', function() {
 gulp.task('scripts.lib', function(){
 	gulp.src(jsLibFiles)
 		.pipe(concat('lib.js'))
-		.pipe(uglify())
+		// .pipe(uglify())
 		// .pipe(gzip())
 		.pipe(gulp.dest('build/js/'))
 		.on('error', gutil.log);
@@ -53,7 +54,7 @@ gulp.task('scripts.lib', function(){
 gulp.task('scripts.app', function(){
 	gulp.src(jsAppFiles)
 		.pipe(concat('app.js'))
-		.pipe(uglify())
+		// .pipe(uglify())
 		// .pipe(gzip())
 		.pipe(gulp.dest('build/js/'))
 		.on('error', gutil.log);
@@ -69,6 +70,11 @@ gulp.task('html.app', function(){
 	gulp.src(html)
 		.pipe(htmlmin({collapseWhitespace: true}))
 		.pipe(gulp.dest('build'));
+});
+
+gulp.task('assets', function(){
+	gulp.src(assets)
+		.pipe(gulp.dest('build/assets'));
 });
 
 gulp.task('server', function() {
@@ -90,6 +96,7 @@ gulp.task('watch', function(){
     gulp.watch(html, ['html.app']);
 });
 
-gulp.task('build', ['styles', 'scripts.lib', 'scripts.app', 'html.directive', 'html.app']);
+gulp.task('build', ['styles', 'scripts.lib', 'scripts.app', 'html.directive', 'html.app', 'assets']);
 
-gulp.task('default', ['build', 'watch', 'server']);
+// gulp.task('default', ['build', 'watch', 'server']);
+gulp.task('default', ['build', 'watch']);

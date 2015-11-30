@@ -1,7 +1,7 @@
 app.directive('jdMapSelect', [ function(){
 	return {
 		restrict: 'E',
-		templateUrl: 'directives/mapSelect.html',
+		templateUrl: 'js/directives/mapSelect.html',
 		link: function(scope, element, attributes) {
 
 			// render google map

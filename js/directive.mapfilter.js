@@ -2,7 +2,7 @@
 app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$routeParams', function(ClimbData, Places, User, $compile, $routeParams){
 	return {
 		restrict: 'E',
-		templateUrl: "directives/mapFilter.html",
+		templateUrl: "js/directives/mapFilter.html",
 		controller : function($scope) {
 
 			var controller = this;

@@ -2,7 +2,7 @@
 app.directive('jdProfileView', ['User', function(User){
 	return {
 		restrict: 'E',
-		templateUrl: "directives/profileView.html",
+		templateUrl: "js/directives/profileView.html",
 		link: function(scope, element, attributes) {
 
 			scope.userProfile = User.user();
