@@ -17,9 +17,13 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 
 			// Draw map
 			if (Places.currentSearch) {
+
+				console.log('Current Search:');
+				console.log(Places.currentSearch);
+
 				// Check for search results
-				var currentLat = Places.currentSearch.geometry.location.A;
-				var currentLong = Places.currentSearch.geometry.location.F;
+				var currentLat = Places.currentSearch.geometry.location.lat();
+				var currentLong = Places.currentSearch.geometry.location.lng();
 
 			} else if ($routeParams.latitude) {
 				// User navicated directly to page
@@ -94,9 +98,16 @@ app.directive('jdMapFilter', ['ClimbData', 'Places', 'User', '$compile', '$route
 					var thisLong = spot.location.long;
 					var thisLat = spot.location.lat;
 
+					// console.log('Map Bounds:');
+					// console.log($scope.mapBounds);
+					// console.log('Spot:');
+					// console.log(spot);
+
+					// console.log('Contains test:');
+					// console.log($scope.mapBounds.contains(new google.maps.LatLng(thisLat, thisLong)));
+
 					// Show spot if within map's bounds
-					if ( ($scope.mapBounds.qa.A >= thisLong && thisLong >= $scope.mapBounds.qa.j) &&
-						 ($scope.mapBounds.za.A <= thisLat && thisLat <= $scope.mapBounds.za.j) ) {
+					if ( $scope.mapBounds.contains(new google.maps.LatLng(thisLat, thisLong)) ) {
 
 						// spot is not included until a climb is included
 						spot.included = false;
