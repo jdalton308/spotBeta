@@ -631,7 +631,7 @@ nav.menuBar .rightList {
 }
 .results .resultList .resultSpot ul.spotClimbs li .climbResult a {
   display: inline-block;
-  width: 80%;
+  max-width: 70%;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
